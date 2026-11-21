@@ -2,6 +2,11 @@
 # Integration test for a disposable Ubuntu VM with systemd and OpenSSH.
 # Generates two ordinary local SSH logins. One runs a harmless sudo command.
 set -euo pipefail
+if [[ "${GITHUB_ACTIONS:-}" != true || "${RUNNER_ENVIRONMENT:-}" != github-hosted ]]; then
+  printf '%s
+' 'This rehearsal uses a disposable GitHub-hosted runner.' >&2
+  exit 1
+fi
 umask 077
 
 pilot_dir=$(mktemp -d "$HOME/.arachne-native.XXXXXX")
@@ -84,6 +89,13 @@ second_pid=$!
 wait "$first_pid"
 wait "$second_pid"
 
+sudo -n useradd --system --user-group --no-create-home --shell /usr/sbin/nologin black-arachne
+if sudo -n -u black-arachne /usr/bin/sudo -n -- /usr/bin/true; then
+  printf '%s
+' 'The unprivileged rehearsal account unexpectedly received sudo access.' >&2
+  exit 1
+fi
+
 sudo -n journalctl --sync
 sudo -n journalctl --since "$pilot_start" --no-pager -o json \
   SYSLOG_IDENTIFIER=sshd SYSLOG_IDENTIFIER=sshd-session SYSLOG_IDENTIFIER=sudo > "$pilot_dir/native.jsonl"
@@ -93,6 +105,7 @@ python3 - "$pilot_dir" <<'PY'
 from collections import Counter
 import json
 from pathlib import Path
+import sqlite3
 import subprocess
 import sys
 
@@ -125,11 +138,17 @@ for anchor in by_session.values():
                       for event in case["events"]))
 assert sorted(counts) == [0, 1], counts
 print("Confirmed native isolation: only the session that ran sudo received the privilege observation.")
+with sqlite3.connect(root / "rehearsal.sqlite3") as db:
+    records = [json.loads(payload) for (payload,) in db.execute(
+        "SELECT payload FROM events WHERE json_extract(payload, '$.actor')='black-arachne'"
+    )]
+    assert any(event["kind"] == "privilege_denied" for event in records), records
+    assert all(event["kind"] != "privileged_activity" for event in records), records
+print("The real declined sudo request was recorded separately from accepted privilege activity.")
 PY
 
 # Rehearse the shipped systemd unit on the disposable runner. The servicing
 # account reads the journal through its supplementary group.
-sudo -n useradd --system --user-group --no-create-home --shell /usr/sbin/nologin black-arachne
 sudo -n install -d -m 0755 /opt/black-arachne
 sudo -n cp -a arachne /opt/black-arachne/
 sudo -n install -m 0644 deploy/black-arachne.service /etc/systemd/system/

@@ -1,7 +1,7 @@
 """Deterministic defensive review with a blinded challenger and an optional model."""
 
 from .agents import model_review
-from .events import episode_window, records
+from .events import DENIAL_REVIEW_THRESHOLD, denied_attempts, episode_window, records
 
 VERSION = "0.1"
 
@@ -22,6 +22,10 @@ def blue(anchor, observations):
     claims = [event for event in observations if event.kind == "deployment" and event.timestamp <= anchor.timestamp]
     failures = [event for event in observations if event.kind == "ssh_failure" and event.timestamp <= anchor.timestamp]
     privileged = [event for event in observations if event.kind == "privileged_activity" and event.timestamp >= anchor.timestamp]
+    denials = denied_attempts(anchor, observations)
+    if len(denials) >= DENIAL_REVIEW_THRESHOLD:
+        return finding("review", "Repeated denied privilege requests require review.",
+                       [anchor, *denials[:DENIAL_REVIEW_THRESHOLD]])
     if privileged and claims:
         return finding("close", "Blue accepted a declared change as a plausible explanation.", [anchor, claims[-1], privileged[0]])
     if len(failures) >= 3 and privileged:

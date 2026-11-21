@@ -3,7 +3,7 @@
 from datetime import datetime, timedelta
 
 from .reasoning import finding, relevant
-from .events import records
+from .events import DENIAL_REVIEW_THRESHOLD, denied_attempts, observation_profile, records
 from .learning import check_model, decision_model
 from .provenance import VERIFICATION_KINDS
 from .role_runtime import RoleFailure, RoleProcess
@@ -25,14 +25,6 @@ CHECKS = {
 RESTRICTED_KINDS = VERIFICATION_KINDS
 
 
-def observation_profile(anchor, events):
-    return {
-        "declared_change": any(event.kind == "deployment" and event.timestamp <= anchor.timestamp for event in events),
-        "prior_failures": sum(event.kind == "ssh_failure" and event.timestamp <= anchor.timestamp for event in events) >= 3,
-        "privileged_activity": any(event.kind == "privileged_activity" and event.timestamp >= anchor.timestamp for event in events),
-    }
-
-
 def blue_hypotheses(profile):
     context = "a declared change" if profile["declared_change"] else "an operator's normal work"
     return {
@@ -49,7 +41,10 @@ def blue_hypotheses(profile):
 
 def red_forecast(profile, history=()):
     """Choose a check on the evidence; model Blue only from observed behavior."""
-    if profile["declared_change"] and profile["privileged_activity"]:
+    if profile.get("repeated_privilege_denials"):
+        check = "identity_record"
+        reason = "The independent identity decision may clarify repeated denied requests."
+    elif profile["declared_change"] and profile["privileged_activity"]:
         check = "change_record"
         reason = "Confirm whether the declared change covers the observed activity."
     elif profile["prior_failures"] and profile["privileged_activity"]:
@@ -80,7 +75,7 @@ def red_forecast(profile, history=()):
 
 def standard_choice(profile):
     """Fixed review procedure using the same catalogue and single-check budget as Red."""
-    if profile["prior_failures"]:
+    if profile["prior_failures"] or profile.get("repeated_privilege_denials"):
         return "activity_record"
     if profile["declared_change"]:
         return "change_record"
@@ -92,7 +87,9 @@ def check_observations(check, anchor, events, profile):
         failures = [event for event in events if event.kind == "ssh_failure" and event.timestamp <= anchor.timestamp]
         privilege = [event for event in events if event.kind == "privileged_activity" and event.timestamp >= anchor.timestamp]
         status = "disputes" if profile["prior_failures"] and profile["privileged_activity"] else "unknown"
-        return {"check": check, "state": status, "evidence_ids": [event.id for event in (*failures[:3], *privilege[:1])]}
+        denials = denied_attempts(anchor, events)[:DENIAL_REVIEW_THRESHOLD]
+        return {"check": check, "state": status,
+                "evidence_ids": [event.id for event in (*failures[:3], *privilege[:1], *denials)]}
     allowed = CHECKS[check]
     candidates = [
         event for event in events
@@ -144,6 +141,9 @@ def operational_policy(anchor, observations, profile, initial, assisted):
     for result in independent:
         if result["state"] == "conflict":
             return reconsider(initial, result, anchor)
+    if profile["repeated_privilege_denials"] and assisted["decision"] == "close":
+        return finding("review", "Repeated denied privilege requests need review before closure.",
+                       [anchor, *denied_attempts(anchor, observations)[:DENIAL_REVIEW_THRESHOLD]])
     if initial["decision"] == "escalate" and assisted["decision"] != "escalate":
         return finding("review", "Escalation was disputed. An operator must reconcile the evidence.", [anchor])
     return assisted
@@ -157,6 +157,9 @@ def full_evidence_reference(anchor, observations, profile):
             if checks[key]["state"] == state:
                 return {"decision": decision, "evidence_ids": checks[key]["evidence_ids"],
                         "reason": "The full-evidence rule prioritizes independent evidence."}
+    if profile["repeated_privilege_denials"]:
+        return finding("review", "The full-evidence rule found repeated denied privilege requests.",
+                       [anchor, *denied_attempts(anchor, observations)[:DENIAL_REVIEW_THRESHOLD]])
     if checks["change_record"]["state"] == "supports" and profile["privileged_activity"]:
         return {"decision": "close", "evidence_ids": checks["change_record"]["evidence_ids"],
                 "reason": "The full-evidence rule found corroborated maintenance."}

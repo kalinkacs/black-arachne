@@ -76,9 +76,12 @@ def triage(path, model=None, limit=20, now=None):
             """SELECT e.host, e.id FROM events e
                LEFT JOIN triaged t ON t.anchor_id=e.id
                LEFT JOIN triage_evidence_state s ON s.anchor_id=e.id
+               LEFT JOIN session_evidence_versions v ON v.anchor_id=e.id
+               LEFT JOIN triage_session_state p ON p.anchor_id=e.id
                WHERE e.timestamp <= ? AND
                (t.anchor_id IS NULL OR (
-                   (SELECT count(*) FROM verified_evidence v WHERE v.anchor_id=e.id) > coalesce(s.verification_count,0)
+                   (SELECT count(*) FROM verified_evidence r WHERE r.anchor_id=e.id) > coalesce(s.verification_count,0)
+                   OR coalesce(v.revision,0) > coalesce(p.revision,0)
                ))
                AND NOT EXISTS (SELECT 1 FROM triage_issues i WHERE i.anchor_id=e.id)
                AND NOT EXISTS (SELECT 1 FROM role_retries r WHERE r.anchor_id=e.id AND r.retry_after > ?)
@@ -115,7 +118,8 @@ def triage(path, model=None, limit=20, now=None):
                                    (anchor_id, str(error), datetime.now(timezone.utc).isoformat()))
                 excluded.append(anchor_id)
                 continue
-            reviewed = len(verifications_for(connection, anchor_id))
+            # Both revisions only increase and belong to this read snapshot.
+            reviewed = input_revision(connection, anchor_id)
             try:
                 report = operational_review(connection, anchor, events, model)
             except RoleFailure as error:
@@ -146,17 +150,31 @@ def triage(path, model=None, limit=20, now=None):
             connection.execute(
                 """INSERT INTO triage_evidence_state VALUES (?, ?)
                    ON CONFLICT(anchor_id) DO UPDATE SET verification_count=excluded.verification_count""",
-                (anchor_id, reviewed),
+                (anchor_id, reviewed[0]),
+            )
+            connection.execute(
+                """INSERT INTO triage_session_state VALUES (?, ?)
+                   ON CONFLICT(anchor_id) DO UPDATE SET revision=excluded.revision""",
+                (anchor_id, reviewed[1]),
             )
             connection.execute("DELETE FROM role_retries WHERE anchor_id=?", (anchor_id,))
             saved.append(run["id"])
     return {"investigated": len(saved), "runs": saved, "excluded": excluded, "retrying": retries}
 
 
+def input_revision(connection, anchor_id):
+    return connection.execute(
+        """SELECT (SELECT count(*) FROM verified_evidence WHERE anchor_id=?),
+           coalesce((SELECT revision FROM session_evidence_versions WHERE anchor_id=?),0)""",
+        (anchor_id, anchor_id),
+    ).fetchone()
+
+
 def latest_revision(connection, anchor_id):
     row = connection.execute(
-        """SELECT coalesce(s.verification_count,0) FROM triaged t
-           LEFT JOIN triage_evidence_state s ON s.anchor_id=t.anchor_id WHERE t.anchor_id=?""",
+        """SELECT coalesce(s.verification_count,0), coalesce(p.revision,0) FROM triaged t
+           LEFT JOIN triage_evidence_state s ON s.anchor_id=t.anchor_id
+           LEFT JOIN triage_session_state p ON p.anchor_id=t.anchor_id WHERE t.anchor_id=?""",
         (anchor_id,),
     ).fetchone()
-    return row[0] if row else -1
+    return row if row else (-1, -1)

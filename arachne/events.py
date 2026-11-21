@@ -8,9 +8,11 @@ import re
 
 ANCHOR_KINDS = {"ssh_login", "ssh_session_open"}
 KINDS = ANCHOR_KINDS | {
-    "ssh_failure", "privileged_activity", "deployment", "change_verified",
+    "ssh_failure", "privileged_activity", "privilege_denied", "deployment", "change_verified",
     "change_disputed", "identity_verified", "identity_disputed",
 }
+SESSION_ACTIVITY = {"ssh_failure", "privileged_activity", "privilege_denied"}
+DENIAL_REVIEW_THRESHOLD = 2
 MAX_LINE = 65_536
 NATIVE_EXECUTABLES = {
     "sshd": {"/usr/sbin/sshd", "/sbin/sshd"},
@@ -87,6 +89,14 @@ def journal_session(record):
     return machine, hashlib.sha256(f"{machine}:{boot}:{int(audit)}".encode()).hexdigest()
 
 
+def sudo_denial(detail):
+    decision = detail.casefold()
+    return any(phrase in decision for phrase in (
+        "not in sudoers", "not allowed to execute", "authentication failure",
+        "incorrect password attempt", "a password is required", "account validation failure",
+    ))
+
+
 def from_journal(record, *, native=False):
     message = record.get("MESSAGE")
     identifier = record.get("SYSLOG_IDENTIFIER")
@@ -106,8 +116,14 @@ def from_journal(record, *, native=False):
         elif fields[0] == "Failed" and fields[2] == "for":
             kind = "ssh_failure"
             actor = fields[5] if fields[3:5] == ["invalid", "user"] and len(fields) > 5 else fields[3]
-    elif identifier == "sudo" and fields and "COMMAND=" in message and " : " in message:
-        kind, actor = "privileged_activity", fields[0]
+    elif identifier == "sudo" and fields and " : " in message:
+        actor, _, content = message.partition(" : ")
+        actor = actor.strip()
+        first = content.split(";", 1)[0].strip()
+        if first.startswith("TTY=") and "COMMAND=" in content:
+            kind = "privileged_activity"
+        elif sudo_denial(first):
+            kind = "privilege_denied"
     if kind is None:
         return None
     cursor = record.get("__CURSOR")
@@ -136,12 +152,26 @@ def records(events):
     return [{key: value for key, value in asdict(event).items() if value is not None} for event in events]
 
 
+PRE_LOGIN_OBSERVATION = timedelta(minutes=10)
 POST_LOGIN_OBSERVATION = timedelta(minutes=15)
 
 
 def episode_window(anchor):
     timestamp = datetime.fromisoformat(anchor.timestamp)
     return (
-        (timestamp - timedelta(minutes=10)).isoformat(timespec="microseconds"),
+        (timestamp - PRE_LOGIN_OBSERVATION).isoformat(timespec="microseconds"),
         (timestamp + POST_LOGIN_OBSERVATION).isoformat(timespec="microseconds"),
     )
+
+
+def denied_attempts(anchor, events):
+    return [event for event in events if event.kind == "privilege_denied" and event.timestamp >= anchor.timestamp]
+
+
+def observation_profile(anchor, events):
+    return {
+        "declared_change": any(event.kind == "deployment" and event.timestamp <= anchor.timestamp for event in events),
+        "prior_failures": sum(event.kind == "ssh_failure" and event.timestamp <= anchor.timestamp for event in events) >= 3,
+        "privileged_activity": any(event.kind == "privileged_activity" and event.timestamp >= anchor.timestamp for event in events),
+        "repeated_privilege_denials": len(denied_attempts(anchor, events)) >= DENIAL_REVIEW_THRESHOLD,
+    }

@@ -7,7 +7,10 @@ import json
 import sqlite3
 from uuid import uuid4
 
-from .events import ANCHOR_KINDS, Event, encode, episode_window, records
+from .events import (
+    ANCHOR_KINDS, POST_LOGIN_OBSERVATION, PRE_LOGIN_OBSERVATION, SESSION_ACTIVITY,
+    Event, encode, episode_window, observation_profile, records,
+)
 from .learning import MAX_HISTORY
 from .provenance import authenticate, check_binding
 from .sessions import attributed_events
@@ -43,6 +46,12 @@ CREATE TABLE IF NOT EXISTS triaged (
 );
 CREATE TABLE IF NOT EXISTS triage_evidence_state (
     anchor_id TEXT PRIMARY KEY REFERENCES events(id), verification_count INTEGER NOT NULL
+);
+CREATE TABLE IF NOT EXISTS session_evidence_versions (
+    anchor_id TEXT PRIMARY KEY REFERENCES events(id), revision INTEGER NOT NULL
+);
+CREATE TABLE IF NOT EXISTS triage_session_state (
+    anchor_id TEXT PRIMARY KEY REFERENCES events(id), revision INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS triage_issues (
     anchor_id TEXT PRIMARY KEY REFERENCES events(id), reason TEXT NOT NULL, created TEXT NOT NULL
@@ -107,6 +116,7 @@ def ingest(connection, events):
         )
         if result.rowcount:
             inserted += 1
+            advance_related_logins(connection, event)
         else:
             original, = connection.execute(
                 "SELECT payload FROM events WHERE id = ?", (event.id,)
@@ -115,9 +125,38 @@ def ingest(connection, events):
                 previous = Event.parse(json.loads(original))
                 if journal_enrichment(previous, event):
                     connection.execute("UPDATE events SET payload=? WHERE id=?", (payload, event.id))
+                    advance_related_logins(connection, event)
                 else:
                     raise ValueError(f"Conflicting evidence id: {event.id}")
     return inserted
+
+
+def advance_related_logins(connection, event):
+    # If the anchor itself was enriched on replay, its existing analysis
+    # might have been made without session attribution.
+    if event.kind in ANCHOR_KINDS and event.source == "systemd-journal" and event.session_key:
+        connection.execute(
+            """INSERT INTO session_evidence_versions VALUES (?, 1)
+               ON CONFLICT(anchor_id) DO UPDATE SET revision=revision+1""",
+            (event.id,),
+        )
+        return
+    if event.kind not in SESSION_ACTIVITY or not event.session_key:
+        return
+    at = datetime.fromisoformat(event.timestamp)
+    after = (at - POST_LOGIN_OBSERVATION).isoformat(timespec="microseconds")
+    before = (at + PRE_LOGIN_OBSERVATION).isoformat(timespec="microseconds")
+    connection.execute(
+        """INSERT INTO session_evidence_versions(anchor_id,revision)
+           SELECT id, 1 FROM events WHERE host=? AND timestamp BETWEEN ? AND ?
+               AND json_extract(payload,'$.session_key')=?
+               AND json_extract(payload,'$.machine_id')=?
+               AND json_extract(payload,'$.actor')=?
+               AND json_extract(payload,'$.kind') IN ('ssh_login','ssh_session_open')
+               AND json_extract(payload,'$.source')='systemd-journal'
+           ON CONFLICT(anchor_id) DO UPDATE SET revision=revision+1""",
+        (event.host, after, before, event.session_key, event.machine_id, event.actor),
+    )
 
 
 def journal_enrichment(previous, event):
@@ -275,11 +314,7 @@ def status_snapshot(connection):
 
 def evidence_profile(anchor, events):
     relevant = [event for event in events if event.host == anchor.host and event.actor == anchor.actor]
-    return (
-        any(event.kind == "deployment" and event.timestamp <= anchor.timestamp for event in relevant),
-        sum(event.kind == "ssh_failure" and event.timestamp <= anchor.timestamp for event in relevant) >= 3,
-        any(event.kind == "privileged_activity" and event.timestamp >= anchor.timestamp for event in relevant),
-    )
+    return observation_profile(anchor, relevant)
 
 
 def confirmed_history(connection, anchor, events):

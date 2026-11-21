@@ -23,6 +23,7 @@ PHASES = {
     "control": {"select"},
 }
 PROFILE_KEYS = {"declared_change", "prior_failures", "privileged_activity"}
+OPTIONAL_PROFILE_KEYS = {"repeated_privilege_denials"}
 DECISIONS = {"close", "review", "escalate"}
 STATES = {"supports", "disputes", "unknown", "conflict"}
 
@@ -32,7 +33,7 @@ def handle(role, phase, payload, state):
         raise ValueError("Unsupported role phase")
     if phase in {"forecast", "select"}:
         expected = {"profile", "history"}
-        if (set(payload) != expected or set(payload["profile"]) != PROFILE_KEYS
+        if (set(payload) != expected or not PROFILE_KEYS <= set(payload["profile"]) <= PROFILE_KEYS | OPTIONAL_PROFILE_KEYS
                 or not all(type(value) is bool for value in payload["profile"].values())):
             raise ValueError("Invalid coarse profile")
         if phase in state:

@@ -14,7 +14,7 @@ TEXT = {"type": "string"}
 MIMIC_CHECKS = {
     "change_record": "Read the trusted change record.",
     "identity_record": "Read the independent identity decision.",
-    "activity_record": "Check past failure count and later privileged activity.",
+    "activity_record": "Check failed logins and accepted or denied privilege requests.",
 }
 EXPECTED_STATE = {"type": "string", "enum": ["supports", "disputes", "unknown"]}
 MIMIC_EXPECTATIONS = {
