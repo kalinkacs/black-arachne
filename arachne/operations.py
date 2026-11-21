@@ -3,7 +3,7 @@
 from datetime import datetime, timedelta, timezone
 import subprocess
 
-from .events import POST_LOGIN_OBSERVATION, from_journal, read_records
+from .events import NativeJournalCoverage, POST_LOGIN_OBSERVATION, encode, read_records
 from .mimicry import mimic
 from .role_runtime import RoleFailure
 from .sessions import attributed_events, attribution
@@ -34,6 +34,7 @@ def collect(connection, since, reader=journal_batch):
     ).fetchone()
     cursor = state[0] if state else None
     last = cursor
+    coverage = NativeJournalCoverage()
 
     def normalize():
         nonlocal last
@@ -41,7 +42,7 @@ def collect(connection, since, reader=journal_batch):
             if not isinstance(row, dict) or not isinstance(row.get("__CURSOR"), str) or not row["__CURSOR"]:
                 raise ValueError("Journal record has no valid cursor")
             last = row["__CURSOR"]
-            event = from_journal(row, native=True)
+            event = coverage.normalize(row)
             if event:
                 yield event
 
@@ -57,7 +58,13 @@ def collect(connection, since, reader=journal_batch):
            ON CONFLICT(name) DO UPDATE SET checked_at=excluded.checked_at, inserted=excluded.inserted""",
         (datetime.now(timezone.utc).isoformat(), inserted),
     )
-    return {"inserted": inserted, "checkpoint_advanced": last != cursor}
+    report = coverage.report()
+    connection.execute(
+        """INSERT INTO collector_coverage VALUES ('local_journal', ?)
+           ON CONFLICT(name) DO UPDATE SET payload=excluded.payload""",
+        (encode(report),),
+    )
+    return {"inserted": inserted, "checkpoint_advanced": last != cursor, "coverage": report}
 
 
 def operational_review(connection, anchor, events, model):

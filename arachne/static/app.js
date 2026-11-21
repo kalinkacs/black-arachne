@@ -255,6 +255,8 @@ async function refreshStatus() {
     "Ожидают повтора " + status.pending_role_retries
   ];
   fields.push(status.collector ? "Сбор проверен " + formatTime(status.collector.checked_at) + " UTC" : "Ожидание запуска сборщика");
+  const missing = status.collector?.coverage?.missing_executable;
+  if (missing) fields.push("Без пути к программе в последнем сборе " + missing);
   document.querySelector("#collector-status").textContent = fields.join(" · ");
 }
 

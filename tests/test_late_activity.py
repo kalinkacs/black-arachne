@@ -7,8 +7,8 @@ from unittest.mock import patch
 
 from arachne.events import from_journal
 from arachne.mimicry import mimic
-from arachne.operations import operational_review, triage
-from arachne.store import database, get_run, ingest
+from arachne.operations import collect, operational_review, triage
+from arachne.store import database, get_run, ingest, status_snapshot
 from test_arachne import journal
 from test_offline import bind_session, sample
 
@@ -106,6 +106,18 @@ class SudoClassificationTests(unittest.TestCase):
                 report = operational_review(connection, anchor, [*events, diagnostic], None)
         self.assertIn(diagnostic.id, report["session_attribution"]["excluded"])
         self.assertNotIn(diagnostic.id, report["blue"]["evidence_ids"])
+
+    def test_collection_status_reports_missing_executable_paths(self):
+        accepted = journal("operator : PWD=/tmp ; USER=root ; COMMAND=/usr/bin/true", "sudo", "accepted", 0)
+        logs = [accepted, {**accepted, "_EXE": None, "__CURSOR": "missing-meta"}]
+        expected = {"read": 2, "retained": 1, "missing_executable": 1}
+        with tempfile.TemporaryDirectory() as directory:
+            db = Path(directory) / "records.sqlite3"
+            with database(db) as connection:
+                result = collect(connection, "today", reader=lambda since, cursor: logs)
+                self.assertEqual(result["coverage"], expected)
+                self.assertEqual(status_snapshot(connection)["collector"]["coverage"], expected)
+                self.assertEqual(result["inserted"], 1)
 
     def test_repeated_denials_require_review_even_with_an_approved_change(self):
         anchor, events = sample("change-confirmed")

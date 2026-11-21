@@ -2,7 +2,6 @@
 
 import argparse
 from contextlib import nullcontext
-from functools import partial
 import json
 import os
 from pathlib import Path
@@ -12,7 +11,7 @@ from urllib.error import HTTPError, URLError
 
 from . import __version__
 from .evaluation import evaluate
-from .events import Event, from_journal, read_records
+from .events import Event, NativeJournalCoverage, from_journal, read_records
 from .files import FILE_LIMITS, load_indicators, scan
 from .integrity import baseline_catalog, establish, observe, recent_findings, scheduled_checks
 from .lab import run_lab
@@ -163,12 +162,17 @@ def main(argv=None):
             return 1 if "journal_error" in collection or failed_scan else 0
         with database(options.db) as connection:
             if options.command in ("import-events", "import-journal"):
-                normalize = Event.parse if options.command == "import-events" else partial(from_journal, native=options.native)
+                coverage = NativeJournalCoverage() if options.command == "import-journal" and options.native else None
+                normalize = Event.parse if options.command == "import-events" else from_journal
+                if coverage is not None:
+                    normalize = coverage.normalize
                 stream = nullcontext(sys.stdin) if options.file == "-" else open(options.file, encoding="utf-8")
                 with stream as source:
                     events = (normalize(record) for record in read_records(source) if isinstance(record, dict)
                               or options.command == "import-events")
                     result = {"inserted": ingest(connection, (event for event in events if event is not None))}
+                    if coverage is not None:
+                        result["coverage"] = coverage.report()
             elif options.command == "import-verifications":
                 key = load_key(options.key)
                 with open(options.file, encoding="utf-8") as stream:

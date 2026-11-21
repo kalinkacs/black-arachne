@@ -63,6 +63,9 @@ CREATE TABLE IF NOT EXISTS role_retries (
 CREATE TABLE IF NOT EXISTS collector_health (
     name TEXT PRIMARY KEY, checked_at TEXT NOT NULL, inserted INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS collector_coverage (
+    name TEXT PRIMARY KEY, payload TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS integrity_baselines (
     id TEXT PRIMARY KEY, name TEXT NOT NULL UNIQUE, definition TEXT NOT NULL,
     current TEXT NOT NULL, revision INTEGER NOT NULL, last_checked TEXT NOT NULL
@@ -299,6 +302,7 @@ def status_snapshot(connection):
     checked = connection.execute(
         "SELECT checked_at, inserted FROM collector_health WHERE name = 'local_journal'"
     ).fetchone()
+    coverage = connection.execute("SELECT payload FROM collector_coverage WHERE name='local_journal'").fetchone()
     return {
         "events": connection.execute("SELECT count(*) FROM events").fetchone()[0],
         "investigations": connection.execute(
@@ -308,7 +312,8 @@ def status_snapshot(connection):
         "authenticated_records": connection.execute("SELECT count(*) FROM verified_evidence").fetchone()[0],
         "excluded_anchors": connection.execute("SELECT count(*) FROM triage_issues").fetchone()[0],
         "pending_role_retries": connection.execute("SELECT count(*) FROM role_retries").fetchone()[0],
-        "collector": {"checked_at": checked[0], "inserted": checked[1]} if checked else None,
+        "collector": {"checked_at": checked[0], "inserted": checked[1],
+                      "coverage": json.loads(coverage[0]) if coverage else None} if checked else None,
     }
 
 

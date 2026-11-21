@@ -156,6 +156,23 @@ def from_journal(record, *, native=False):
         return None
 
 
+class NativeJournalCoverage:
+    """Count usable messages and missing executable provenance in an import."""
+
+    def __init__(self):
+        self.read = self.retained = self.missing_executable = 0
+
+    def normalize(self, record):
+        self.read += 1
+        self.missing_executable += int(not isinstance(record.get("_EXE"), str))
+        event = from_journal(record, native=True)
+        self.retained += int(event is not None)
+        return event
+
+    def report(self):
+        return {"read": self.read, "retained": self.retained, "missing_executable": self.missing_executable}
+
+
 def records(events):
     return [{key: value for key, value in asdict(event).items() if value is not None} for event in events]
 
