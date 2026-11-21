@@ -67,6 +67,7 @@ def read_records(stream):
             yield json.loads(line)
 
 
+SSH_SESSION = re.compile(r"^Starting session: .+ for ([^\s]+) from \S+ port \d+ id \d+$")
 PAM_LOGIN = re.compile(r"^pam_unix\(sshd(?:-session)?:session\): session opened for user ([^\s(]+)")
 
 
@@ -97,9 +98,9 @@ def from_journal(record, *, native=False):
     machine, session = journal_session(record)
     kind, actor = None, None
     if identifier in {"sshd", "sshd-session"} and len(fields) >= 4:
-        pam_login = PAM_LOGIN.match(message)
-        if pam_login and session:
-            kind, actor = "ssh_session_open", pam_login[1]
+        session_open = PAM_LOGIN.match(message) or SSH_SESSION.fullmatch(message)
+        if session_open and session:
+            kind, actor = "ssh_session_open", session_open[1]
         elif fields[0] == "Accepted" and fields[2] == "for":
             kind, actor = "ssh_login", fields[3]
         elif fields[0] == "Failed" and fields[2] == "for":

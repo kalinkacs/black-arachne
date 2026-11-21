@@ -148,6 +148,19 @@ function outcomePanel(report) {
   return panel;
 }
 
+function sessionCard(scope, indices) {
+  const panel = node("section", undefined, "card");
+  const status = scope.status === "bound"
+    ? "Сеанс связан с журналом аудита Linux."
+    : "В журнале нет идентификатора сеанса. Активность нельзя надёжно связать с этим входом.";
+  panel.append(node("h3", "Привязка к сеансу"), node("p", status),
+    node("small", "Связано " + scope.linked.length + " · Контекст " + scope.context.length
+      + " · Исключено " + scope.excluded.length));
+  const references = evidence(scope.excluded, indices);
+  if (references) panel.append(node("small", "Улики вне сеанса " + references, "mismatch"));
+  return panel;
+}
+
 function render(report) {
   const indices = new Map(report.events.map((event, i) => [event.id, i + 1]));
   const heading = node("h2", report.scenario || report.host);
@@ -174,6 +187,9 @@ function render(report) {
     const item = node("li");
     item.append(node("span", "E" + indices.get(event.id), "event-number"),
       node("div", event.kind + " · " + event.actor), node("small", formatTime(event.timestamp) + " UTC · " + event.source));
+    if (report.session_attribution?.excluded.includes(event.id)) {
+      item.append(node("small", "Вне сеанса · не учтено в решении", "mismatch"));
+    }
     if (report.provenance?.unverified.includes(event.id)) {
       item.append(node("small", "Подтверждение не прошло проверку источника", "mismatch"));
     } else if (report.provenance && Object.hasOwn(report.provenance.verified, event.id)) {
@@ -182,8 +198,12 @@ function render(report) {
     timeline.append(item);
   }
   caseElement.replaceChildren(heading, subheading, forecast, cards);
+  if (report.session_attribution) caseElement.append(sessionCard(report.session_attribution, indices));
   if (report.recommendation) {
     caseElement.append(decisionCard("Защитная рекомендация", report.recommendation, indices));
+  }
+  if (report.full_evidence_reference) {
+    caseElement.append(decisionCard("Правила со всеми проверками", report.full_evidence_reference, indices, report.label));
   }
   if (report.mimicry) caseElement.append(reasoningPanel(report.mimicry, indices));
   if (report.role_runtime?.trace) caseElement.append(roleTimeline(report.role_runtime));

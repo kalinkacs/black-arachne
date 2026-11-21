@@ -22,6 +22,8 @@ class SessionTests(unittest.TestCase):
         self.assertEqual(anchor.kind, "ssh_session_open")
         self.assertEqual(anchor.actor, "operator")
         self.assertEqual(anchor.session_key, linked.session_key)
+        verbose = journal("Starting session: command for operator from 127.0.0.1 port 12345 id 0", "sshd", "verbose", 0)
+        self.assertEqual(from_journal({**verbose, **fields}, native=True).session_key, anchor.session_key)
         self.assertIsNone(from_journal({**login, **fields, "_AUDIT_SESSION": "4294967295"}, native=True))
         self.assertNotEqual(from_journal({**sudo, **fields, "_BOOT_ID": "c" * 32}, native=True).session_key,
                             anchor.session_key)

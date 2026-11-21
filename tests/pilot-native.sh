@@ -100,9 +100,15 @@ root = Path(sys.argv[1])
 anchors = json.loads((root / "anchors.json").read_text())
 by_session = {anchor["session_key"]: anchor for anchor in anchors if anchor.get("session_key")}
 if len(by_session) != 2:
-    diagnostics = Counter((entry.get("SYSLOG_IDENTIFIER"), bool(entry.get("_AUDIT_SESSION")),
-                           bool(entry.get("_MACHINE_ID")), bool(entry.get("_BOOT_ID")))
-                          for entry in map(json.loads, (root / "native.jsonl").read_text().splitlines()))
+    def describe(entry):
+        message = entry.get("MESSAGE", "")
+        prefix = next((key for key in ("Accepted", "pam_unix", "Starting session:", "Close session:")
+                       if isinstance(message, str) and message.startswith(key)), "other")
+        audit = entry.get("_AUDIT_SESSION")
+        return (entry.get("SYSLOG_IDENTIFIER"), Path(entry.get("_EXE", "/unknown")).name, prefix,
+                type(audit).__name__, audit in ("0", "4294967295"), bool(entry.get("_MACHINE_ID")), bool(entry.get("_BOOT_ID")))
+
+    diagnostics = Counter(map(describe, map(json.loads, (root / "native.jsonl").read_text().splitlines())))
     print(f"Native journal source coverage: {dict(diagnostics)}", file=sys.stderr)
     raise SystemExit(f"Expected two audit-bound SSH sessions, captured {len(by_session)}")
 
