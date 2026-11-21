@@ -5,7 +5,10 @@ import json
 import sys
 
 from .learning import hypothesis_model
-from .mimicry import CHECKS, RESTRICTED_KINDS, blue_hypotheses, observation_profile, reconsider, red_forecast, standard_choice
+from .mimicry import (
+    CHECKS, CROSS_CHECKS, RESTRICTED_KINDS, blue_hypotheses, checked_commitment,
+    observation_profile, reconsider, red_forecast, standard_choice,
+)
 from .reasoning import blue
 from .role_runtime import FORMAT, MAX_PACKET
 
@@ -18,8 +21,8 @@ class Observation:
 
 
 PHASES = {
-    "red": {"forecast", "compare"},
-    "blue": {"assess", "reconsider"},
+    "red": {"forecast", "compare", "commit", "switch"},
+    "blue": {"assess", "reconsider", "commit", "switch"},
     "control": {"select"},
 }
 PROFILE_KEYS = {"declared_change", "prior_failures", "privileged_activity"}
@@ -28,9 +31,44 @@ DECISIONS = {"close", "review", "escalate"}
 STATES = {"supports", "disputes", "unknown", "conflict"}
 
 
+def cross_examine(role, phase, payload, state):
+    initial_phase, reveal_phase = ("forecast", "compare") if role == "red" else ("assess", "reconsider")
+    if initial_phase not in state or phase in state or reveal_phase in state:
+        raise ValueError("Commitments must follow assessment and precede additional evidence")
+    if phase == "commit" and not payload:
+        if role == "red":
+            check = state["forecast"]["check"]
+            if check not in CROSS_CHECKS:
+                check = "identity_record"
+            expected = "disputes"
+        else:
+            decision = state["assess"]["decision"]
+            check = "change_record" if decision == "close" else "identity_record"
+            expected = "disputes" if decision == "escalate" else "supports"
+    elif phase == "switch" and set(payload) == {"peer"} and "commit" in state:
+        peer = checked_commitment(payload["peer"])
+        check = peer["check"]
+        if role == "red":
+            # Argue the case for legitimate work using the independent
+            # source that Blue named before hearing the challenge.
+            expected = "supports"
+        else:
+            # A valid change record addresses authorization. It leaves the
+            # identity of the person using the account open to challenge.
+            if check == "change_record":
+                check = "identity_record"
+            expected = "disputes"
+    else:
+        raise ValueError("Invalid role-switch request")
+    state[phase] = True
+    return {"check": check, "expected_state": expected}
+
+
 def handle(role, phase, payload, state):
     if phase not in PHASES[role] or not isinstance(payload, dict):
         raise ValueError("Unsupported role phase")
+    if phase in {"commit", "switch"}:
+        return cross_examine(role, phase, payload, state)
     if phase in {"forecast", "select"}:
         expected = {"profile", "history"}
         if (set(payload) != expected or not PROFILE_KEYS <= set(payload["profile"]) <= PROFILE_KEYS | OPTIONAL_PROFILE_KEYS

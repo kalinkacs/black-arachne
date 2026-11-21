@@ -23,6 +23,7 @@ CHECKS = {
     "activity_record": {"source": "systemd-journal"},
 }
 RESTRICTED_KINDS = VERIFICATION_KINDS
+CROSS_CHECKS = ("change_record", "identity_record")
 
 
 def blue_hypotheses(profile):
@@ -169,7 +170,7 @@ def full_evidence_reference(anchor, observations, profile):
     return finding("review", "The full-evidence rule needs further context.", [anchor])
 
 
-def isolated_branches(anchor, scoped, visible, profile, history):
+def isolated_branches(anchor, scoped, visible, profile, history, *, cross_examine=False):
     """Send each role a separate minimized projection, then compare its responses."""
     handles = {event.id: f"E{index}" for index, event in enumerate(visible)}
     undisclosed = [event for event in scoped if event.id not in handles]
@@ -226,6 +227,17 @@ def isolated_branches(anchor, scoped, visible, profile, history):
             raise RoleFailure("A role selected a check outside the catalogue")
         if forecast.get("prediction") not in ("review", "close", "escalate", None):
             raise RoleFailure("Red returned an unsupported prediction")
+        commitments = None
+        if cross_examine:
+            red_plan = checked_commitment(step(red, "commit", {}))
+            blue_plan = checked_commitment(step(blue, "commit", {}))
+            commitments = {
+                "without_swap": {"red": red_plan, "blue": blue_plan},
+                "with_swap": {
+                    "red": checked_commitment(step(red, "switch", {"peer": blue_plan})),
+                    "blue": checked_commitment(step(blue, "switch", {"peer": red_plan})),
+                },
+            }
         standard_result, assisted_result = selected_observations(standard, forecast, anchor, scoped, profile)
 
         def review(observed):
@@ -240,10 +252,39 @@ def isolated_branches(anchor, scoped, visible, profile, history):
                                          "observation": assisted_result["state"]})
 
     hypotheses = checked_hypotheses(assessed.get("hypotheses"))
+    cross_exam = {}
+    if commitments is not None:
+        cross_exam = {"cross_examination": {
+            branch: evaluate_commitments(plans, initial_mapped, anchor, scoped, profile)
+            for branch, plans in commitments.items()
+        }}
     return {"forecast": forecast, "initial": initial_mapped, "hypotheses": hypotheses,
             "standard": standard, "standard_result": standard_result, "assisted_result": assisted_result,
             "ordinary_review": ordinary_review, "assisted": assisted,
-            "role_runtime": {"mode": "local-processes", "trace": trace, "red_feedback": feedback}}
+            "role_runtime": {"mode": "local-processes", "trace": trace, "red_feedback": feedback},
+            **cross_exam}
+
+
+def checked_commitment(value):
+    if (not isinstance(value, dict) or set(value) != {"check", "expected_state"}
+            or value["check"] not in CROSS_CHECKS or value["expected_state"] not in ("supports", "disputes")):
+        raise RoleFailure("Invalid cross-examination commitment")
+    return value
+
+
+def evaluate_commitments(plans, initial, anchor, scoped, profile):
+    # Both arms select against the same frozen Blue assessment. An initial
+    # escalation needs a test that can support a benign explanation.
+    preferred_state = "supports" if initial["decision"] == "escalate" else "disputes"
+    role = next((role for role in ("blue", "red") if plans[role]["expected_state"] == preferred_state), "blue")
+    selected = plans[role]
+    observed = check_observations(selected["check"], anchor, scoped, profile)
+    return {
+        "commitments": plans, "selected_role": role, "observation": observed,
+        "forecast_matched": (selected["expected_state"] == observed["state"]
+                             if observed["state"] in ("supports", "disputes") else None),
+        **reconsider(initial, observed, anchor),
+    }
 
 
 def checked_hypotheses(value):
@@ -289,8 +330,10 @@ def external_branches(anchor, scoped, visible, profile, history, model):
             "assisted": reconsider(initial, assisted_result, anchor), "role_runtime": {"mode": "external-model"}}
 
 
-def mimic(anchor, events, history=(), model=None, *, verified=None, session_scope=None):
+def mimic(anchor, events, history=(), model=None, *, verified=None, session_scope=None, cross_examine=False):
     """Freeze both perspectives before either branch receives any verification."""
+    if model and cross_examine:
+        raise ValueError("Experimental role switching requires offline workers")
     scoped = relevant(anchor, events)
     provenance = None
     if verified is not None:
@@ -305,7 +348,7 @@ def mimic(anchor, events, history=(), model=None, *, verified=None, session_scop
     visible = [event for event in scoped if event.kind not in RESTRICTED_KINDS]
     profile = observation_profile(anchor, visible)
     branches = (external_branches(anchor, scoped, visible, profile, history, model) if model
-                else isolated_branches(anchor, scoped, visible, profile, history))
+                else isolated_branches(anchor, scoped, visible, profile, history, cross_examine=cross_examine))
     challenger, initial = branches["forecast"], branches["initial"]
     hypotheses = branches["hypotheses"]
     observed = branches["assisted_result"]
@@ -332,6 +375,7 @@ def mimic(anchor, events, history=(), model=None, *, verified=None, session_scop
         "full_evidence_reference": full_evidence_reference(anchor, scoped, profile),
         "history_used": list(history),
         "role_runtime": branches["role_runtime"],
+        **({"cross_examination": branches["cross_examination"]} if cross_examine else {}),
         "mimicry": {
             "hypotheses": hypotheses,
             "standard_reviewer": branches["standard"],

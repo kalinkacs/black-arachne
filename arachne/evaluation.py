@@ -33,6 +33,7 @@ def evaluate(stream, model=None, *, analyze=investigate, on_case=None):
     counts = {variant: defaultdict(int) for variant in VARIANTS}
     families = defaultdict(lambda: defaultdict(int))
     safety = defaultdict(int)
+    role_swap = None
     forecast_cases = 0
     ids = set()
     start = perf_counter()
@@ -48,15 +49,31 @@ def evaluate(stream, model=None, *, analyze=investigate, on_case=None):
             on_case({**report, "scenario": case_id, "label": expected})
         family = families[record["family"]]
         family["total"] += 1
-        for variant in (*VARIANTS, FULL_REFERENCE):
-            if variant not in report:
-                continue
+        compared = {variant: report[variant] for variant in (*VARIANTS, FULL_REFERENCE) if variant in report}
+        if "cross_examination" in report:
+            arms = report["cross_examination"]
+            compared.update(arms)
+            if role_swap is None:
+                role_swap = {"changed_checks": 0, "changed_decisions": 0,
+                             "only_with_swap_correct": 0, "only_without_swap_correct": 0}
+            original, switched = arms["without_swap"], arms["with_swap"]
+            role_swap["changed_checks"] += int(original["observation"]["check"] != switched["observation"]["check"])
+            role_swap["changed_decisions"] += int(original["decision"] != switched["decision"])
+            original_correct, switched_correct = original["decision"] == expected, switched["decision"] == expected
+            role_swap["only_with_swap_correct"] += int(switched_correct and not original_correct)
+            role_swap["only_without_swap_correct"] += int(original_correct and not switched_correct)
+        for variant, assessment in compared.items():
             if variant not in counts:
                 counts[variant] = defaultdict(int)
-            decision = report[variant]["decision"]
+            decision = assessment["decision"]
             counts[variant]["correct"] += int(expected == decision)
             counts[variant]["missed_escalations"] += int(expected == "escalate" and decision != expected)
             counts[variant]["false_escalations"] += int(expected != "escalate" and decision == "escalate")
+            if variant in ("without_swap", "with_swap"):
+                counts[variant]["false_closures"] += int(expected != "close" and decision == "close")
+                matched = assessment["forecast_matched"]
+                counts[variant]["forecasts_resolved"] += int(matched is not None)
+                counts[variant]["forecasts_matched"] += int(matched is True)
             family[variant] += int(expected == decision)
         if "mimicry" in report:
             forecast_cases += 1
@@ -73,4 +90,7 @@ def evaluate(stream, model=None, *, analyze=investigate, on_case=None):
               "elapsed_seconds": round(perf_counter() - start, 3)}
     if forecast_cases:
         result["checks_per_variant"] = {"blue": 0, "standard_review": 1, "assisted": 1, FULL_REFERENCE: 3}
+    if role_swap is not None:
+        result["checks_per_variant"].update({"without_swap": 1, "with_swap": 1})
+        result["role_swap"] = role_swap
     return result

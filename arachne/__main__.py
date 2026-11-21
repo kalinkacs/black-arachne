@@ -2,6 +2,7 @@
 
 import argparse
 from contextlib import nullcontext
+from functools import partial
 import json
 import os
 from pathlib import Path
@@ -85,6 +86,8 @@ def parser():
     benchmark = commands.add_parser("evaluate", help="Compare reviewers on labeled JSONL episodes")
     benchmark.add_argument("file")
     model_options(benchmark)
+    benchmark.add_argument("--cross-examine", action="store_true",
+                           help="Compare offline agents with and without reciprocal role switching")
     trial = commands.add_parser("trial", help="Run the packaged perspective comparison and save its dossiers")
     model_options(trial)
     scanner = commands.add_parser("scan-files", help="Compare local file hashes with trusted SHA-256 indicators")
@@ -141,8 +144,11 @@ def main(argv=None):
             print(json.dumps(result, indent=2, ensure_ascii=False))
             return (2 if result["findings"] else 0) if result["complete"] else 3
         if options.command == "evaluate":
+            if options.cross_examine and options.model:
+                raise ValueError("--cross-examine uses offline workers")
             with open(options.file, encoding="utf-8") as stream:
-                print(json.dumps(evaluate(stream, options.model, analyze=mimic), indent=2))
+                analyze = partial(mimic, cross_examine=True) if options.cross_examine else mimic
+                print(json.dumps(evaluate(stream, options.model, analyze=analyze), indent=2))
             return 0
         if options.command == "serve":
             serve(options.db, options.port, options.operator)
