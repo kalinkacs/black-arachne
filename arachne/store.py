@@ -33,6 +33,10 @@ CREATE TABLE IF NOT EXISTS triaged (
 CREATE TABLE IF NOT EXISTS triage_issues (
     anchor_id TEXT PRIMARY KEY REFERENCES events(id), reason TEXT NOT NULL, created TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS role_retries (
+    anchor_id TEXT PRIMARY KEY REFERENCES events(id),
+    attempts INTEGER NOT NULL, retry_after TEXT NOT NULL, reason TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS collector_health (
     name TEXT PRIMARY KEY, checked_at TEXT NOT NULL, inserted INTEGER NOT NULL
 );
@@ -195,6 +199,7 @@ def status_snapshot(connection):
         ).fetchone()[0],
         "confirmed": connection.execute("SELECT count(*) FROM outcomes").fetchone()[0],
         "excluded_anchors": connection.execute("SELECT count(*) FROM triage_issues").fetchone()[0],
+        "pending_role_retries": connection.execute("SELECT count(*) FROM role_retries").fetchone()[0],
         "collector": {"checked_at": checked[0], "inserted": checked[1]} if checked else None,
     }
 

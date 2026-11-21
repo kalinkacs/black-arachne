@@ -26,6 +26,14 @@ def positive_int(value):
     return number
 
 
+def model_options(command, default=None):
+    backend = command.add_mutually_exclusive_group()
+    backend.add_argument("--model", help="Enable an external model for both roles")
+    backend.add_argument("--offline", dest="model", action="store_const", const=None,
+                         help="Use local role processes even if ARACHNE_MODEL is set")
+    command.set_defaults(model=default)
+
+
 def parser():
     app = argparse.ArgumentParser(prog="python -m arachne", description="Linux defensive investigation and review")
     app.add_argument("--db", default="arachne.sqlite3", help="SQLite evidence file")
@@ -38,14 +46,14 @@ def parser():
     run = commands.add_parser("investigate", help="Create one immutable investigation snapshot")
     run.add_argument("host")
     run.add_argument("anchor")
-    run.add_argument("--model", help="Optional OpenAI model with structured output support")
+    model_options(run)
     collector = commands.add_parser("collect", help="Import local journal with a durable checkpoint")
     collector.add_argument("--since", default="30 minutes ago", help="Initial journal window")
     cycle = commands.add_parser("cycle", help="Collect local Linux events and investigate pending logins")
     cycle.add_argument("--since", default="30 minutes ago", help="Initial journal window")
     worker = commands.add_parser("triage", help="Investigate mature SSH events once")
     for command in (cycle, worker):
-        command.add_argument("--model", default=os.environ.get("ARACHNE_MODEL"), help="Enable both model-assisted roles")
+        model_options(command, default=os.environ.get("ARACHNE_MODEL"))
         command.add_argument("--limit", type=int, choices=range(1, 101), default=20, metavar="1..100")
     review = commands.add_parser("confirm-outcome", help="Record an operator-verified decision")
     review.add_argument("run_id")
@@ -55,9 +63,9 @@ def parser():
     demo.add_argument("--model")
     benchmark = commands.add_parser("evaluate", help="Compare reviewers on labeled JSONL episodes")
     benchmark.add_argument("file")
-    benchmark.add_argument("--model")
+    model_options(benchmark)
     trial = commands.add_parser("trial", help="Run the packaged perspective comparison and save its dossiers")
-    trial.add_argument("--model")
+    model_options(trial)
     scanner = commands.add_parser("scan-files", help="Compare local file hashes with trusted SHA-256 indicators")
     scanner.add_argument("directory")
     scanner.add_argument("--indicators", required=True)

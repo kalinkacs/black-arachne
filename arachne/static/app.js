@@ -79,6 +79,19 @@ function reasoningPanel(trace, indices) {
   return panel;
 }
 
+function roleTimeline(runtime) {
+  const labels = { red: "Red", blue: "Blue", control: "Независимый рецензент" };
+  const phases = { forecast: "Зафиксировал прогноз", select: "Выбрал проверку",
+    assess: "Сформулировал гипотезы", reconsider: "Проверил вывод", compare: "Сверил прогноз с исходом" };
+  const panel = node("section", undefined, "card");
+  const timeline = node("ol");
+  for (const step of runtime.trace) {
+    timeline.append(node("li", labels[step.role] + " · " + phases[step.phase]));
+  }
+  panel.append(node("h3", "Обмен между агентами"), timeline);
+  return panel;
+}
+
 function outcomePanel(report) {
   const panel = node("section", undefined, "card");
   if (report.outcome) {
@@ -165,6 +178,7 @@ function render(report) {
     caseElement.append(decisionCard("Защитная рекомендация", report.recommendation, indices));
   }
   if (report.mimicry) caseElement.append(reasoningPanel(report.mimicry, indices));
+  if (report.role_runtime?.trace) caseElement.append(roleTimeline(report.role_runtime));
   if (report.initial_hypotheses) {
     const hypotheses = node("section", undefined, "card");
     hypotheses.append(node("h3", "Гипотезы Blue"), node("p", report.initial_hypotheses.legitimate),
@@ -207,7 +221,8 @@ async function refreshStatus() {
   const status = await read("/api/status");
   const fields = [
     "События " + status.events, "Реальные досье " + status.investigations,
-    "Подтверждено " + status.confirmed, "Исключено из авторазбора " + status.excluded_anchors
+    "Подтверждено " + status.confirmed, "Исключено из авторазбора " + status.excluded_anchors,
+    "Ожидают повтора " + status.pending_role_retries
   ];
   fields.push(status.collector ? "Сбор проверен " + formatTime(status.collector.checked_at) + " UTC" : "Ожидание запуска сборщика");
   document.querySelector("#collector-status").textContent = fields.join(" · ");

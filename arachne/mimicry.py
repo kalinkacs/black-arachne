@@ -1,8 +1,11 @@
 """Defensive perspective modeling with blind predictions and bounded evidence disclosure."""
 
-from .reasoning import blue, finding, relevant
+from datetime import datetime, timedelta
+
+from .reasoning import finding, relevant
 from .events import records
-from .learning import check_model, decision_model, hypothesis_model
+from .learning import check_model, decision_model
+from .role_runtime import RoleFailure, RoleProcess
 
 CHECKS = {
     "change_record": {
@@ -154,45 +157,141 @@ def operational_policy(anchor, observations, profile, initial, assisted):
     return assisted
 
 
+def isolated_branches(anchor, scoped, visible, profile, history):
+    """Send each role a separate minimized projection, then compare its responses."""
+    handles = {event.id: f"E{index}" for index, event in enumerate(visible)}
+    undisclosed = [event for event in scoped if event.id not in handles]
+    handles.update({event.id: f"V{index}" for index, event in enumerate(undisclosed)})
+    fallback = {handle: event_id for event_id, handle in handles.items()}
+    anchor_handle = handles[anchor.id]
+    origin = datetime.fromisoformat(anchor.timestamp)
+    visible_events = [
+        {"id": handles[event.id], "kind": event.kind,
+         "timestamp": (datetime.fromisoformat(event.timestamp) - origin) // timedelta(microseconds=1)}
+        for event in visible
+    ]
+    red_history = [
+        {"initial": item["initial"], "verified": item["verified"], "comparisons": [
+            {"check": branch["check"], "decision": branch["decision"]}
+            for branch in item.get("comparisons", ())
+        ]}
+        for item in history
+    ]
+    blue_history = [
+        {"verified": item["verified"], "comparisons": [
+            {"check": branch["check"], "state": branch["state"]}
+            for branch in item.get("comparisons", ())
+        ]}
+        for item in history
+    ]
+    trace = []
+
+    def step(worker, phase, payload):
+        result = worker.call(phase, payload)
+        trace.append({"role": worker.role, "phase": phase})
+        return result
+
+    def map_refs(result, mapping):
+        try:
+            return {**result, "evidence_ids": [mapping[ref] for ref in result["evidence_ids"]]}
+        except (KeyError, TypeError) as error:
+            raise RoleFailure("Blue returned an evidence reference outside the disclosed projection") from error
+
+    def valid_decision(result):
+        if result.get("decision") not in ("review", "close", "escalate"):
+            raise RoleFailure("Blue returned an unsupported decision")
+        return result
+
+    coarse = {"profile": profile, "history": red_history}
+    with RoleProcess("red") as red, RoleProcess("blue") as blue, RoleProcess("control") as control:
+        forecast = step(red, "forecast", coarse)
+        standard = step(control, "select", coarse)
+        assessed = step(blue, "assess", {"observations": visible_events, "anchor": anchor_handle, "history": blue_history})
+        initial = valid_decision(assessed["initial"])
+        initial_map = {item["id"]: fallback[item["id"]] for item in visible_events}
+        initial_mapped = map_refs(initial, initial_map)
+        if any(chosen not in tuple(CHECKS) for chosen in (forecast.get("check"), standard.get("check"))):
+            raise RoleFailure("A role selected a check outside the catalogue")
+        if forecast.get("prediction") not in ("review", "close", "escalate", None):
+            raise RoleFailure("Red returned an unsupported prediction")
+        standard_result, assisted_result = selected_observations(standard, forecast, anchor, scoped, profile)
+
+        def review(observed):
+            allowed = {**initial_map, **{handles[ref]: ref for ref in observed["evidence_ids"]}}
+            projection = map_refs(observed, handles)
+            decision = valid_decision(step(blue, "reconsider", {"observation": projection}))
+            return map_refs(decision, allowed)
+
+        ordinary_review = review(standard_result)
+        assisted = ordinary_review if standard_result == assisted_result else review(assisted_result)
+        feedback = step(red, "compare", {"actual": initial["decision"], "result": assisted["decision"],
+                                         "observation": assisted_result["state"]})
+
+    hypotheses = checked_hypotheses(assessed.get("hypotheses"))
+    return {"forecast": forecast, "initial": initial_mapped, "hypotheses": hypotheses,
+            "standard": standard, "standard_result": standard_result, "assisted_result": assisted_result,
+            "ordinary_review": ordinary_review, "assisted": assisted,
+            "role_runtime": {"mode": "local-processes", "trace": trace, "red_feedback": feedback}}
+
+
+def checked_hypotheses(value):
+    if not isinstance(value, dict) or set(value) != {"legitimate", "security"}:
+        raise RoleFailure("Blue returned invalid hypotheses")
+    for hypothesis in value.values():
+        if not isinstance(hypothesis, dict) or set(hypothesis) != {"description", "expectations"}:
+            raise RoleFailure("Blue returned invalid hypothesis fields")
+        expectations = hypothesis["expectations"]
+        if not isinstance(expectations, dict) or set(expectations) != set(CHECKS) or any(
+            state not in ("supports", "disputes", "unknown") for state in expectations.values()
+        ):
+            raise RoleFailure("Blue returned invalid check expectations")
+    return value
+
+
+def selected_observations(standard, challenger, anchor, scoped, profile):
+    standard_choice_id = standard["check"]
+    ordinary = check_observations(standard_choice_id, anchor, scoped, profile)
+    selected = challenger["check"]
+    assisted = ordinary if selected == standard_choice_id else check_observations(selected, anchor, scoped, profile)
+    return ordinary, assisted
+
+
+def external_branches(anchor, scoped, visible, profile, history, model):
+    from .agents import model_review
+
+    forecast = model_review("mimic_forecast", model, anchor, visible, history, profile=profile)
+    standard = model_review("mimic_control", model, anchor, visible, history, profile=profile)
+    assessment = model_review("mimic_blue", model, anchor, visible, history)
+    initial = {key: assessment[key] for key in ("decision", "reason", "evidence_ids", "engine")}
+    hypotheses = {
+        perspective: {
+            "description": assessment[perspective],
+            "expectations": {check: assessment[f"{perspective}_{check}"] for check in CHECKS},
+        }
+        for perspective in ("legitimate", "security")
+    }
+    standard_result, assisted_result = selected_observations(standard, forecast, anchor, scoped, profile)
+    return {"forecast": forecast, "initial": initial, "hypotheses": hypotheses, "standard": standard,
+            "standard_result": standard_result, "assisted_result": assisted_result,
+            "ordinary_review": reconsider(initial, standard_result, anchor),
+            "assisted": reconsider(initial, assisted_result, anchor), "role_runtime": {"mode": "external-model"}}
+
+
 def mimic(anchor, events, history=(), model=None):
     """Freeze both perspectives before either branch receives any verification."""
     scoped = relevant(anchor, events)
     visible = [event for event in scoped if event.kind not in RESTRICTED_KINDS]
     profile = observation_profile(anchor, visible)
-    challenger = red_forecast(profile, history)
-    initial = blue(anchor, visible)
-    hypotheses = hypothesis_model(blue_hypotheses(profile), history)
-    standard = {"check": standard_choice(profile), "engine": "rules",
-                "reason": "Inspect the highest-priority independent evidence from the visible profile."}
-    if model:
-        from .agents import model_review
-
-        challenger = model_review("mimic_forecast", model, anchor, visible, history, profile=profile)
-        standard = model_review("mimic_control", model, anchor, visible, history, profile=profile)
-        assessment = model_review("mimic_blue", model, anchor, visible, history)
-        initial = {key: assessment[key] for key in ("decision", "reason", "evidence_ids", "engine")}
-        hypotheses = {
-            perspective: {
-                "description": assessment[perspective],
-                "expectations": {check: assessment[f"{perspective}_{check}"] for check in CHECKS},
-            }
-            for perspective in ("legitimate", "security")
-        }
-
-    standard_choice_id = standard["check"]
-    standard_result = check_observations(standard_choice_id, anchor, scoped, profile)
-    selected = challenger["check"]
-    assisted_result = standard_result if selected == standard_choice_id else check_observations(selected, anchor, scoped, profile)
-
-    def score(result):
-        return {role: model["expectations"][result["check"]] == result["state"]
-                for role, model in hypotheses.items()} if result["state"] in {"supports", "disputes"} else {}
-
-    ordinary_review = reconsider(initial, standard_result, anchor)
-    assisted = reconsider(initial, assisted_result, anchor)
-    advice = operational_policy(anchor, scoped, profile, initial, assisted)
+    branches = (external_branches(anchor, scoped, visible, profile, history, model) if model
+                else isolated_branches(anchor, scoped, visible, profile, history))
+    challenger, initial = branches["forecast"], branches["initial"]
+    hypotheses = branches["hypotheses"]
+    observed = branches["assisted_result"]
+    assisted = branches["assisted"]
+    matches = {role: hypothesis["expectations"][observed["check"]] == observed["state"]
+               for role, hypothesis in hypotheses.items()} if observed["state"] in {"supports", "disputes"} else {}
     return {
-        "engine_version": "0.4",
+        "engine_version": "0.5",
         "host": anchor.host,
         "anchor_id": anchor.id,
         "events": records(events),
@@ -200,16 +299,17 @@ def mimic(anchor, events, history=(), model=None):
         "prediction_matched": challenger["prediction"] == initial["decision"] if challenger["prediction"] is not None else None,
         "blue": initial,
         "initial_hypotheses": {role: hypothesis["description"] for role, hypothesis in hypotheses.items()},
-        "standard_review": ordinary_review,
+        "standard_review": branches["ordinary_review"],
         "assisted": assisted,
-        "recommendation": advice,
+        "recommendation": operational_policy(anchor, scoped, profile, initial, assisted),
         "history_used": list(history),
+        "role_runtime": branches["role_runtime"],
         "mimicry": {
             "hypotheses": hypotheses,
-            "standard_reviewer": standard,
-            "standard_observation": standard_result,
-            "assisted_observation": assisted_result,
-            "hypothesis_matches": score(assisted_result),
+            "standard_reviewer": branches["standard"],
+            "standard_observation": branches["standard_result"],
+            "assisted_observation": observed,
+            "hypothesis_matches": matches,
             "checks_per_branch": 1,
         },
     }

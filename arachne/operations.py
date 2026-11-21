@@ -1,10 +1,11 @@
 """Read-only collection and scheduled defensive triage for a single Linux deployment."""
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import subprocess
 
 from .events import POST_LOGIN_OBSERVATION, from_journal, read_records
 from .mimicry import mimic
+from .role_runtime import RoleFailure
 from .store import EvidenceWindowOverflow, confirmed_history, database, episode, ingest, save_run
 
 JOURNAL_IDENTIFIERS = ("sshd", "sshd-session", "sudo")
@@ -64,19 +65,22 @@ def operational_review(connection, anchor, events, model):
 def triage(path, model=None, limit=20, now=None):
     now = now or datetime.now(timezone.utc)
     ready = (now - POST_LOGIN_OBSERVATION).isoformat(timespec="microseconds")
+    current_time = now.isoformat(timespec="microseconds")
     with database(path) as connection:
         pending = connection.execute(
             """SELECT e.host, e.id FROM events e LEFT JOIN triaged t ON t.anchor_id=e.id
                WHERE t.anchor_id IS NULL AND e.timestamp <= ?
                AND NOT EXISTS (SELECT 1 FROM triage_issues i WHERE i.anchor_id=e.id)
+               AND NOT EXISTS (SELECT 1 FROM role_retries r WHERE r.anchor_id=e.id AND r.retry_after > ?)
                AND json_extract(e.payload, '$.kind')='ssh_login'
                AND json_extract(e.payload, '$.source')='systemd-journal'
                ORDER BY e.timestamp, e.id LIMIT ?""",
-            (ready, limit),
+            (ready, current_time, limit),
         ).fetchall()
 
     saved = []
     excluded = []
+    retries = []
     for host, anchor_id in pending:
         with database(path) as connection:
             try:
@@ -86,11 +90,28 @@ def triage(path, model=None, limit=20, now=None):
                                    (anchor_id, str(error), datetime.now(timezone.utc).isoformat()))
                 excluded.append(anchor_id)
                 continue
-            report = operational_review(connection, anchor, events, model)
+            try:
+                report = operational_review(connection, anchor, events, model)
+            except RoleFailure as error:
+                connection.execute("BEGIN IMMEDIATE")
+                if connection.execute("SELECT 1 FROM triaged WHERE anchor_id = ?", (anchor_id,)).fetchone():
+                    continue
+                row = connection.execute("SELECT attempts FROM role_retries WHERE anchor_id=?", (anchor_id,)).fetchone()
+                attempts = 1 + (row[0] if row else 0)
+                next_try = (now + timedelta(seconds=min(3600, 15 * 2 ** min(attempts, 8)))).isoformat(timespec="microseconds")
+                connection.execute(
+                    """INSERT INTO role_retries VALUES (?, ?, ?, ?)
+                       ON CONFLICT(anchor_id) DO UPDATE SET
+                       attempts=excluded.attempts, retry_after=excluded.retry_after, reason=excluded.reason""",
+                    (anchor_id, attempts, next_try, str(error)),
+                )
+                retries.append(anchor_id)
+                continue
             connection.execute("BEGIN IMMEDIATE")
             if connection.execute("SELECT 1 FROM triaged WHERE anchor_id = ?", (anchor_id,)).fetchone():
                 continue
             run = save_run(connection, report)
             connection.execute("INSERT INTO triaged VALUES (?, ?)", (anchor_id, run["id"]))
+            connection.execute("DELETE FROM role_retries WHERE anchor_id=?", (anchor_id,))
             saved.append(run["id"])
-    return {"investigated": len(saved), "runs": saved, "excluded": excluded}
+    return {"investigated": len(saved), "runs": saved, "excluded": excluded, "retrying": retries}
