@@ -15,7 +15,7 @@ from .files import load_indicators, scan
 from .lab import run_lab
 from .mimicry import mimic
 from .operations import collect, operational_review, triage
-from .store import confirm_outcome, database, episode, ingest, save_run
+from .store import confirm_outcome, database, episode, ingest, save_run, status_snapshot, verify_audit
 from .web import serve
 
 
@@ -64,7 +64,10 @@ def parser():
     scanner.add_argument("--max-files", type=positive_int, default=1000)
     scanner.add_argument("--max-file-mib", type=positive_int, default=32)
     scanner.add_argument("--max-total-mib", type=positive_int, default=256)
+    commands.add_parser("status", help="Print local collection and triage status")
+    commands.add_parser("verify-audit", help="Verify linkage and content of operator outcomes")
     dashboard = commands.add_parser("serve")
+    dashboard.add_argument("--operator", action="store_true", help="Enable local confirmation forms")
     dashboard.add_argument("--port", type=int, default=8765)
     return app
 
@@ -84,7 +87,7 @@ def main(argv=None):
                 print(json.dumps(evaluate(stream, options.model, analyze=mimic), indent=2))
             return 0
         if options.command == "serve":
-            serve(options.db, options.port)
+            serve(options.db, options.port, options.operator)
             return 0
         if options.command in ("triage", "cycle"):
             collection = {}
@@ -119,6 +122,8 @@ def main(argv=None):
             elif options.command == "confirm-outcome":
                 confirm_outcome(connection, options.run_id, options.decision, options.note)
                 result = {"confirmed": options.run_id}
+            elif options.command in ("status", "verify-audit"):
+                result = status_snapshot(connection) if options.command == "status" else verify_audit(connection)
             elif options.command == "trial":
                 cases = Path(__file__).parent / "data" / "trial.jsonl"
                 with cases.open(encoding="utf-8") as stream:
@@ -127,7 +132,7 @@ def main(argv=None):
             else:
                 result = run_lab(connection, options.model)
         print(json.dumps(result, indent=2, ensure_ascii=False))
-        return 0
+        return 2 if options.command == "verify-audit" and not result["valid"] else 0
     except KeyboardInterrupt:
         return 0
     except HTTPError as error:

@@ -2,6 +2,7 @@
 
 from .reasoning import blue, finding, relevant
 from .events import records
+from .learning import check_model, decision_model, hypothesis_model
 
 CHECKS = {
     "change_record": {
@@ -61,12 +62,14 @@ def red_forecast(profile, history=()):
         check = "identity_record"
         reason = "An independently recorded account decision could resolve uncertainty in the Blue assessment."
 
-    matching = [entry for entry in history if entry.get("initial") == predicted]
-    for entry in matching:
-        if entry["verified"] != predicted and entry["check"] in CHECKS:
-            check = entry["check"]
-            reason += " A past, verified decision from a comparable episode informs the check."
-            break
+    prior = predicted
+    predicted, probabilities = decision_model(prior, history)
+    if predicted != prior:
+        reason += " The distribution of prior Blue decisions changes the forecast."
+    learned_check, estimates = check_model(check, CHECKS, history)
+    if learned_check != check:
+        check = learned_check
+        reason += " Multiple comparable, verified episodes support a different verification."
     return {
         "engine": "policy-model",
         "check": check,
@@ -75,6 +78,8 @@ def red_forecast(profile, history=()):
         "disconfirmation": f"The forecast fails if Blue's initial decision differs from {predicted}.",
         "evidence_ids": [],
         "visible_profile": dict(profile),
+        "decision_distribution": probabilities,
+        "check_history": estimates,
     }
 
 
@@ -156,7 +161,7 @@ def mimic(anchor, events, history=(), model=None):
     profile = observation_profile(anchor, visible)
     challenger = red_forecast(profile, history)
     initial = blue(anchor, visible)
-    hypotheses = blue_hypotheses(profile)
+    hypotheses = hypothesis_model(blue_hypotheses(profile), history)
     standard = {"check": standard_choice(profile), "engine": "rules",
                 "reason": "Inspect the highest-priority independent evidence from the visible profile."}
     if model:
@@ -187,7 +192,7 @@ def mimic(anchor, events, history=(), model=None):
     assisted = reconsider(initial, assisted_result, anchor)
     advice = operational_policy(anchor, scoped, profile, initial, assisted)
     return {
-        "engine_version": "0.3",
+        "engine_version": "0.4",
         "host": anchor.host,
         "anchor_id": anchor.id,
         "events": records(events),

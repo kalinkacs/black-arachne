@@ -47,3 +47,9 @@ article { display: grid; align-content: start; gap: 16px; overflow-wrap: anywher
 }
 
 .mismatch { color: #ffd1a8; }
+
+.outcome-form { display: grid; max-width: 520px; gap: 8px; }
+.outcome-form select, .outcome-form textarea { background: #222634; color: inherit; border: 1px solid var(--border); border-radius: 7px; padding: 9px 12px; font: inherit; }
+.outcome-form button { justify-self: start; }
+.outcome-form button:disabled { opacity: .6; cursor: default; }
+#collector-status { font-size: .84rem; }

@@ -12,6 +12,7 @@ const states = { supports: "Подтверждает штатную версию
 let runs = [];
 let selection;
 let requestSequence = 0;
+let session = { operator: false };
 
 function node(tag, value, className) {
   const element = document.createElement(tag);
@@ -78,6 +79,59 @@ function reasoningPanel(trace, indices) {
   return panel;
 }
 
+function outcomePanel(report) {
+  const panel = node("section", undefined, "card");
+  if (report.outcome) {
+    panel.append(node("h3", "Подтверждённый исход"), node("strong", decisions[report.outcome.decision]),
+      node("p", report.outcome.note), node("small", formatTime(report.outcome.created) + " UTC"));
+    return panel;
+  }
+  if (!session.operator || report.scenario) return null;
+  const form = node("form", undefined, "outcome-form");
+  const select = node("select");
+  select.id = "review-decision";
+  for (const [key, name] of Object.entries(decisions)) {
+    const option = node("option", name);
+    option.value = key;
+    select.append(option);
+  }
+  select.value = report.recommendation?.decision ?? "review";
+  const decisionLabel = node("label", "Решение оператора");
+  decisionLabel.htmlFor = select.id;
+  const note = node("textarea");
+  note.id = "review-note";
+  note.maxLength = 2000;
+  note.required = true;
+  note.rows = 3;
+  const noteLabel = node("label", "На чём основан вывод");
+  noteLabel.htmlFor = note.id;
+  const save = node("button", "Подтвердить исход");
+  save.type = "submit";
+  const feedback = node("p");
+  feedback.setAttribute("role", "status");
+  form.append(decisionLabel, select, noteLabel, note, save, feedback);
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    save.disabled = true;
+    try {
+      const response = await fetch("/api/runs/" + report.id + "/outcome", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Arachne-Operator": session.csrf },
+        body: JSON.stringify({ decision: select.value, note: note.value })
+      });
+      if (!response.ok) throw new Error(response.status === 409
+        ? "Исход уже подтверждён. Открой расследование заново." : "Не удалось сохранить исход.");
+      if (selection === report.id) await display(report.id);
+      await refreshStatus();
+    } catch (error) {
+      feedback.textContent = error.message;
+      save.disabled = false;
+    }
+  });
+  panel.append(node("h3", "Проверка оператором"), form);
+  return panel;
+}
+
 function render(report) {
   const indices = new Map(report.events.map((event, i) => [event.id, i + 1]));
   const heading = node("h2", report.scenario || report.host);
@@ -90,6 +144,11 @@ function render(report) {
     node("small", [report.forecast.engine, decisions[report.forecast.prediction], verification,
       redLinks ? "Улики " + redLinks : ""].filter(Boolean).join(" · ")));
   if (report.forecast.disconfirmation) forecast.append(node("small", report.forecast.disconfirmation));
+  if (report.forecast.decision_distribution) {
+    const probabilities = Object.entries(report.forecast.decision_distribution)
+      .map(([key, chance]) => decisions[key] + " " + Math.round(chance * 100) + "%");
+    forecast.append(node("small", probabilities.join(" · ")));
+  }
   const cards = node("div", undefined, "cards");
   cards.append(decisionCard("Blue", report.blue, indices, report.label),
     decisionCard("Обычная проверка", report.standard_review, indices, report.label),
@@ -115,6 +174,8 @@ function render(report) {
   if (report.history_used?.length) {
     caseElement.append(node("p", "Сопоставленные подтверждённые эпизоды · " + report.history_used.length, "muted"));
   }
+  const outcome = outcomePanel(report);
+  if (outcome) caseElement.append(outcome);
   if (report.label) caseElement.append(node("p", "Ожидаемое решение · " + decisions[report.label], "muted"));
   caseElement.append(node("h3", "Хронология улик"), timeline);
 }
@@ -142,6 +203,25 @@ async function refresh() {
   }
 }
 
+async function refreshStatus() {
+  const status = await read("/api/status");
+  const fields = [
+    "События " + status.events, "Реальные досье " + status.investigations,
+    "Подтверждено " + status.confirmed, "Исключено из авторазбора " + status.excluded_anchors
+  ];
+  fields.push(status.collector ? "Сбор проверен " + formatTime(status.collector.checked_at) + " UTC" : "Ожидание запуска сборщика");
+  document.querySelector("#collector-status").textContent = fields.join(" · ");
+}
+
+async function boot() {
+  try {
+    [session] = await Promise.all([read("/api/session"), refreshStatus()]);
+    await refresh();
+  } catch (error) {
+    statusElement.textContent = error.message;
+  }
+}
+
 filter.addEventListener("input", renderList);
-document.querySelector("#reload").addEventListener("click", refresh);
-refresh();
+document.querySelector("#reload").addEventListener("click", boot);
+boot();

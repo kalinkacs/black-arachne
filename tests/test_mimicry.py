@@ -44,9 +44,11 @@ class MimicryTests(unittest.TestCase):
                 self.assertEqual(run["recommendation"]["decision"], "review")
 
     def test_prior_operator_outcome_can_change_check_without_erasing_new_evidence(self):
-        run = self.run_case("identity-dispute-with-declaration", history=[
-            {"initial": "close", "verified": "escalate", "check": "identity_record"},
-        ])
+        experience = {"initial": "close", "verified": "escalate", "check": "identity_record",
+                      "comparisons": [{"check": "identity_record", "decision": "escalate", "state": "disputes"}]}
+        isolated = self.run_case("identity-dispute-with-declaration", history=[experience])
+        self.assertEqual(isolated["forecast"]["check"], "change_record")
+        run = self.run_case("identity-dispute-with-declaration", history=[experience] * 3)
         self.assertEqual(run["forecast"]["check"], "identity_record")
         self.assertEqual(run["assisted"]["decision"], "escalate")
 
