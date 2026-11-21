@@ -5,6 +5,7 @@ import json
 import sys
 
 from .learning import hypothesis_model
+from .measurement import PROFILE_FIELDS, checked_focus, local_focus
 from .mimicry import (
     CHECKS, CROSS_CHECKS, RESTRICTED_KINDS, blue_hypotheses, checked_commitment,
     observation_profile, reconsider, red_forecast, standard_choice,
@@ -21,14 +22,37 @@ class Observation:
 
 
 PHASES = {
-    "red": {"forecast", "compare", "commit", "switch"},
-    "blue": {"assess", "reconsider", "commit", "switch"},
+    "red": {"forecast", "compare", "commit", "switch", "signal_initial", "signal_reframe"},
+    "blue": {"assess", "reconsider", "commit", "switch", "signal_initial", "signal_reframe"},
     "control": {"select"},
 }
 PROFILE_KEYS = {"declared_change", "prior_failures", "privileged_activity"}
 OPTIONAL_PROFILE_KEYS = {"repeated_privilege_denials"}
 DECISIONS = {"close", "review", "escalate"}
 STATES = {"supports", "disputes", "unknown", "conflict"}
+
+
+def plan_signal(role, phase, payload, state):
+    if phase in state:
+        raise ValueError("Evidence proposal is already frozen")
+    perspective = "legitimate" if role == "blue" else "security"
+    if phase == "signal_initial":
+        profile = payload.get("profile")
+        if (set(payload) != {"profile"} or not isinstance(profile, dict) or set(profile) != PROFILE_FIELDS
+                or not all(type(value) is bool for value in profile.values())):
+            raise ValueError("Invalid evidence planning profile")
+        result = local_focus(profile, perspective)
+        state["signal_profile"] = profile
+    else:
+        if "signal_initial" not in state or set(payload) != {"peer"} or (payload["peer"] is None and role != "blue"):
+            raise ValueError("Invalid evidence planning reframe")
+        peer = payload["peer"]
+        if peer is not None:
+            peer = checked_focus(peer, first=True)["primary"]
+            perspective = "security" if role == "blue" else "legitimate"
+        result = local_focus(state["signal_profile"], perspective, own=state["signal_initial"]["primary"], peer=peer)
+    state[phase] = result
+    return result
 
 
 def cross_examine(role, phase, payload, state):
@@ -67,6 +91,8 @@ def cross_examine(role, phase, payload, state):
 def handle(role, phase, payload, state):
     if phase not in PHASES[role] or not isinstance(payload, dict):
         raise ValueError("Unsupported role phase")
+    if phase in {"signal_initial", "signal_reframe"}:
+        return plan_signal(role, phase, payload, state)
     if phase in {"commit", "switch"}:
         return cross_examine(role, phase, payload, state)
     if phase in {"forecast", "select"}:

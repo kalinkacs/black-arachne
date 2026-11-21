@@ -21,6 +21,7 @@ from .observability import MAX_CHECKS, audit_observability
 from .operations import collect, operational_review, triage
 from .pilot import since_cutoff, summary as pilot_summary
 from .provenance import SOURCE_KINDS, create_key, load_key, sign_record
+from .signal_experiment import run_signal_experiment
 from .store import (
     confirm_outcome, database, episode, import_verifications, ingest, save_run, status_snapshot, verify_audit,
 )
@@ -95,6 +96,10 @@ def parser():
     observability.add_argument("--max-checks", type=int, choices=range(MAX_CHECKS + 1), default=2)
     observability.add_argument("--tolerate-missing", type=int, choices=(0, 1), default=0,
                                help="Require the plan to retain explicit separation if a source is unavailable")
+    signals = commands.add_parser("compare-signals", help="Test evidence proposed before disclosure on held-out cases")
+    signals.add_argument("discovery", help="Labeled calibration cases in the observe-gaps format")
+    signals.add_argument("holdout", help="Labeled cases from disjoint families for evaluation")
+    model_options(signals)
     trial = commands.add_parser("trial", help="Run the packaged perspective comparison and save its dossiers")
     model_options(trial)
     scanner = commands.add_parser("scan-files", help="Compare local file hashes with trusted SHA-256 indicators")
@@ -161,6 +166,11 @@ def main(argv=None):
             holdout = open(options.holdout, encoding="utf-8") if options.holdout else nullcontext()
             with holdout as unseen, open(options.file, encoding="utf-8") as stream:
                 report = audit_observability(stream, options.max_checks, options.tolerate_missing, holdout=unseen)
+            print(json.dumps(report, indent=2, ensure_ascii=False))
+            return 0
+        if options.command == "compare-signals":
+            with open(options.discovery, encoding="utf-8") as discovery, open(options.holdout, encoding="utf-8") as unseen:
+                report = run_signal_experiment(discovery, unseen, options.model)
             print(json.dumps(report, indent=2, ensure_ascii=False))
             return 0
         if options.command == "serve":

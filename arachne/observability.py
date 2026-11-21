@@ -106,6 +106,15 @@ def coverage(witnesses, checks, required):
     return sum(witness.covered(checks, required) for witness in witnesses)
 
 
+def read_holdout(stream, discovery):
+    unseen, _ = read_episodes(stream)
+    if {episode.family for episode in unseen} & {episode.family for episode in discovery}:
+        raise ValueError("Holdout and discovery families must be disjoint")
+    if {episode.identifier for episode in unseen} & {episode.identifier for episode in discovery}:
+        raise ValueError("Holdout and discovery case identifiers must be disjoint")
+    return unseen
+
+
 def summarize(episodes, witnesses, checks, catalogue, required):
     covered = coverage(witnesses, checks, required)
     examples = []
@@ -151,10 +160,6 @@ def audit_observability(stream, max_checks=len(CROSS_CHECKS), tolerate_missing=0
         "discovery": summarize(episodes, witnesses, checks, catalogue, required),
     }
     if holdout is not None:
-        unseen, _ = read_episodes(holdout)
-        if {episode.family for episode in unseen} & {episode.family for episode in episodes}:
-            raise ValueError("Holdout and discovery families must be disjoint")
-        if {episode.identifier for episode in unseen} & {episode.identifier for episode in episodes}:
-            raise ValueError("Holdout and discovery case identifiers must be disjoint")
+        unseen = read_holdout(holdout, episodes)
         report["holdout"] = summarize(unseen, find_witnesses(unseen, catalogue), checks, catalogue, required)
     return report
