@@ -6,7 +6,9 @@ import subprocess
 from .events import POST_LOGIN_OBSERVATION, from_journal, read_records
 from .mimicry import mimic
 from .role_runtime import RoleFailure
-from .store import EvidenceWindowOverflow, confirmed_history, database, episode, ingest, save_run
+from .store import (
+    EvidenceWindowOverflow, confirmed_history, database, episode, ingest, save_run, verifications_for,
+)
 
 JOURNAL_IDENTIFIERS = ("sshd", "sshd-session", "sudo")
 
@@ -38,7 +40,7 @@ def collect(connection, since, reader=journal_batch):
             if not isinstance(row, dict) or not isinstance(row.get("__CURSOR"), str) or not row["__CURSOR"]:
                 raise ValueError("Journal record has no valid cursor")
             last = row["__CURSOR"]
-            event = from_journal(row)
+            event = from_journal(row, native=True)
             if event:
                 yield event
 
@@ -59,7 +61,7 @@ def collect(connection, since, reader=journal_batch):
 
 def operational_review(connection, anchor, events, model):
     history = confirmed_history(connection, anchor, events)
-    return mimic(anchor, events, history, model)
+    return mimic(anchor, events, history, model, verified=verifications_for(connection, anchor.id))
 
 
 def triage(path, model=None, limit=20, now=None):
@@ -68,8 +70,13 @@ def triage(path, model=None, limit=20, now=None):
     current_time = now.isoformat(timespec="microseconds")
     with database(path) as connection:
         pending = connection.execute(
-            """SELECT e.host, e.id FROM events e LEFT JOIN triaged t ON t.anchor_id=e.id
-               WHERE t.anchor_id IS NULL AND e.timestamp <= ?
+            """SELECT e.host, e.id FROM events e
+               LEFT JOIN triaged t ON t.anchor_id=e.id
+               LEFT JOIN triage_evidence_state s ON s.anchor_id=e.id
+               WHERE e.timestamp <= ? AND
+               (t.anchor_id IS NULL OR (
+                   (SELECT count(*) FROM verified_evidence v WHERE v.anchor_id=e.id) > coalesce(s.verification_count,0)
+               ))
                AND NOT EXISTS (SELECT 1 FROM triage_issues i WHERE i.anchor_id=e.id)
                AND NOT EXISTS (SELECT 1 FROM role_retries r WHERE r.anchor_id=e.id AND r.retry_after > ?)
                AND json_extract(e.payload, '$.kind')='ssh_login'
@@ -83,18 +90,22 @@ def triage(path, model=None, limit=20, now=None):
     retries = []
     for host, anchor_id in pending:
         with database(path) as connection:
+            connection.execute("BEGIN")
             try:
                 anchor, events = episode(connection, host, anchor_id)
             except EvidenceWindowOverflow as error:
+                connection.rollback()
                 connection.execute("INSERT OR IGNORE INTO triage_issues VALUES (?, ?, ?)",
                                    (anchor_id, str(error), datetime.now(timezone.utc).isoformat()))
                 excluded.append(anchor_id)
                 continue
+            reviewed = len(verifications_for(connection, anchor_id))
             try:
                 report = operational_review(connection, anchor, events, model)
             except RoleFailure as error:
+                connection.rollback()
                 connection.execute("BEGIN IMMEDIATE")
-                if connection.execute("SELECT 1 FROM triaged WHERE anchor_id = ?", (anchor_id,)).fetchone():
+                if latest_revision(connection, anchor_id) >= reviewed:
                     continue
                 row = connection.execute("SELECT attempts FROM role_retries WHERE anchor_id=?", (anchor_id,)).fetchone()
                 attempts = 1 + (row[0] if row else 0)
@@ -107,11 +118,29 @@ def triage(path, model=None, limit=20, now=None):
                 )
                 retries.append(anchor_id)
                 continue
+            connection.commit()
             connection.execute("BEGIN IMMEDIATE")
-            if connection.execute("SELECT 1 FROM triaged WHERE anchor_id = ?", (anchor_id,)).fetchone():
+            if latest_revision(connection, anchor_id) >= reviewed:
                 continue
             run = save_run(connection, report)
-            connection.execute("INSERT INTO triaged VALUES (?, ?)", (anchor_id, run["id"]))
+            connection.execute(
+                "INSERT INTO triaged VALUES (?, ?) ON CONFLICT(anchor_id) DO UPDATE SET run_id=excluded.run_id",
+                (anchor_id, run["id"]),
+            )
+            connection.execute(
+                """INSERT INTO triage_evidence_state VALUES (?, ?)
+                   ON CONFLICT(anchor_id) DO UPDATE SET verification_count=excluded.verification_count""",
+                (anchor_id, reviewed),
+            )
             connection.execute("DELETE FROM role_retries WHERE anchor_id=?", (anchor_id,))
             saved.append(run["id"])
     return {"investigated": len(saved), "runs": saved, "excluded": excluded, "retrying": retries}
+
+
+def latest_revision(connection, anchor_id):
+    row = connection.execute(
+        """SELECT coalesce(s.verification_count,0) FROM triaged t
+           LEFT JOIN triage_evidence_state s ON s.anchor_id=t.anchor_id WHERE t.anchor_id=?""",
+        (anchor_id,),
+    ).fetchone()
+    return row[0] if row else -1

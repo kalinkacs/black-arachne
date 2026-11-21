@@ -9,13 +9,18 @@ import sqlite3
 import sys
 from urllib.error import HTTPError, URLError
 
+from . import __version__
 from .evaluation import evaluate
 from .events import Event, from_journal, read_records
-from .files import load_indicators, scan
+from .files import FILE_LIMITS, load_indicators, scan
+from .integrity import baseline_catalog, establish, observe, recent_findings, scheduled_checks
 from .lab import run_lab
 from .mimicry import mimic
 from .operations import collect, operational_review, triage
-from .store import confirm_outcome, database, episode, ingest, save_run, status_snapshot, verify_audit
+from .provenance import SOURCE_KINDS, create_key, load_key, sign_record
+from .store import (
+    confirm_outcome, database, episode, import_verifications, ingest, save_run, status_snapshot, verify_audit,
+)
 from .web import serve
 
 
@@ -36,11 +41,24 @@ def model_options(command, default=None):
 
 def parser():
     app = argparse.ArgumentParser(prog="python -m arachne", description="Linux defensive investigation and review")
+    app.add_argument("--version", action="version", version=f"Black Arachne {__version__}")
     app.add_argument("--db", default="arachne.sqlite3", help="SQLite evidence file")
     commands = app.add_subparsers(dest="command", required=True)
     for name in ("import-events", "import-journal"):
         command = commands.add_parser(name)
         command.add_argument("file", nargs="?", default="-", help="JSONL file or stdin")
+    key = commands.add_parser("create-verifier", help="Create a scoped private key for an independent evidence source")
+    key.add_argument("file")
+    key.add_argument("--id", required=True)
+    key.add_argument("--source", choices=SOURCE_KINDS, required=True)
+    key.add_argument("--host", required=True)
+    seal = commands.add_parser("sign-verifications", help="Sign normalized verification records for one SSH login")
+    seal.add_argument("file")
+    seal.add_argument("--key", required=True)
+    seal.add_argument("--anchor", required=True)
+    verified = commands.add_parser("import-verifications", help="Authenticate signed evidence and associate it with the login")
+    verified.add_argument("file")
+    verified.add_argument("--key", required=True)
     anchors = commands.add_parser("anchors", help="Print recent SSH login anchors")
     anchors.add_argument("--host")
     run = commands.add_parser("investigate", help="Create one immutable investigation snapshot")
@@ -72,6 +90,15 @@ def parser():
     scanner.add_argument("--max-files", type=positive_int, default=1000)
     scanner.add_argument("--max-file-mib", type=positive_int, default=32)
     scanner.add_argument("--max-total-mib", type=positive_int, default=256)
+    baseline = commands.add_parser("integrity-baseline", help="Record a complete local file integrity baseline")
+    baseline.add_argument("directory")
+    baseline.add_argument("--name", required=True)
+    baseline.add_argument("--max-files", type=positive_int, default=FILE_LIMITS["max_files"])
+    baseline.add_argument("--max-file-mib", type=positive_int, default=FILE_LIMITS["max_bytes"] // 1024**2)
+    baseline.add_argument("--max-total-mib", type=positive_int, default=FILE_LIMITS["total_bytes"] // 1024**2)
+    integrity_check = commands.add_parser("integrity-check", help="Compare real files against a baseline")
+    integrity_check.add_argument("baseline")
+    commands.add_parser("integrity-list", help="List file baselines and findings")
     commands.add_parser("status", help="Print local collection and triage status")
     commands.add_parser("verify-audit", help="Verify linkage and content of operator outcomes")
     dashboard = commands.add_parser("serve")
@@ -83,6 +110,15 @@ def parser():
 def main(argv=None):
     options = parser().parse_args(argv)
     try:
+        if options.command == "create-verifier":
+            print(json.dumps(create_key(options.file, options.id, options.source, options.host), indent=2))
+            return 0
+        if options.command == "sign-verifications":
+            key = load_key(options.key)
+            with open(options.file, encoding="utf-8") as stream:
+                for record in read_records(stream):
+                    print(json.dumps(sign_record(key, options.anchor, Event.parse(record))))
+            return 0
         if options.command == "scan-files":
             with open(options.indicators, encoding="utf-8") as stream:
                 indicators = load_indicators(stream)
@@ -90,6 +126,15 @@ def main(argv=None):
                           max_bytes=options.max_file_mib * 1024**2, total_bytes=options.max_total_mib * 1024**2)
             print(json.dumps(result, indent=2, ensure_ascii=False))
             return 2 if result["matched"] else 0
+        if options.command == "integrity-baseline":
+            limits = {"max_files": options.max_files, "max_bytes": options.max_file_mib * 1024**2,
+                      "total_bytes": options.max_total_mib * 1024**2}
+            print(json.dumps(establish(options.db, options.directory, options.name, limits), indent=2))
+            return 0
+        if options.command == "integrity-check":
+            result = observe(options.db, options.baseline)
+            print(json.dumps(result, indent=2, ensure_ascii=False))
+            return (2 if result["findings"] else 0) if result["complete"] else 3
         if options.command == "evaluate":
             with open(options.file, encoding="utf-8") as stream:
                 print(json.dumps(evaluate(stream, options.model, analyze=mimic), indent=2))
@@ -100,11 +145,16 @@ def main(argv=None):
         if options.command in ("triage", "cycle"):
             collection = {}
             if options.command == "cycle":
-                with database(options.db) as connection:
-                    connection.execute("BEGIN IMMEDIATE")
-                    collection = collect(connection, options.since)
+                try:
+                    with database(options.db) as connection:
+                        connection.execute("BEGIN IMMEDIATE")
+                        collection = collect(connection, options.since)
+                except (OSError, ValueError) as error:
+                    collection["journal_error"] = str(error)
+                collection["integrity"] = scheduled_checks(options.db)
             print(json.dumps({**collection, **triage(options.db, options.model, options.limit)}, indent=2))
-            return 0
+            failed_scan = any(not result["complete"] for result in collection.get("integrity", ()))
+            return 1 if "journal_error" in collection or failed_scan else 0
         with database(options.db) as connection:
             if options.command in ("import-events", "import-journal"):
                 normalize = Event.parse if options.command == "import-events" else from_journal
@@ -113,6 +163,10 @@ def main(argv=None):
                     events = (normalize(record) for record in read_records(source) if isinstance(record, dict)
                               or options.command == "import-events")
                     result = {"inserted": ingest(connection, (event for event in events if event is not None))}
+            elif options.command == "import-verifications":
+                key = load_key(options.key)
+                with open(options.file, encoding="utf-8") as stream:
+                    result = import_verifications(connection, key, read_records(stream))
             elif options.command == "anchors":
                 parameters = ("ssh_login",)
                 sql = "SELECT payload FROM events WHERE json_extract(payload, '$.kind') = ?"
@@ -130,6 +184,8 @@ def main(argv=None):
             elif options.command == "confirm-outcome":
                 confirm_outcome(connection, options.run_id, options.decision, options.note)
                 result = {"confirmed": options.run_id}
+            elif options.command == "integrity-list":
+                result = {"baselines": baseline_catalog(connection), "findings": recent_findings(connection)}
             elif options.command in ("status", "verify-audit"):
                 result = status_snapshot(connection) if options.command == "status" else verify_audit(connection)
             elif options.command == "trial":
@@ -152,6 +208,10 @@ def main(argv=None):
     return 1
 
 
-if __name__ == "__main__":
+def cli():
     os.umask(0o077)
-    sys.exit(main())
+    return main()
+
+
+if __name__ == "__main__":
+    sys.exit(cli())

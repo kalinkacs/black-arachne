@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from .reasoning import finding, relevant
 from .events import records
 from .learning import check_model, decision_model
+from .provenance import VERIFICATION_KINDS
 from .role_runtime import RoleFailure, RoleProcess
 
 CHECKS = {
@@ -20,12 +21,7 @@ CHECKS = {
     },
     "activity_record": {"source": "systemd-journal"},
 }
-RESTRICTED_KINDS = {
-    kind
-    for check in CHECKS.values()
-    for field, kind in check.items()
-    if field in {"positive", "negative"}
-}
+RESTRICTED_KINDS = VERIFICATION_KINDS
 
 
 def observation_profile(anchor, events):
@@ -277,9 +273,17 @@ def external_branches(anchor, scoped, visible, profile, history, model):
             "assisted": reconsider(initial, assisted_result, anchor), "role_runtime": {"mode": "external-model"}}
 
 
-def mimic(anchor, events, history=(), model=None):
+def mimic(anchor, events, history=(), model=None, *, verified=None):
     """Freeze both perspectives before either branch receives any verification."""
     scoped = relevant(anchor, events)
+    provenance = None
+    if verified is not None:
+        provenance = {
+            "verified": {event.id: verified[event.id] for event in scoped
+                         if event.kind in RESTRICTED_KINDS and event.id in verified},
+            "unverified": [event.id for event in scoped if event.kind in RESTRICTED_KINDS and event.id not in verified],
+        }
+        scoped = [event for event in scoped if event.kind not in RESTRICTED_KINDS or event.id in verified]
     visible = [event for event in scoped if event.kind not in RESTRICTED_KINDS]
     profile = observation_profile(anchor, visible)
     branches = (external_branches(anchor, scoped, visible, profile, history, model) if model
@@ -291,7 +295,8 @@ def mimic(anchor, events, history=(), model=None):
     matches = {role: hypothesis["expectations"][observed["check"]] == observed["state"]
                for role, hypothesis in hypotheses.items()} if observed["state"] in {"supports", "disputes"} else {}
     return {
-        "engine_version": "0.5",
+        "engine_version": "0.6",
+        "provenance": provenance,
         "host": anchor.host,
         "anchor_id": anchor.id,
         "events": records(events),

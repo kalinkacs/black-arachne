@@ -9,6 +9,7 @@ import secrets
 import sqlite3
 from urllib.parse import urlsplit
 
+from .integrity import baseline_catalog, recent_findings
 from .store import confirm_outcome, database, get_outcome, get_run, list_runs, status_snapshot
 
 STATIC = Path(__file__).parent / "static"
@@ -55,6 +56,9 @@ def handler(path, operator=False):
             if route == "/api/status":
                 with database(path) as connection:
                     return self.send_json(200, status_snapshot(connection))
+            if route == "/api/integrity":
+                with database(path) as connection:
+                    return self.send_json(200, {"baselines": baseline_catalog(connection), "findings": recent_findings(connection)})
             if route == "/api/runs":
                 with database(path) as connection:
                     runs = list_runs(connection)

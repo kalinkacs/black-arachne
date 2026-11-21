@@ -13,7 +13,12 @@
     <p>Расследование Linux-инцидентов</p>
     <p id="collector-status" aria-live="polite"></p>
   </header>
+  <nav class="workspace-nav" aria-label="Разделы">
+    <button id="cases-tab" type="button" aria-pressed="true" aria-controls="cases-view">Расследования</button>
+    <button id="integrity-tab" type="button" aria-pressed="false" aria-controls="integrity-view">Целостность файлов</button>
+  </nav>
   <main>
+    <div id="cases-view" class="cases-grid">
     <aside aria-label="Список расследований">
       <div class="section-head"><h2>Расследования</h2><button id="reload" type="button">Обновить</button></div>
       <label class="filter" for="filter">Фильтр по хосту или эпизоду<input id="filter" type="search" placeholder="Имя хоста или эпизода"></label>
@@ -24,6 +29,11 @@
       <h2>Досье расследования</h2>
       <p>Выбери расследование из списка.</p>
     </article>
+    </div>
+    <section id="integrity-view" class="integrity-view" aria-label="Целостность файлов" hidden>
+      <div class="section-head"><h2>Целостность файлов</h2><button id="integrity-reload" type="button">Обновить</button></div>
+      <div id="integrity-content" aria-live="polite"></div>
+    </section>
   </main>
 </body>
 </html>

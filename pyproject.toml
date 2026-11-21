@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "black-arachne"
+description = "Offline defensive investigation and file integrity monitoring for Linux"
+readme = "README.md"
+requires-python = ">=3.12"
+dynamic = ["version"]
+classifiers = [
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: Security",
+]
+
+[project.scripts]
+black-arachne = "arachne.__main__:cli"
+
+[tool.setuptools]
+packages = ["arachne"]
+
+[tool.setuptools.dynamic]
+version = {attr = "arachne.__version__"}
+
+[tool.setuptools.package-data]
+arachne = ["data/*.jsonl", "static/*.html", "static/*.js", "static/*.css"]

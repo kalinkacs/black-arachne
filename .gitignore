@@ -4,3 +4,7 @@ __pycache__/
 *.sqlite3-*
 .env
 .venv/
+*.key.json
+build/
+dist/
+*.egg-info/

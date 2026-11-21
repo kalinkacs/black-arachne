@@ -21,6 +21,8 @@ def journal(message, identifier, cursor, minute):
         "__CURSOR": cursor, "_HOSTNAME": "test-host",
         "__REALTIME_TIMESTAMP": str((1_767_268_800 + 60 * minute) * 1_000_000),
         "SYSLOG_IDENTIFIER": identifier, "MESSAGE": message,
+        "_EXE": {"sshd": "/usr/sbin/sshd", "sshd-session": "/usr/lib/openssh/sshd-session",
+                 "sudo": "/usr/bin/sudo"}.get(identifier, "/usr/bin/unknown"),
     }
 
 
@@ -32,6 +34,11 @@ class EvidenceTests(unittest.TestCase):
         self.assertNotIn("192.0.2.1", repr(event))
         self.assertEqual(event.id, from_journal(record).id)
         self.assertIsNone(from_journal(journal("other", "sshd", "cursor-b", 1)))
+
+    def test_native_journal_requires_recognized_executable_metadata(self):
+        record = journal("Accepted publickey for operator from 192.0.2.1 port 1 ssh2", "sshd", "a", 0)
+        self.assertEqual(from_journal(record, native=True).kind, "ssh_login")
+        self.assertIsNone(from_journal({**record, "_EXE": "/usr/bin/logger"}, native=True))
 
     def test_invalid_event_and_oversized_input_are_rejected(self):
         with self.assertRaises(ValueError):

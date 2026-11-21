@@ -9,12 +9,20 @@ from uuid import uuid4
 
 from .events import Event, encode, episode_window, records
 from .learning import MAX_HISTORY
+from .provenance import authenticate, check_binding
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS events (
     id TEXT PRIMARY KEY, host TEXT NOT NULL, timestamp TEXT NOT NULL, payload TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS events_by_host_time ON events(host, timestamp, id);
+CREATE TABLE IF NOT EXISTS verified_evidence (
+    event_id TEXT PRIMARY KEY REFERENCES events(id),
+    anchor_id TEXT NOT NULL REFERENCES events(id),
+    key_id TEXT NOT NULL,
+    signature TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS verified_evidence_by_anchor ON verified_evidence(anchor_id);
 CREATE TABLE IF NOT EXISTS runs (
     id TEXT PRIMARY KEY, created TEXT NOT NULL, payload TEXT NOT NULL
 );
@@ -30,6 +38,9 @@ CREATE TABLE IF NOT EXISTS collector_state (
 CREATE TABLE IF NOT EXISTS triaged (
     anchor_id TEXT PRIMARY KEY, run_id TEXT NOT NULL REFERENCES runs(id)
 );
+CREATE TABLE IF NOT EXISTS triage_evidence_state (
+    anchor_id TEXT PRIMARY KEY REFERENCES events(id), verification_count INTEGER NOT NULL
+);
 CREATE TABLE IF NOT EXISTS triage_issues (
     anchor_id TEXT PRIMARY KEY REFERENCES events(id), reason TEXT NOT NULL, created TEXT NOT NULL
 );
@@ -40,6 +51,19 @@ CREATE TABLE IF NOT EXISTS role_retries (
 CREATE TABLE IF NOT EXISTS collector_health (
     name TEXT PRIMARY KEY, checked_at TEXT NOT NULL, inserted INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS integrity_baselines (
+    id TEXT PRIMARY KEY, name TEXT NOT NULL UNIQUE, definition TEXT NOT NULL,
+    current TEXT NOT NULL, revision INTEGER NOT NULL, last_checked TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS integrity_health (
+    baseline_id TEXT PRIMARY KEY REFERENCES integrity_baselines(id),
+    attempted TEXT NOT NULL, complete INTEGER NOT NULL, reason TEXT
+);
+CREATE TABLE IF NOT EXISTS integrity_findings (
+    id TEXT PRIMARY KEY, baseline_id TEXT NOT NULL REFERENCES integrity_baselines(id),
+    created TEXT NOT NULL, payload TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS integrity_findings_by_time ON integrity_findings(created DESC, id DESC);
 CREATE TABLE IF NOT EXISTS decision_audit (
     sequence INTEGER PRIMARY KEY AUTOINCREMENT,
     payload TEXT NOT NULL,
@@ -87,6 +111,33 @@ def ingest(connection, events):
             if original != payload:
                 raise ValueError(f"Conflicting evidence id: {event.id}")
     return inserted
+
+
+def import_verifications(connection, key, envelopes):
+    enrolled = 0
+    for envelope in envelopes:
+        event, anchor_id = authenticate(key, envelope)
+        row = connection.execute("SELECT payload FROM events WHERE id=?", (anchor_id,)).fetchone()
+        if not row:
+            raise ValueError("Verification refers to an unknown login")
+        check_binding(Event.parse(json.loads(row[0])), event)
+        ingest(connection, (event,))
+        receipt = (anchor_id, key.key_id, envelope["mac"])
+        existing = connection.execute(
+            "SELECT anchor_id, key_id, signature FROM verified_evidence WHERE event_id=?", (event.id,)
+        ).fetchone()
+        if existing is not None:
+            if existing != receipt:
+                raise ValueError("Conflicting authenticated evidence receipt")
+            continue
+        connection.execute("INSERT INTO verified_evidence VALUES (?, ?, ?, ?)", (event.id, *receipt))
+        enrolled += 1
+    return {"verified": enrolled}
+
+
+def verifications_for(connection, anchor_id):
+    rows = connection.execute("SELECT event_id, key_id FROM verified_evidence WHERE anchor_id=?", (anchor_id,))
+    return dict(rows)
 
 
 def episode(connection, host, anchor_id):
@@ -198,6 +249,7 @@ def status_snapshot(connection):
             "SELECT count(*) FROM runs WHERE json_type(payload, '$.scenario') IS NULL"
         ).fetchone()[0],
         "confirmed": connection.execute("SELECT count(*) FROM outcomes").fetchone()[0],
+        "authenticated_records": connection.execute("SELECT count(*) FROM verified_evidence").fetchone()[0],
         "excluded_anchors": connection.execute("SELECT count(*) FROM triage_issues").fetchone()[0],
         "pending_role_retries": connection.execute("SELECT count(*) FROM role_retries").fetchone()[0],
         "collector": {"checked_at": checked[0], "inserted": checked[1]} if checked else None,

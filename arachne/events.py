@@ -10,6 +10,12 @@ KINDS = {
     "change_disputed", "identity_verified", "identity_disputed",
 }
 MAX_LINE = 65_536
+NATIVE_EXECUTABLES = {
+    "sshd": {"/usr/sbin/sshd", "/sbin/sshd"},
+    "sshd-session": {"/usr/lib/openssh/sshd-session", "/usr/libexec/openssh/sshd-session",
+                     "/usr/libexec/sshd-session", "/usr/sbin/sshd-session"},
+    "sudo": {"/usr/bin/sudo", "/bin/sudo"},
+}
 
 
 @dataclass(frozen=True)
@@ -50,10 +56,12 @@ def read_records(stream):
             yield json.loads(line)
 
 
-def from_journal(record):
+def from_journal(record, *, native=False):
     message = record.get("MESSAGE")
     identifier = record.get("SYSLOG_IDENTIFIER")
     if not isinstance(message, str) or not isinstance(identifier, str):
+        return None
+    if native and record.get("_EXE") not in tuple(NATIVE_EXECUTABLES.get(identifier, ())):
         return None
     fields = message.split()
     kind, actor = None, None

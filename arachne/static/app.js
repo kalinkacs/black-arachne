@@ -4,6 +4,9 @@ const runsElement = document.querySelector("#runs");
 const statusElement = document.querySelector("#status");
 const caseElement = document.querySelector("#case");
 const filter = document.querySelector("#filter");
+const integrityContent = document.querySelector("#integrity-content");
+const casesTab = document.querySelector("#cases-tab");
+const integrityTab = document.querySelector("#integrity-tab");
 const decisions = { close: "Закрыть", review: "Запросить данные", escalate: "Эскалировать" };
 const checks = { change_record: "Журнал изменений", identity_record: "Сведения об учётной записи",
   activity_record: "Последовательность событий" };
@@ -171,6 +174,11 @@ function render(report) {
     const item = node("li");
     item.append(node("span", "E" + indices.get(event.id), "event-number"),
       node("div", event.kind + " · " + event.actor), node("small", formatTime(event.timestamp) + " UTC · " + event.source));
+    if (report.provenance?.unverified.includes(event.id)) {
+      item.append(node("small", "Подтверждение не прошло проверку источника", "mismatch"));
+    } else if (report.provenance && Object.hasOwn(report.provenance.verified, event.id)) {
+      item.append(node("small", "Проверено · " + report.provenance.verified[event.id]));
+    }
     timeline.append(item);
   }
   caseElement.replaceChildren(heading, subheading, forecast, cards);
@@ -221,7 +229,8 @@ async function refreshStatus() {
   const status = await read("/api/status");
   const fields = [
     "События " + status.events, "Реальные досье " + status.investigations,
-    "Подтверждено " + status.confirmed, "Исключено из авторазбора " + status.excluded_anchors,
+    "Подтверждено " + status.confirmed, "Проверено записей " + status.authenticated_records,
+    "Исключено из авторазбора " + status.excluded_anchors,
     "Ожидают повтора " + status.pending_role_retries
   ];
   fields.push(status.collector ? "Сбор проверен " + formatTime(status.collector.checked_at) + " UTC" : "Ожидание запуска сборщика");
@@ -237,6 +246,59 @@ async function boot() {
   }
 }
 
+const changes = { added: "Добавлен", removed: "Удалён", content: "Изменилось содержимое",
+  permissions: "Изменились права", type: "Изменился тип", restored: "Вернулся к исходному состоянию" };
+
+function fileState(entry) {
+  if (!entry) return "Отсутствует";
+  const mode = entry.mode.toString(8).padStart(4, "0");
+  return entry.sha256 ? entry.sha256 + " · " + mode : "Специальный файл · " + mode;
+}
+
+async function refreshIntegrity() {
+  integrityContent.replaceChildren(node("p", "Загрузка…"));
+  try {
+    const { baselines, findings } = await read("/api/integrity");
+    if (!baselines.length) {
+      integrityContent.replaceChildren(node("p", "Папки для наблюдения пока не настроены."));
+      return;
+    }
+    const monitors = node("div", undefined, "cards");
+    for (const baseline of baselines) {
+      const item = node("section", undefined, "card");
+      const status = baseline.complete === null ? "Исходное состояние сохранено" :
+        baseline.complete ? "Проверка завершена" : "Проверка не завершена";
+      item.append(node("h3", baseline.name), node("p", status, baseline.complete === false ? "mismatch" : undefined),
+        node("small", formatTime(baseline.latest_attempt || baseline.last_checked) + " UTC"));
+      if (baseline.reason) item.append(node("p", baseline.reason));
+      monitors.append(item);
+    }
+    const log = node("div", undefined, "file-changes");
+    for (const finding of findings) {
+      const item = node("details", undefined, "card");
+      item.append(node("summary", finding.path + " · " + changes[finding.change]),
+        node("small", finding.baseline + " · " + formatTime(finding.created) + " UTC"),
+        node("p", "Было · " + fileState(finding.previous)), node("p", "Стало · " + fileState(finding.observed)));
+      log.append(item);
+    }
+    integrityContent.replaceChildren(monitors,
+      findings.length ? node("h3", "Замеченные изменения") : node("p", "Изменений пока нет."), log);
+  } catch (error) {
+    integrityContent.replaceChildren(node("p", error.message));
+  }
+}
+
+function switchView(integrity) {
+  document.querySelector("#cases-view").hidden = integrity;
+  document.querySelector("#integrity-view").hidden = !integrity;
+  casesTab.setAttribute("aria-pressed", String(!integrity));
+  integrityTab.setAttribute("aria-pressed", String(integrity));
+  if (integrity) refreshIntegrity();
+}
+
+casesTab.addEventListener("click", () => switchView(false));
+integrityTab.addEventListener("click", () => switchView(true));
+document.querySelector("#integrity-reload").addEventListener("click", refreshIntegrity);
 filter.addEventListener("input", renderList);
 document.querySelector("#reload").addEventListener("click", boot);
 boot();
