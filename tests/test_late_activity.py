@@ -87,6 +87,8 @@ class SudoClassificationTests(unittest.TestCase):
         accepted = journal("operator : TTY=pts/0 ; PWD=/tmp ; USER=root ; COMMAND=/usr/bin/true",
                            "sudo", "fixture-allow", 1)
         self.assertEqual(from_journal(accepted, native=True).kind, "privileged_activity")
+        no_terminal = {**accepted, "MESSAGE": "operator : PWD=/tmp ; USER=root ; COMMAND=/usr/bin/true"}
+        self.assertEqual(from_journal(no_terminal, native=True).kind, "privileged_activity")
 
     def test_repeated_denials_require_review_even_with_an_approved_change(self):
         anchor, events = sample("change-confirmed")

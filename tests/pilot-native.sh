@@ -103,11 +103,16 @@ python3 -m arachne --db "$pilot_dir/rehearsal.sqlite3" import-journal --native "
 python3 -m arachne --db "$pilot_dir/rehearsal.sqlite3" anchors > "$pilot_dir/anchors.json"
 python3 - "$pilot_dir" <<'PY'
 from collections import Counter
+from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
 import sqlite3
 import subprocess
 import sys
+
+from arachne.events import ANCHOR_KINDS, from_journal
+from arachne.operations import triage
+from arachne.store import database, get_run, ingest
 
 root = Path(sys.argv[1])
 anchors = json.loads((root / "anchors.json").read_text())
@@ -136,7 +141,13 @@ for anchor in by_session.values():
     linked = set(case["session_attribution"]["linked"])
     counts.append(sum(event["kind"] == "privileged_activity" and event["id"] in linked
                       for event in case["events"]))
-assert sorted(counts) == [0, 1], counts
+if sorted(counts) != [0, 1]:
+    journal_sudo = [row for row in map(json.loads, (root / "native.jsonl").read_text().splitlines())
+                    if row.get("SYSLOG_IDENTIFIER") == "sudo"]
+    messages = [(bool(row.get("_AUDIT_SESSION")), isinstance(row.get("MESSAGE"), str)
+                 and tuple(part for part in ("TTY=", "PWD=", "USER=", "COMMAND=") if part in row["MESSAGE"]))
+                for row in journal_sudo]
+    raise AssertionError((counts, Counter(messages)))
 print("Confirmed native isolation: only the session that ran sudo received the privilege observation.")
 with sqlite3.connect(root / "rehearsal.sqlite3") as db:
     records = [json.loads(payload) for (payload,) in db.execute(
@@ -145,6 +156,24 @@ with sqlite3.connect(root / "rehearsal.sqlite3") as db:
     assert any(event["kind"] == "privilege_denied" for event in records), records
     assert all(event["kind"] != "privileged_activity" for event in records), records
 print("The real declined sudo request was recorded separately from accepted privilege activity.")
+
+# Replay authentic journal observations in two batches to exercise late delivery.
+native = [event for row in map(json.loads, (root / "native.jsonl").read_text().splitlines())
+          if isinstance(row, dict) and (event := from_journal(row, native=True))]
+anchors = [event for event in native if event.kind in ANCHOR_KINDS and event.session_key in by_session]
+delayed, = [event for event in native if event.kind == "privileged_activity" and event.session_key in by_session]
+late_db = root / "late.sqlite3"
+ready = datetime.now(timezone.utc) + timedelta(minutes=16)
+with database(late_db) as db:
+    ingest(db, anchors)
+assert triage(late_db, now=ready)["investigated"] == 2
+with database(late_db) as db:
+    ingest(db, [delayed])
+resumed, = triage(late_db, now=ready)["runs"]
+with database(late_db) as db:
+    assert get_run(db, resumed)["session_attribution"]["linked"] == [delayed.id]
+assert triage(late_db, now=ready)["investigated"] == 0
+print("Late native activity caused exactly one reassessment, limited to the matching session.")
 PY
 
 # Rehearse the shipped systemd unit on the disposable runner. The servicing

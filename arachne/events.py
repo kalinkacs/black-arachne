@@ -120,7 +120,9 @@ def from_journal(record, *, native=False):
         actor, _, content = message.partition(" : ")
         actor = actor.strip()
         first = content.split(";", 1)[0].strip()
-        if first.startswith("TTY=") and "COMMAND=" in content:
+        if first.startswith(("TTY=", "PWD=", "USER=", "COMMAND=")) and any(
+            field.lstrip().startswith("COMMAND=") for field in content.split(";")
+        ):
             kind = "privileged_activity"
         elif sudo_denial(first):
             kind = "privilege_denied"
