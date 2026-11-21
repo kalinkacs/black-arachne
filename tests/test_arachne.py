@@ -11,6 +11,7 @@ from unittest.mock import patch
 
 from arachne.events import Event, from_journal, read_records
 from arachne.lab import run_lab, scenarios
+from arachne.agents import model_review
 from arachne.reasoning import investigate
 from arachne.store import database, episode, get_run, ingest
 
@@ -79,18 +80,18 @@ class InvestigationTests(unittest.TestCase):
 
         def provider(request, timeout):
             body = json.loads(request.data)
-            visible = json.loads(body["messages"][1]["content"])
+            visible = json.loads(body["messages"][1]["content"])["events"]
             self.assertEqual(len(visible), 3)
             self.assertTrue(visible[1]["is_anchor"])
             self.assertEqual(set(visible[1]), {"handle", "is_anchor", "kind", "offset_seconds"})
             self.assertNotIn(event.host, str(visible))
-            return io.StringIO(json.dumps({"choices": [{"message": {"content": json.dumps(decision)}}]}))
+            return io.BytesIO(json.dumps({"choices": [{"message": {"content": json.dumps(decision)}}]}).encode())
 
-        with patch.dict(os.environ, {"OPENAI_API_KEY": "test-only"}), patch("arachne.reasoning.urllib.request.urlopen", provider):
-            self.assertEqual(investigate(event, events, "test-model")["forecast"]["evidence_ids"], [event.id])
+        with patch.dict(os.environ, {"OPENAI_API_KEY": "test-only"}), patch("arachne.agents.urllib.request.urlopen", provider):
+            self.assertEqual(model_review("red_forecast", "test-model", event, events[:-1])["evidence_ids"], [event.id])
             decision["evidence_ids"] = ["unknown"]
             with self.assertRaisesRegex(ValueError, "evidence validation"):
-                investigate(event, events, "test-model")
+                model_review("red_forecast", "test-model", event, events[:-1])
 
     def test_synthetic_smoke_results_and_persisted_runs(self):
         with tempfile.TemporaryDirectory() as temporary:

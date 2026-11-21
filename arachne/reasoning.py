@@ -1,14 +1,9 @@
 """Deterministic defensive review with a blinded challenger and an optional model."""
 
-from datetime import datetime
-import json
-import os
-import urllib.request
-
-from .events import records
+from .agents import model_review
+from .events import episode_window, records
 
 VERSION = "0.1"
-CHECKS = ("change_record", "conflicting_activity")
 
 
 def finding(decision, reason, evidence):
@@ -16,7 +11,11 @@ def finding(decision, reason, evidence):
 
 
 def relevant(anchor, events):
-    return [event for event in events if event.host == anchor.host and event.actor == anchor.actor]
+    lower, upper = episode_window(anchor)
+    return [
+        event for event in events
+        if event.host == anchor.host and event.actor == anchor.actor and lower <= event.timestamp <= upper
+    ]
 
 
 def blue(anchor, observations):
@@ -50,70 +49,6 @@ def red(anchor, observations):
     }
 
 
-def model_red(anchor, observations, model):
-    key = os.environ.get("OPENAI_API_KEY")
-    if not key:
-        raise ValueError("OPENAI_API_KEY is required with --model")
-    properties = {
-        "check": {"type": "string", "enum": list(CHECKS)},
-        "prediction": {"type": ["string", "null"], "enum": ["close", "review", "escalate", None]},
-        "hypothesis": {"type": "string"},
-        "evidence_ids": {"type": "array", "items": {"type": "string"}},
-    }
-    # Only kinds, relative timing and local handles are sent to the provider.
-    handles = {f"E{index}": event.id for index, event in enumerate(observations)}
-    visible = [
-        {"handle": handle, "kind": event.kind, "is_anchor": event.id == anchor.id,
-         "offset_seconds": (datetime.fromisoformat(event.timestamp) - datetime.fromisoformat(anchor.timestamp)).total_seconds()}
-        for handle, event in zip(handles, observations)
-    ]
-    request = urllib.request.Request(
-        "https://api.openai.com/v1/chat/completions",
-        data=json.dumps({
-            "model": model,
-            "messages": [
-                {"role": "system", "content": (
-                    "You review defensive Linux triage. Blue closes when a deployment claim precedes a login "
-                    "and privileged activity follows; otherwise it escalates when >=3 failures precede the "
-                    "login and privilege follows, and requests review in other cases. Predict Blue's decision "
-                    "or abstain. Choose one read-only check: change_record verifies the declared change; "
-                    "conflicting_activity reviews privileged activity. Cite local evidence handles. "
-                    "Use only the evidence provided and describe a defensive hypothesis."
-                )},
-                {"role": "user", "content": json.dumps(visible)},
-            ],
-            "response_format": {"type": "json_schema", "json_schema": {
-                "name": "defensive_review", "strict": True,
-                "schema": {"type": "object", "properties": properties,
-                           "required": list(properties), "additionalProperties": False},
-            }},
-            "max_completion_tokens": 1200,
-        }).encode(),
-        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
-        method="POST",
-    )
-    with urllib.request.urlopen(request, timeout=30) as response:
-        data = json.load(response)
-    try:
-        result = json.loads(data["choices"][0]["message"]["content"])
-        references = result["evidence_ids"]
-        if (
-            set(result) != set(properties)
-            or result["check"] not in CHECKS
-            or result["prediction"] not in ("close", "review", "escalate", None)
-            or not isinstance(result["hypothesis"], str)
-            or not 0 < len(result["hypothesis"]) <= 600
-            or not isinstance(references, list)
-            or not 0 < len(references) <= 12
-            or not all(isinstance(ref, str) and ref in handles for ref in references)
-        ):
-            raise ValueError("Model output did not pass evidence validation")
-        result["evidence_ids"] = list(dict.fromkeys(handles[ref] for ref in references))
-        return {**result, "engine": model}
-    except (KeyError, TypeError, IndexError, json.JSONDecodeError) as error:
-        raise ValueError("No usable structured model review was received") from error
-
-
 def verify(anchor, observations, first, check):
     privileged = [event for event in observations if event.kind == "privileged_activity" and event.timestamp >= anchor.timestamp]
     if check == "change_record":
@@ -134,7 +69,9 @@ def verify(anchor, observations, first, check):
 def investigate(anchor, events, model=None):
     scoped = relevant(anchor, events)
     visible = [event for event in scoped if event.kind != "change_verified"]
-    forecast = model_red(anchor, visible, model) if model else red(anchor, visible)
+    if model:
+        return role_investigation(anchor, events, model)
+    forecast = red(anchor, visible)
     initial = blue(anchor, visible)
     standard = verify(anchor, scoped, initial, "conflicting_activity")
     assisted = verify(anchor, scoped, initial, forecast["check"])
@@ -144,4 +81,46 @@ def investigate(anchor, events, model=None):
         "events": records(events), "forecast": forecast,
         "prediction_matched": prediction == initial["decision"] if prediction is not None else None,
         "blue": initial, "standard_review": standard, "assisted": assisted,
+    }
+
+
+def apply_policy(anchor, observations, recommendation):
+    """Keep weakly supported conclusions open and preserve corroborated risk signals."""
+    risk = verify(anchor, observations, {"decision": "close"}, "conflicting_activity")
+    if risk["decision"] == "escalate":
+        return risk
+    if recommendation["decision"] == "close":
+        claims = [event for event in observations if event.kind == "deployment" and event.timestamp <= anchor.timestamp]
+        corroborated = any(
+            event.kind == "change_verified" and event.source == "change-management"
+            and claims and event.timestamp >= claims[-1].timestamp
+            for event in observations
+        )
+        if not corroborated:
+            return finding("review", "Closure requires independent corroboration of a declared change.", [anchor])
+    return recommendation
+
+
+def role_investigation(anchor, events, model, memory=()):
+    """Blind Red to initial Blue output and expose the same catalogue to both reviewers."""
+    scoped = relevant(anchor, events)
+    visible = [event for event in scoped if event.kind != "change_verified"]
+    forecast = model_review("red_forecast", model, anchor, visible, memory)
+    initial = model_review("blue_initial", model, anchor, visible, memory)
+    independent = model_review("independent_check", model, anchor, visible, memory)
+
+    def reassess(check):
+        disclosed = scoped if check == "change_record" else visible
+        return model_review("blue_reassessment", model, anchor, disclosed, memory, check)
+
+    standard = reassess(independent["check"])
+    assisted = standard if independent["check"] == forecast["check"] else reassess(forecast["check"])
+    return {
+        "engine_version": "0.2", "host": anchor.host, "anchor_id": anchor.id,
+        "events": records(events), "forecast": forecast, "independent_check": independent,
+        "prediction_matched": forecast["prediction"] == initial["decision"] if forecast["prediction"] is not None else None,
+        "blue": initial, "standard_review": standard, "assisted": assisted,
+        "recommendation": apply_policy(anchor, scoped, assisted),
+        "initial_hypotheses": {"legitimate": initial["legitimate"], "security": initial["security"]},
+        "history_used": list(memory),
     }

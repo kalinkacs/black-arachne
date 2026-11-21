@@ -1,0 +1,26 @@
+[Unit]
+Description=Collect and investigate Linux evidence with Black Arachne
+
+[Service]
+Type=oneshot
+User=black-arachne
+Group=black-arachne
+SupplementaryGroups=systemd-journal
+WorkingDirectory=/opt/black-arachne
+StateDirectory=black-arachne
+StateDirectoryMode=0700
+UMask=0077
+Environment=PYTHONDONTWRITEBYTECODE=1
+EnvironmentFile=-/etc/black-arachne/worker.env
+ExecStart=/usr/bin/python3 -m arachne --db /var/lib/black-arachne/evidence.sqlite3 cycle
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=strict
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+LockPersonality=yes

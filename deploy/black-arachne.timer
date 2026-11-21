@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Black Arachne periodically
+
+[Timer]
+OnBootSec=1min
+OnUnitInactiveSec=2min
+Unit=black-arachne.service
+
+[Install]
+WantedBy=timers.target

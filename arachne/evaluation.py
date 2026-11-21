@@ -1,0 +1,60 @@
+"""Offline evaluation with labels hidden from all reasoning roles."""
+
+from collections import defaultdict
+from time import perf_counter
+
+from .events import Event, read_records
+from .reasoning import investigate
+
+VARIANTS = ("blue", "standard_review", "assisted")
+
+
+def parse_case(record):
+    if not isinstance(record, dict) or set(record) != {"id", "family", "expected", "anchor_id", "events"}:
+        raise ValueError("Each case must contain id, family, expected, anchor_id and events")
+    for key in ("id", "family", "anchor_id"):
+        if not isinstance(record[key], str) or not record[key].strip() or len(record[key]) > 200:
+            raise ValueError(f"Invalid case {key}")
+    if record["expected"] not in ("close", "review", "escalate"):
+        raise ValueError("Expected decision must be close, review or escalate")
+    if not isinstance(record["events"], list) or not 1 <= len(record["events"]) <= 1000:
+        raise ValueError("A case must contain 1–1000 observations")
+    observations = sorted(map(Event.parse, record["events"]), key=lambda event: (event.timestamp, event.id))
+    if len({event.id for event in observations}) != len(observations):
+        raise ValueError("Duplicate observation id within one case")
+    anchor = next((event for event in observations if event.id == record["anchor_id"]), None)
+    if not anchor or anchor.kind != "ssh_login":
+        raise ValueError("Missing or invalid SSH anchor")
+    return anchor, observations
+
+
+def evaluate(stream, model=None):
+    counts = {variant: defaultdict(int) for variant in VARIANTS}
+    families = defaultdict(lambda: defaultdict(int))
+    safety = defaultdict(int)
+    ids = set()
+    start = perf_counter()
+    for record in read_records(stream):
+        anchor, events = parse_case(record)
+        case_id = record["id"]
+        if case_id in ids:
+            raise ValueError(f"Duplicate case identifier: {case_id}")
+        ids.add(case_id)
+        report = investigate(anchor, events, model)
+        expected = record["expected"]
+        family = families[record["family"]]
+        family["total"] += 1
+        for variant in VARIANTS:
+            decision = report[variant]["decision"]
+            counts[variant]["correct"] += int(expected == decision)
+            counts[variant]["missed_escalations"] += int(expected == "escalate" and decision != expected)
+            counts[variant]["false_escalations"] += int(expected != "escalate" and decision == "escalate")
+            family[variant] += int(expected == decision)
+        standard_correct = expected == report["standard_review"]["decision"]
+        assisted_correct = expected == report["assisted"]["decision"]
+        safety["red_only_correct"] += int(assisted_correct and not standard_correct)
+        safety["standard_only_correct"] += int(standard_correct and not assisted_correct)
+    if not ids:
+        raise ValueError("Evaluation input contains no cases")
+    return {"total": len(ids), "metrics": counts, "by_family": families, "paired": safety,
+            "elapsed_seconds": round(perf_counter() - start, 3)}

@@ -74,6 +74,18 @@ function render(report) {
     timeline.append(item);
   }
   caseElement.replaceChildren(heading, subheading, forecast, cards);
+  if (report.recommendation) {
+    caseElement.append(decisionCard("Защитная рекомендация", report.recommendation, indices));
+  }
+  if (report.initial_hypotheses) {
+    const hypotheses = node("section", undefined, "card");
+    hypotheses.append(node("h3", "Гипотезы Blue"), node("p", report.initial_hypotheses.legitimate),
+      node("p", report.initial_hypotheses.security));
+    caseElement.append(hypotheses);
+  }
+  if (report.history_used?.length) {
+    caseElement.append(node("p", "Сопоставленные подтверждённые эпизоды · " + report.history_used.length, "muted"));
+  }
   if (report.label) caseElement.append(node("p", "Ожидаемое решение · " + decisions[report.label], "muted"));
   caseElement.append(node("h3", "Хронология улик"), timeline);
 }

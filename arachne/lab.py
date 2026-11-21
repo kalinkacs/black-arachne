@@ -1,7 +1,7 @@
 """Inert synthetic fixtures with labels kept outside the reasoning path."""
 
 from .events import Event
-from .reasoning import investigate
+from .reasoning import investigate, role_investigation
 from .store import episode, ingest, save_run
 
 
@@ -35,7 +35,7 @@ def run_lab(connection, model=None):
         ingest(connection, events)
         login = next(event for event in events if event.kind == "ssh_login")
         anchor, evidence = episode(connection, login.host, login.id)
-        report = investigate(anchor, evidence, model)
+        report = role_investigation(anchor, evidence, model) if model else investigate(anchor, evidence)
         for variant in scores:
             scores[variant] += int(report[variant]["decision"] == expected)
         run = save_run(connection, {**report, "label": expected, "scenario": name})

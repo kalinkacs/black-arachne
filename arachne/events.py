@@ -1,7 +1,7 @@
 """Validated, minimal evidence records and Linux journal normalization."""
 
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 
@@ -86,3 +86,14 @@ def from_journal(record):
 
 def records(events):
     return [asdict(event) for event in events]
+
+
+POST_LOGIN_OBSERVATION = timedelta(minutes=15)
+
+
+def episode_window(anchor):
+    timestamp = datetime.fromisoformat(anchor.timestamp)
+    return (
+        (timestamp - timedelta(minutes=10)).isoformat(timespec="microseconds"),
+        (timestamp + POST_LOGIN_OBSERVATION).isoformat(timespec="microseconds"),
+    )
