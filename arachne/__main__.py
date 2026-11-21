@@ -17,6 +17,7 @@ from .files import FILE_LIMITS, load_indicators, scan
 from .integrity import baseline_catalog, establish, observe, recent_findings, scheduled_checks
 from .lab import run_lab
 from .mimicry import mimic
+from .observability import MAX_CHECKS, audit_observability
 from .operations import collect, operational_review, triage
 from .pilot import since_cutoff, summary as pilot_summary
 from .provenance import SOURCE_KINDS, create_key, load_key, sign_record
@@ -88,6 +89,12 @@ def parser():
     model_options(benchmark)
     benchmark.add_argument("--cross-examine", action="store_true",
                            help="Compare offline agents with and without reciprocal role switching")
+    observability = commands.add_parser("observe-gaps", help="Replay coverage gaps in reviewed offline cases")
+    observability.add_argument("file", help="Labeled discovery cases in the evaluate JSONL format")
+    observability.add_argument("--holdout", help="Labeled cases from disjoint families for a frozen replay")
+    observability.add_argument("--max-checks", type=int, choices=range(MAX_CHECKS + 1), default=2)
+    observability.add_argument("--tolerate-missing", type=int, choices=(0, 1), default=0,
+                               help="Require the plan to retain explicit separation if a source is unavailable")
     trial = commands.add_parser("trial", help="Run the packaged perspective comparison and save its dossiers")
     model_options(trial)
     scanner = commands.add_parser("scan-files", help="Compare local file hashes with trusted SHA-256 indicators")
@@ -149,6 +156,12 @@ def main(argv=None):
             with open(options.file, encoding="utf-8") as stream:
                 analyze = partial(mimic, cross_examine=True) if options.cross_examine else mimic
                 print(json.dumps(evaluate(stream, options.model, analyze=analyze), indent=2))
+            return 0
+        if options.command == "observe-gaps":
+            holdout = open(options.holdout, encoding="utf-8") if options.holdout else nullcontext()
+            with holdout as unseen, open(options.file, encoding="utf-8") as stream:
+                report = audit_observability(stream, options.max_checks, options.tolerate_missing, holdout=unseen)
+            print(json.dumps(report, indent=2, ensure_ascii=False))
             return 0
         if options.command == "serve":
             serve(options.db, options.port, options.operator)
