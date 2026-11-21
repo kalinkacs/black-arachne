@@ -17,6 +17,8 @@ def attribution(anchor, events, verified):
         elif event.kind in VERIFICATION_KINDS:
             if event.id in verified:
                 context.append(event.id)
+        elif event.kind == "privilege_denial_unverified":
+            excluded.append(event.id)
         elif event.kind in ANCHOR_KINDS:
             continue
         elif event.kind == "deployment" and not event.session_key:

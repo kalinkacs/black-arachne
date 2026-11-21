@@ -186,7 +186,8 @@ function render(report) {
   for (const event of report.events) {
     const item = node("li");
     item.append(node("span", "E" + indices.get(event.id), "event-number"),
-      node("div", event.kind + " · " + event.actor), node("small", formatTime(event.timestamp) + " UTC · " + event.source));
+      node("div", (event.kind === "privilege_denial_unverified" ? "Отказ sudo без подтверждённого источника" : event.kind)
+        + " · " + event.actor), node("small", formatTime(event.timestamp) + " UTC · " + event.source));
     if (report.session_attribution?.excluded.includes(event.id)) {
       item.append(node("small", "Вне сеанса · не учтено в решении", "mismatch"));
     }

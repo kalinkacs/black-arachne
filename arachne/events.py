@@ -8,7 +8,7 @@ import re
 
 ANCHOR_KINDS = {"ssh_login", "ssh_session_open"}
 KINDS = ANCHOR_KINDS | {
-    "ssh_failure", "privileged_activity", "privilege_denied", "deployment", "change_verified",
+    "ssh_failure", "privileged_activity", "privilege_denied", "privilege_denial_unverified", "deployment", "change_verified",
     "change_disputed", "identity_verified", "identity_disputed",
 }
 SESSION_ACTIVITY = {"ssh_failure", "privileged_activity", "privilege_denied"}
@@ -92,7 +92,7 @@ def journal_session(record):
 def sudo_denial(detail):
     decision = detail.casefold()
     return any(phrase in decision for phrase in (
-        "not in sudoers", "not allowed to execute", "authentication failure",
+        "not in sudoers", "not allowed to execute", "command not allowed", "authentication failure",
         "incorrect password attempt", "a password is required", "account validation failure",
     ))
 
@@ -102,8 +102,7 @@ def from_journal(record, *, native=False):
     identifier = record.get("SYSLOG_IDENTIFIER")
     if not isinstance(message, str) or not isinstance(identifier, str):
         return None
-    if native and record.get("_EXE") not in tuple(NATIVE_EXECUTABLES.get(identifier, ())):
-        return None
+    trusted_executable = record.get("_EXE") in tuple(NATIVE_EXECUTABLES.get(identifier, ()))
     fields = message.split()
     machine, session = journal_session(record)
     kind, actor = None, None
@@ -128,6 +127,13 @@ def from_journal(record, *, native=False):
             kind = "privilege_denied"
     if kind is None:
         return None
+    if native and not trusted_executable:
+        if (kind != "privilege_denied" or record.get("_EXE") is not None
+                or record.get("_COMM") != "sudo" or record.get("_TRANSPORT") != "syslog"):
+            return None
+        # The kernel process name can survive when no executable path is
+        # available. Show this as incomplete telemetry, never as a case signal.
+        kind = "privilege_denial_unverified"
     cursor = record.get("__CURSOR")
     host = record.get("_HOSTNAME")
     micros = record.get("__REALTIME_TIMESTAMP")

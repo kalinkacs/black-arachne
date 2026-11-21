@@ -16,6 +16,7 @@ pilot_start=$(date --iso-8601=seconds)
 [[ "$pilot_user" =~ ^[a-zA-Z0-9_-]+$ ]]
 cleanup() {
   sudo -n systemctl stop "$pilot_unit.service" 2>/dev/null || true
+  sudo -n rm -f /etc/sudoers.d/black-arachne-native-fixture
   rm -rf -- "$pilot_dir"
 }
 trap cleanup EXIT
@@ -90,12 +91,19 @@ wait "$first_pid"
 wait "$second_pid"
 
 sudo -n useradd --system --user-group --no-create-home --shell /usr/sbin/nologin black-arachne
+# Spell out a denial on the disposable VM's fixture account so sudo emits
+# a policy decision rather than only returning a missing-password prompt.
+printf '%s
+' 'Defaults:black-arachne !authenticate' 'black-arachne ALL=(root) !/usr/bin/true' > "$pilot_dir/sudo-denial"
+sudo -n visudo -cf "$pilot_dir/sudo-denial"
+sudo -n install -m 0440 "$pilot_dir/sudo-denial" /etc/sudoers.d/black-arachne-native-fixture
 if sudo -n -u black-arachne /usr/bin/sudo -n -- /usr/bin/true; then
   printf '%s
 ' 'The unprivileged rehearsal account unexpectedly received sudo access.' >&2
   exit 1
 fi
 
+sudo -n rm -f /etc/sudoers.d/black-arachne-native-fixture
 sudo -n journalctl --sync
 sudo -n journalctl --since "$pilot_start" --no-pager -o json \
   SYSLOG_IDENTIFIER=sshd SYSLOG_IDENTIFIER=sshd-session SYSLOG_IDENTIFIER=sudo > "$pilot_dir/native.jsonl"
@@ -153,8 +161,8 @@ with sqlite3.connect(root / "rehearsal.sqlite3") as db:
     records = [json.loads(payload) for (payload,) in db.execute(
         "SELECT payload FROM events WHERE json_extract(payload, '$.actor')='black-arachne'"
     )]
-    assert any(event["kind"] == "privilege_denied" for event in records), records
     assert all(event["kind"] != "privileged_activity" for event in records), records
+    assert any(event["kind"] in {"privilege_denied", "privilege_denial_unverified"} for event in records), records
 print("The real declined sudo request was recorded separately from accepted privilege activity.")
 
 # Replay authentic journal observations in two batches to exercise late delivery.

@@ -90,6 +90,23 @@ class SudoClassificationTests(unittest.TestCase):
         no_terminal = {**accepted, "MESSAGE": "operator : PWD=/tmp ; USER=root ; COMMAND=/usr/bin/true"}
         self.assertEqual(from_journal(no_terminal, native=True).kind, "privileged_activity")
 
+    def test_missing_executable_records_are_diagnostic_only(self):
+        row = journal("operator : command not allowed ; PWD=/tmp ; USER=root ; COMMAND=/usr/bin/true",
+                      "sudo", "fixture-partial", 0)
+        context = {**row, "_EXE": None, "_COMM": "sudo", "_TRANSPORT": "syslog"}
+        self.assertEqual(from_journal(context, native=True).kind, "privilege_denial_unverified")
+        self.assertIsNone(from_journal({**context, "_EXE": "/usr/bin/logger"}, native=True))
+        self.assertIsNone(from_journal({**context, "_COMM": "logger"}, native=True))
+
+        anchor, events = bind_session(*sample("change-confirmed"))
+        activity = next(event for event in events if event.kind == "privileged_activity")
+        diagnostic = replace(activity, id="local-incomplete-denial", kind="privilege_denial_unverified")
+        with tempfile.TemporaryDirectory() as directory:
+            with database(Path(directory) / "records.sqlite3") as connection:
+                report = operational_review(connection, anchor, [*events, diagnostic], None)
+        self.assertIn(diagnostic.id, report["session_attribution"]["excluded"])
+        self.assertNotIn(diagnostic.id, report["blue"]["evidence_ids"])
+
     def test_repeated_denials_require_review_even_with_an_approved_change(self):
         anchor, events = sample("change-confirmed")
         activity = next(event for event in events if event.kind == "privileged_activity")

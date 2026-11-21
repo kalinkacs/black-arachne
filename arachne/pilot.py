@@ -31,6 +31,13 @@ def _summary(connection, since):
            AND json_extract(payload, '$.kind') IN ('ssh_login','ssh_session_open')""",
         (since,),
     ).fetchone()
+    denied, unverifiable = connection.execute(
+        """SELECT
+               coalesce(sum(json_extract(payload,'$.kind')='privilege_denied'),0),
+               coalesce(sum(json_extract(payload,'$.kind')='privilege_denial_unverified'),0)
+           FROM events WHERE timestamp>=? AND json_extract(payload,'$.source')='systemd-journal'""",
+        (since,),
+    ).fetchone()
     latest = connection.execute(
         """WITH recent AS (
                SELECT id, payload, row_number() OVER (
@@ -77,7 +84,8 @@ def _summary(connection, since):
     return {
         "since": since,
         "journal": {"login_observations": anchors, "bound_observations": bound,
-                    "unbound_observations": anchors - bound},
+                    "unbound_observations": anchors - bound,
+                    "sudo_denials": denied, "sudo_denials_unverified": unverifiable},
         "operations": operations,
         "cases": cases,
         "decisions": metrics,
