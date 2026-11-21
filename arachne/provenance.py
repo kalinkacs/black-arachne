@@ -10,7 +10,7 @@ import re
 import secrets
 import stat
 
-from .events import Event, encode, episode_window, records
+from .events import ANCHOR_KINDS, Event, encode, episode_window, records
 
 SOURCE_KINDS = {
     "change-management": {"change_verified", "change_disputed"},
@@ -104,7 +104,11 @@ def authenticate(key, envelope):
 
 def check_binding(anchor, event):
     lower, upper = episode_window(anchor)
-    if anchor.kind != "ssh_login" or (anchor.host, anchor.actor) != (event.host, event.actor):
+    if anchor.kind not in ANCHOR_KINDS or (anchor.host, anchor.actor) != (event.host, event.actor):
         raise ValueError("Verification does not match the login host and account")
+    if event.machine_id is not None and event.machine_id != anchor.machine_id:
+        raise ValueError("Verification does not match the login machine")
+    if event.session_key is not None and event.session_key != anchor.session_key:
+        raise ValueError("Verification does not match the login session")
     if not lower <= event.timestamp <= upper:
         raise ValueError("Verification is outside the login's evidence window")

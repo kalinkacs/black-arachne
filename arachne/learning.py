@@ -7,14 +7,14 @@ MAX_HISTORY = 5
 MIN_OBSERVATIONS = 3
 
 
-def decision_model(prior, history):
-    votes = Counter({decision: 1 + 2 * (prior == decision) for decision in DECISIONS})
-    for episode in history:
-        if episode.get("initial") in DECISIONS:
-            votes[episode["initial"]] += 1
-    prediction = max(votes, key=lambda decision: (votes[decision], decision == prior))
-    total = sum(votes.values())
-    return prediction, {decision: round(votes[decision] / total, 3) for decision in DECISIONS}
+def decision_model(history):
+    """Predict Blue's decision only when observed history supports it."""
+    observed = Counter(episode["initial"] for episode in history if episode.get("initial") in DECISIONS)
+    total = sum(observed.values())
+    leader, count = observed.most_common(1)[0] if observed else (None, 0)
+    prediction = leader if total >= MIN_OBSERVATIONS and count > total / 2 else None
+    return prediction, {decision: round((1 + observed[decision]) / (len(DECISIONS) + total), 3)
+                        for decision in DECISIONS}
 
 
 def check_model(default, checks, history):

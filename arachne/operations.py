@@ -6,6 +6,7 @@ import subprocess
 from .events import POST_LOGIN_OBSERVATION, from_journal, read_records
 from .mimicry import mimic
 from .role_runtime import RoleFailure
+from .sessions import attributed_events, attribution
 from .store import (
     EvidenceWindowOverflow, confirmed_history, database, episode, ingest, save_run, verifications_for,
 )
@@ -60,8 +61,10 @@ def collect(connection, since, reader=journal_batch):
 
 
 def operational_review(connection, anchor, events, model):
-    history = confirmed_history(connection, anchor, events)
-    return mimic(anchor, events, history, model, verified=verifications_for(connection, anchor.id))
+    verified = verifications_for(connection, anchor.id)
+    scope = attribution(anchor, events, verified)
+    history = confirmed_history(connection, anchor, attributed_events(anchor, events, scope))
+    return mimic(anchor, events, history, model, verified=verified, session_scope=scope)
 
 
 def triage(path, model=None, limit=20, now=None):
@@ -79,8 +82,21 @@ def triage(path, model=None, limit=20, now=None):
                ))
                AND NOT EXISTS (SELECT 1 FROM triage_issues i WHERE i.anchor_id=e.id)
                AND NOT EXISTS (SELECT 1 FROM role_retries r WHERE r.anchor_id=e.id AND r.retry_after > ?)
-               AND json_extract(e.payload, '$.kind')='ssh_login'
+               AND json_extract(e.payload, '$.kind') IN ('ssh_login','ssh_session_open')
                AND json_extract(e.payload, '$.source')='systemd-journal'
+               AND (
+                   json_extract(e.payload, '$.session_key') IS NULL
+                   OR EXISTS (SELECT 1 FROM verified_evidence v WHERE v.anchor_id=e.id)
+                   OR NOT EXISTS (
+                       SELECT 1 FROM events a WHERE a.host=e.host
+                       AND json_extract(a.payload,'$.session_key')=json_extract(e.payload,'$.session_key')
+                       AND json_extract(a.payload,'$.machine_id')=json_extract(e.payload,'$.machine_id')
+                       AND json_extract(a.payload,'$.actor')=json_extract(e.payload,'$.actor')
+                       AND json_extract(a.payload,'$.source')='systemd-journal'
+                       AND json_extract(a.payload,'$.kind') IN ('ssh_login','ssh_session_open')
+                       AND (a.timestamp<e.timestamp OR (a.timestamp=e.timestamp AND a.id<e.id))
+                   )
+               )
                ORDER BY e.timestamp, e.id LIMIT ?""",
             (ready, current_time, limit),
         ).fetchall()

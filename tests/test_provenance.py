@@ -9,12 +9,12 @@ from unittest.mock import patch
 from arachne.operations import operational_review, triage
 from arachne.provenance import authenticate, create_key, load_key, sign_record
 from arachne.store import database, episode, get_run, import_verifications, ingest
-from test_offline import sample
+from test_offline import bind_session, sample
 
 
 class ProvenanceTests(unittest.TestCase):
     def test_tamper_scope_and_key_file_permissions(self):
-        anchor, events = sample("change-confirmed")
+        anchor, events = bind_session(*sample("change-confirmed"))
         verification = next(item for item in events if item.kind == "change_verified")
         with tempfile.TemporaryDirectory() as directory:
             key_path = Path(directory) / "changes.key.json"
@@ -35,9 +35,9 @@ class ProvenanceTests(unittest.TestCase):
                 load_key(key_path)
 
     def test_unsigned_claim_does_not_close_and_signed_claim_stays_bound_to_one_login(self):
-        anchor, events = sample("change-confirmed")
+        anchor, events = bind_session(*sample("change-confirmed"))
         verification = next(item for item in events if item.kind == "change_verified")
-        other = replace(anchor, id="second-overlapping-login")
+        other = replace(anchor, id="second-overlapping-login", session_key="2" * 64)
         with tempfile.TemporaryDirectory() as directory:
             key_path = Path(directory) / "changes.key.json"
             create_key(key_path, "official-changes", "change-management", anchor.host)
@@ -55,12 +55,12 @@ class ProvenanceTests(unittest.TestCase):
                 self.assertEqual(signed["provenance"]["verified"], {verification.id: "official-changes"})
                 overlapping = operational_review(connection, other, episode(connection, other.host, other.id)[1], None)
                 self.assertEqual(overlapping["recommendation"]["decision"], "review")
-                separately_signed = sign_record(key, other.id, verification)
+                separately_signed = sign_record(key, other.id, replace(verification, session_key=other.session_key))
                 with self.assertRaisesRegex(ValueError, "Conflicting"):
                     import_verifications(connection, key, [separately_signed])
 
     def test_mixed_import_rolls_back_if_binding_fails(self):
-        anchor, events = sample("change-confirmed")
+        anchor, events = bind_session(*sample("change-confirmed"))
         verification = next(item for item in events if item.kind == "change_verified")
         with tempfile.TemporaryDirectory() as directory:
             key_path = Path(directory) / "changes.key.json"
@@ -80,7 +80,7 @@ class ProvenanceTests(unittest.TestCase):
 
 
     def test_late_authenticated_record_creates_a_new_snapshot_once(self):
-        anchor, events = sample("change-confirmed")
+        anchor, events = bind_session(*sample("change-confirmed"))
         native = replace(anchor, source="systemd-journal")
         verification = next(item for item in events if item.kind == "change_verified")
         with tempfile.TemporaryDirectory() as directory:
@@ -102,7 +102,7 @@ class ProvenanceTests(unittest.TestCase):
 
 
     def test_receipt_inserted_during_a_review_is_observed_by_the_next_run(self):
-        anchor, events = sample("change-confirmed")
+        anchor, events = bind_session(*sample("change-confirmed"))
         native = replace(anchor, source="systemd-journal")
         verification = next(item for item in events if item.kind == "change_verified")
         with tempfile.TemporaryDirectory() as directory:

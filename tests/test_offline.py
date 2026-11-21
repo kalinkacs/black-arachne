@@ -19,10 +19,15 @@ def sample(name):
     return parse_case(row)
 
 
+def bind_session(anchor, events, session="1" * 64, machine="a" * 32):
+    linked = [replace(event, machine_id=machine, session_key=session) for event in events]
+    return next(event for event in linked if event.id == anchor.id), linked
+
+
 class LocalModelTests(unittest.TestCase):
     def test_probabilities_move_and_checks_use_distinct_episode_votes(self):
         history = [{"initial": "review"}] * 4
-        decision, distribution = decision_model("close", history)
+        decision, distribution = decision_model(history)
         self.assertEqual(decision, "review")
         self.assertAlmostEqual(sum(distribution.values()), 1, delta=0.002)
         comparison = {"check": "identity_record", "decision": "escalate", "state": "disputes"}

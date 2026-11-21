@@ -4,9 +4,11 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta, timezone
 import hashlib
 import json
+import re
 
-KINDS = {
-    "ssh_login", "ssh_failure", "privileged_activity", "deployment", "change_verified",
+ANCHOR_KINDS = {"ssh_login", "ssh_session_open"}
+KINDS = ANCHOR_KINDS | {
+    "ssh_failure", "privileged_activity", "deployment", "change_verified",
     "change_disputed", "identity_verified", "identity_disputed",
 }
 MAX_LINE = 65_536
@@ -26,16 +28,25 @@ class Event:
     kind: str
     actor: str
     source: str
+    machine_id: str | None = None
+    session_key: str | None = None
 
     @classmethod
     def parse(cls, record):
-        if not isinstance(record, dict) or set(record) != set(cls.__dataclass_fields__):
+        required = {"id", "timestamp", "host", "kind", "actor", "source"}
+        if not isinstance(record, dict) or not required <= set(record) <= set(cls.__dataclass_fields__):
             raise ValueError("Expected id, timestamp, host, kind, actor and source")
-        for key, value in record.items():
+        for key in required:
+            value = record[key]
             if not isinstance(value, str) or not value.strip() or len(value) > 256:
                 raise ValueError(f"Invalid value for {key}")
             if any(ord(char) < 32 or ord(char) == 127 for char in value):
                 raise ValueError(f"Control character in {key}")
+        machine, session = record.get("machine_id"), record.get("session_key")
+        if machine is not None and (not isinstance(machine, str) or not hex_identifier(machine, 32)):
+            raise ValueError("Invalid machine identifier")
+        if session is not None and (machine is None or not isinstance(session, str) or not hex_identifier(session, 64)):
+            raise ValueError("Invalid session key")
         if record["kind"] not in KINDS:
             raise ValueError("Unsupported event kind")
         timestamp = datetime.fromisoformat(record["timestamp"])
@@ -56,6 +67,25 @@ def read_records(stream):
             yield json.loads(line)
 
 
+PAM_LOGIN = re.compile(r"^pam_unix\(sshd(?:-session)?:session\): session opened for user ([^\s(]+)")
+
+
+def hex_identifier(value, length):
+    return len(value) == length and all(character in "abcdef0123456789" for character in value)
+
+
+def journal_session(record):
+    machine = record.get("_MACHINE_ID")
+    if not isinstance(machine, str) or not hex_identifier(machine, 32):
+        return None, None
+    boot, audit = record.get("_BOOT_ID"), record.get("_AUDIT_SESSION")
+    # -1 (u32 max) is Linux's unset audit-session sentinel.
+    if (not isinstance(boot, str) or not hex_identifier(boot, 32) or not isinstance(audit, str)
+            or not audit.isascii() or not audit.isdecimal() or len(audit) > 10 or not 0 < int(audit) < 4_294_967_295):
+        return machine, None
+    return machine, hashlib.sha256(f"{machine}:{boot}:{int(audit)}".encode()).hexdigest()
+
+
 def from_journal(record, *, native=False):
     message = record.get("MESSAGE")
     identifier = record.get("SYSLOG_IDENTIFIER")
@@ -64,9 +94,13 @@ def from_journal(record, *, native=False):
     if native and record.get("_EXE") not in tuple(NATIVE_EXECUTABLES.get(identifier, ())):
         return None
     fields = message.split()
+    machine, session = journal_session(record)
     kind, actor = None, None
     if identifier in {"sshd", "sshd-session"} and len(fields) >= 4:
-        if fields[0] == "Accepted" and fields[2] == "for":
+        pam_login = PAM_LOGIN.match(message)
+        if pam_login and session:
+            kind, actor = "ssh_session_open", pam_login[1]
+        elif fields[0] == "Accepted" and fields[2] == "for":
             kind, actor = "ssh_login", fields[3]
         elif fields[0] == "Failed" and fields[2] == "for":
             kind = "ssh_failure"
@@ -90,13 +124,15 @@ def from_journal(record, *, native=False):
             "kind": kind,
             "actor": actor,
             "source": "systemd-journal",
+            "machine_id": machine,
+            "session_key": session,
         })
     except (OverflowError, OSError, ValueError):
         return None
 
 
 def records(events):
-    return [asdict(event) for event in events]
+    return [{key: value for key, value in asdict(event).items() if value is not None} for event in events]
 
 
 POST_LOGIN_OBSERVATION = timedelta(minutes=15)

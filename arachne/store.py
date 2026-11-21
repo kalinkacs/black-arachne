@@ -7,15 +7,18 @@ import json
 import sqlite3
 from uuid import uuid4
 
-from .events import Event, encode, episode_window, records
+from .events import ANCHOR_KINDS, Event, encode, episode_window, records
 from .learning import MAX_HISTORY
 from .provenance import authenticate, check_binding
+from .sessions import attributed_events
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS events (
     id TEXT PRIMARY KEY, host TEXT NOT NULL, timestamp TEXT NOT NULL, payload TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS events_by_host_time ON events(host, timestamp, id);
+CREATE INDEX IF NOT EXISTS events_by_session ON events(host, json_extract(payload, '$.session_key'), timestamp)
+WHERE json_extract(payload, '$.session_key') IS NOT NULL;
 CREATE TABLE IF NOT EXISTS verified_evidence (
     event_id TEXT PRIMARY KEY REFERENCES events(id),
     anchor_id TEXT NOT NULL REFERENCES events(id),
@@ -109,8 +112,21 @@ def ingest(connection, events):
                 "SELECT payload FROM events WHERE id = ?", (event.id,)
             ).fetchone()
             if original != payload:
-                raise ValueError(f"Conflicting evidence id: {event.id}")
+                previous = Event.parse(json.loads(original))
+                if journal_enrichment(previous, event):
+                    connection.execute("UPDATE events SET payload=? WHERE id=?", (payload, event.id))
+                else:
+                    raise ValueError(f"Conflicting evidence id: {event.id}")
     return inserted
+
+
+def journal_enrichment(previous, event):
+    if event.source != "systemd-journal" or not event.machine_id:
+        return False
+    old, new = records((previous, event))
+    # A repeat import may add new machine metadata to older journal records.
+    # Previously observed facts are immutable.
+    return old != new and all(new.get(key) == value for key, value in old.items())
 
 
 def import_verifications(connection, key, envelopes):
@@ -147,13 +163,14 @@ def episode(connection, host, anchor_id):
     if not row:
         raise ValueError("Anchor event is missing")
     anchor = Event.parse(json.loads(row[0]))
-    if anchor.kind != "ssh_login":
+    if anchor.kind not in ANCHOR_KINDS:
         raise ValueError("The anchor must be an SSH login")
     lower, upper = episode_window(anchor)
     rows = connection.execute(
         """SELECT payload FROM events WHERE host = ? AND timestamp BETWEEN ? AND ?
+           AND json_extract(payload, '$.actor')=?
            ORDER BY timestamp, id LIMIT 1001""",
-        (host, lower, upper),
+        (host, lower, upper, anchor.actor),
     ).fetchall()
     if len(rows) > 1000:
         raise EvidenceWindowOverflow("More than 1000 observations in the investigation window")
@@ -281,6 +298,11 @@ def confirmed_history(connection, anchor, events):
             continue
         past = [Event.parse(event) for event in run["events"]]
         prior_anchor = next(event for event in past if event.id == run["anchor_id"])
+        if prior_anchor.machine_id != anchor.machine_id:
+            continue
+        scope = run.get("session_attribution")
+        if scope is not None:
+            past = attributed_events(prior_anchor, past, scope)
         if evidence_profile(prior_anchor, past) == current:
             seen.add(run["anchor_id"])
             record = {"initial": run["blue"]["decision"], "verified": expected, "check": run["forecast"]["check"]}

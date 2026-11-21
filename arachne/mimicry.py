@@ -7,6 +7,7 @@ from .events import records
 from .learning import check_model, decision_model
 from .provenance import VERIFICATION_KINDS
 from .role_runtime import RoleFailure, RoleProcess
+from .sessions import attributed_events
 
 CHECKS = {
     "change_record": {
@@ -47,34 +48,29 @@ def blue_hypotheses(profile):
 
 
 def red_forecast(profile, history=()):
-    """Model the original Blue policy using only boolean properties of its view."""
+    """Choose a check on the evidence; model Blue only from observed behavior."""
     if profile["declared_change"] and profile["privileged_activity"]:
-        predicted = "close"
         check = "change_record"
-        reason = "Blue may confuse a declared change with evidence that this activity was authorized."
+        reason = "Confirm whether the declared change covers the observed activity."
     elif profile["prior_failures"] and profile["privileged_activity"]:
-        predicted = "escalate"
         check = "identity_record"
-        reason = "Blue may escalate before it checks whether an independent source can explain the login."
+        reason = "An independent identity decision distinguishes account misuse from a legitimate recovery."
     else:
-        predicted = "review"
         check = "identity_record"
-        reason = "An independently recorded account decision could resolve uncertainty in the Blue assessment."
+        reason = "An independent identity decision may resolve an ambiguous login."
 
-    prior = predicted
-    predicted, probabilities = decision_model(prior, history)
-    if predicted != prior:
-        reason += " The distribution of prior Blue decisions changes the forecast."
+    predicted, probabilities = decision_model(history)
     learned_check, estimates = check_model(check, CHECKS, history)
     if learned_check != check:
         check = learned_check
         reason += " Multiple comparable, verified episodes support a different verification."
     return {
-        "engine": "policy-model",
+        "engine": "observed-policy-model",
         "check": check,
         "prediction": predicted,
         "hypothesis": reason,
-        "disconfirmation": f"The forecast fails if Blue's initial decision differs from {predicted}.",
+        "disconfirmation": (f"The forecast fails if Blue's initial decision differs from {predicted}."
+                             if predicted else "There is not enough comparable history to predict Blue's decision."),
         "evidence_ids": [],
         "visible_profile": dict(profile),
         "decision_distribution": probabilities,
@@ -151,6 +147,23 @@ def operational_policy(anchor, observations, profile, initial, assisted):
     if initial["decision"] == "escalate" and assisted["decision"] != "escalate":
         return finding("review", "Escalation was disputed. An operator must reconcile the evidence.", [anchor])
     return assisted
+
+
+def full_evidence_reference(anchor, observations, profile):
+    """Reference using every check, independently of either model's selection."""
+    checks = {check: check_observations(check, anchor, observations, profile) for check in CHECKS}
+    for state, decision in (("disputes", "escalate"), ("conflict", "review")):
+        for key in ("change_record", "identity_record"):
+            if checks[key]["state"] == state:
+                return {"decision": decision, "evidence_ids": checks[key]["evidence_ids"],
+                        "reason": "The full-evidence rule prioritizes independent evidence."}
+    if checks["change_record"]["state"] == "supports" and profile["privileged_activity"]:
+        return {"decision": "close", "evidence_ids": checks["change_record"]["evidence_ids"],
+                "reason": "The full-evidence rule found corroborated maintenance."}
+    if checks["activity_record"]["state"] == "disputes" and checks["identity_record"]["state"] != "supports":
+        return {"decision": "escalate", "evidence_ids": checks["activity_record"]["evidence_ids"],
+                "reason": "The full-evidence rule found repeated failures and privileged activity."}
+    return finding("review", "The full-evidence rule needs further context.", [anchor])
 
 
 def isolated_branches(anchor, scoped, visible, profile, history):
@@ -273,7 +286,7 @@ def external_branches(anchor, scoped, visible, profile, history, model):
             "assisted": reconsider(initial, assisted_result, anchor), "role_runtime": {"mode": "external-model"}}
 
 
-def mimic(anchor, events, history=(), model=None, *, verified=None):
+def mimic(anchor, events, history=(), model=None, *, verified=None, session_scope=None):
     """Freeze both perspectives before either branch receives any verification."""
     scoped = relevant(anchor, events)
     provenance = None
@@ -284,6 +297,8 @@ def mimic(anchor, events, history=(), model=None, *, verified=None):
             "unverified": [event.id for event in scoped if event.kind in RESTRICTED_KINDS and event.id not in verified],
         }
         scoped = [event for event in scoped if event.kind not in RESTRICTED_KINDS or event.id in verified]
+    if session_scope is not None:
+        scoped = attributed_events(anchor, scoped, session_scope)
     visible = [event for event in scoped if event.kind not in RESTRICTED_KINDS]
     profile = observation_profile(anchor, visible)
     branches = (external_branches(anchor, scoped, visible, profile, history, model) if model
@@ -294,9 +309,13 @@ def mimic(anchor, events, history=(), model=None, *, verified=None):
     assisted = branches["assisted"]
     matches = {role: hypothesis["expectations"][observed["check"]] == observed["state"]
                for role, hypothesis in hypotheses.items()} if observed["state"] in {"supports", "disputes"} else {}
+    recommendation = operational_policy(anchor, scoped, profile, initial, assisted)
+    if session_scope is not None and recommendation["decision"] == "close" and not profile["privileged_activity"]:
+        recommendation = finding("review", "Closure requires privilege activity attributed to the same SSH session.", [anchor])
     return {
-        "engine_version": "0.6",
+        "engine_version": "0.7",
         "provenance": provenance,
+        "session_attribution": session_scope,
         "host": anchor.host,
         "anchor_id": anchor.id,
         "events": records(events),
@@ -306,7 +325,8 @@ def mimic(anchor, events, history=(), model=None, *, verified=None):
         "initial_hypotheses": {role: hypothesis["description"] for role, hypothesis in hypotheses.items()},
         "standard_review": branches["ordinary_review"],
         "assisted": assisted,
-        "recommendation": operational_policy(anchor, scoped, profile, initial, assisted),
+        "recommendation": recommendation,
+        "full_evidence_reference": full_evidence_reference(anchor, scoped, profile),
         "history_used": list(history),
         "role_runtime": branches["role_runtime"],
         "mimicry": {

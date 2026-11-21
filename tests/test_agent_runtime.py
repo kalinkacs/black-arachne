@@ -9,7 +9,7 @@ from arachne.mimicry import mimic
 from arachne.operations import triage
 from arachne.role_runtime import RoleFailure, RoleProcess
 from arachne.store import confirm_outcome, database, get_run, ingest, save_run, status_snapshot
-from test_offline import sample
+from test_offline import bind_session, sample
 
 
 class RuntimeTests(unittest.TestCase):
@@ -18,11 +18,11 @@ class RuntimeTests(unittest.TestCase):
                   "history": []}
         with RoleProcess("red") as red, RoleProcess("control") as control:
             self.assertNotEqual(red.process.pid, control.process.pid)
-            self.assertEqual(red.call("forecast", coarse)["prediction"], "review")
+            self.assertIsNone(red.call("forecast", coarse)["prediction"])
             self.assertEqual(control.call("select", coarse)["check"], "identity_record")
             compared = red.call("compare", {"actual": "review",
                                            "result": "escalate", "observation": "disputes"})
-            self.assertEqual(compared, {"prediction_matched": True, "decision_changed": True,
+            self.assertEqual(compared, {"prediction_matched": None, "decision_changed": True,
                                         "verification_state": "disputes"})
             with self.assertRaises(RoleFailure):
                 red.call("assess", coarse)
@@ -93,7 +93,7 @@ class RuntimeRetryTests(unittest.TestCase):
 
 class AgentFeedbackTests(unittest.TestCase):
     def test_worker_uses_three_operator_confirmations_in_the_next_queued_case(self):
-        anchor, events = sample("repeated-failures-and-account-confirmation")
+        anchor, events = bind_session(*sample("repeated-failures-and-account-confirmation"))
         with tempfile.TemporaryDirectory() as folder:
             db = Path(folder) / "cases.sqlite3"
             with database(db) as connection:

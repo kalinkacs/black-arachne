@@ -11,8 +11,7 @@ StateDirectory=black-arachne
 StateDirectoryMode=0700
 UMask=0077
 Environment=PYTHONDONTWRITEBYTECODE=1
-EnvironmentFile=-/etc/black-arachne/worker.env
-ExecStart=/usr/bin/python3 -m arachne --db /var/lib/black-arachne/evidence.sqlite3 cycle
+ExecStart=/usr/bin/python3 -m arachne --db /var/lib/black-arachne/evidence.sqlite3 cycle --offline
 NoNewPrivileges=yes
 CapabilityBoundingSet=
 PrivateTmp=yes

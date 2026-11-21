@@ -2,6 +2,7 @@
 
 import argparse
 from contextlib import nullcontext
+from functools import partial
 import json
 import os
 from pathlib import Path
@@ -17,6 +18,7 @@ from .integrity import baseline_catalog, establish, observe, recent_findings, sc
 from .lab import run_lab
 from .mimicry import mimic
 from .operations import collect, operational_review, triage
+from .pilot import since_cutoff, summary as pilot_summary
 from .provenance import SOURCE_KINDS, create_key, load_key, sign_record
 from .store import (
     confirm_outcome, database, episode, import_verifications, ingest, save_run, status_snapshot, verify_audit,
@@ -47,6 +49,8 @@ def parser():
     for name in ("import-events", "import-journal"):
         command = commands.add_parser(name)
         command.add_argument("file", nargs="?", default="-", help="JSONL file or stdin")
+        if name == "import-journal":
+            command.add_argument("--native", action="store_true", help="Require trusted executable metadata on exported journal records")
     key = commands.add_parser("create-verifier", help="Create a scoped private key for an independent evidence source")
     key.add_argument("file")
     key.add_argument("--id", required=True)
@@ -99,6 +103,8 @@ def parser():
     integrity_check = commands.add_parser("integrity-check", help="Compare real files against a baseline")
     integrity_check.add_argument("baseline")
     commands.add_parser("integrity-list", help="List file baselines and findings")
+    pilot = commands.add_parser("pilot-report", help="Export aggregate observation-mode pilot metrics as JSON")
+    pilot.add_argument("--since", help="Only include telemetry and dossiers at or after this RFC3339 timestamp")
     commands.add_parser("status", help="Print local collection and triage status")
     commands.add_parser("verify-audit", help="Verify linkage and content of operator outcomes")
     dashboard = commands.add_parser("serve")
@@ -157,7 +163,7 @@ def main(argv=None):
             return 1 if "journal_error" in collection or failed_scan else 0
         with database(options.db) as connection:
             if options.command in ("import-events", "import-journal"):
-                normalize = Event.parse if options.command == "import-events" else from_journal
+                normalize = Event.parse if options.command == "import-events" else partial(from_journal, native=options.native)
                 stream = nullcontext(sys.stdin) if options.file == "-" else open(options.file, encoding="utf-8")
                 with stream as source:
                     events = (normalize(record) for record in read_records(source) if isinstance(record, dict)
@@ -168,8 +174,8 @@ def main(argv=None):
                 with open(options.file, encoding="utf-8") as stream:
                     result = import_verifications(connection, key, read_records(stream))
             elif options.command == "anchors":
-                parameters = ("ssh_login",)
-                sql = "SELECT payload FROM events WHERE json_extract(payload, '$.kind') = ?"
+                parameters = ()
+                sql = "SELECT payload FROM events WHERE json_extract(payload, '$.kind') IN ('ssh_login', 'ssh_session_open')"
                 if options.host:
                     sql += " AND host = ?"
                     parameters += (options.host,)
@@ -186,6 +192,8 @@ def main(argv=None):
                 result = {"confirmed": options.run_id}
             elif options.command == "integrity-list":
                 result = {"baselines": baseline_catalog(connection), "findings": recent_findings(connection)}
+            elif options.command == "pilot-report":
+                result = pilot_summary(connection, since_cutoff(options.since))
             elif options.command in ("status", "verify-audit"):
                 result = status_snapshot(connection) if options.command == "status" else verify_audit(connection)
             elif options.command == "trial":
