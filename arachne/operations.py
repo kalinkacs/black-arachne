@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 import subprocess
 
 from .events import POST_LOGIN_OBSERVATION, from_journal, read_records
-from .reasoning import apply_policy, investigate, relevant, role_investigation
+from .mimicry import mimic
 from .store import confirmed_history, database, episode, ingest, save_run
 
 JOURNAL_IDENTIFIERS = ("sshd", "sshd-session", "sudo")
@@ -52,11 +52,8 @@ def collect(connection, since, reader=journal_batch):
 
 
 def operational_review(connection, anchor, events, model):
-    if model:
-        history = confirmed_history(connection, anchor, events)
-        return role_investigation(anchor, events, model, history)
-    report = investigate(anchor, events)
-    return {**report, "recommendation": apply_policy(anchor, relevant(anchor, events), report["assisted"])}
+    history = confirmed_history(connection, anchor, events)
+    return mimic(anchor, events, history, model)
 
 
 def triage(path, model=None, limit=20, now=None):

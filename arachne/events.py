@@ -5,7 +5,10 @@ from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 
-KINDS = {"ssh_login", "ssh_failure", "privileged_activity", "deployment", "change_verified"}
+KINDS = {
+    "ssh_login", "ssh_failure", "privileged_activity", "deployment", "change_verified",
+    "change_disputed", "identity_verified", "identity_disputed",
+}
 MAX_LINE = 65_536
 
 

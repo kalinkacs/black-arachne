@@ -45,3 +45,5 @@ article { display: grid; align-content: start; gap: 16px; overflow-wrap: anywher
   aside { border-right: 0; border-bottom: 1px solid var(--border); }
   #runs { max-height: 220px; overflow: auto; }
 }
+
+.mismatch { color: #ffd1a8; }

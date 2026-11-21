@@ -28,7 +28,7 @@ def parse_case(record):
     return anchor, observations
 
 
-def evaluate(stream, model=None):
+def evaluate(stream, model=None, *, analyze=investigate, on_case=None):
     counts = {variant: defaultdict(int) for variant in VARIANTS}
     families = defaultdict(lambda: defaultdict(int))
     safety = defaultdict(int)
@@ -40,8 +40,10 @@ def evaluate(stream, model=None):
         if case_id in ids:
             raise ValueError(f"Duplicate case identifier: {case_id}")
         ids.add(case_id)
-        report = investigate(anchor, events, model)
+        report = analyze(anchor, events, model=model)
         expected = record["expected"]
+        if on_case is not None:
+            on_case({**report, "scenario": case_id, "label": expected})
         family = families[record["family"]]
         family["total"] += 1
         for variant in VARIANTS:
@@ -50,6 +52,11 @@ def evaluate(stream, model=None):
             counts[variant]["missed_escalations"] += int(expected == "escalate" and decision != expected)
             counts[variant]["false_escalations"] += int(expected != "escalate" and decision == "escalate")
             family[variant] += int(expected == decision)
+        if "mimicry" in report and report["prediction_matched"] is not None:
+            safety["red_forecasts"] += 1
+            safety["red_forecasts_matched"] += int(report["prediction_matched"])
+        if "mimicry" in report:
+            safety["safety_policy_correct"] += int(expected == report["recommendation"]["decision"])
         standard_correct = expected == report["standard_review"]["decision"]
         assisted_correct = expected == report["assisted"]["decision"]
         safety["red_only_correct"] += int(assisted_correct and not standard_correct)

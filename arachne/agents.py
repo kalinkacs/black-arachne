@@ -11,6 +11,17 @@ EVIDENCE = {"type": "array", "items": {"type": "string"}}
 DECISION = {"type": "string", "enum": list(DECISIONS)}
 CHECK = {"type": "string", "enum": list(CHECKS)}
 TEXT = {"type": "string"}
+MIMIC_CHECKS = {
+    "change_record": "Read the trusted change record.",
+    "identity_record": "Read the independent identity decision.",
+    "activity_record": "Check past failure count and later privileged activity.",
+}
+EXPECTED_STATE = {"type": "string", "enum": ["supports", "disputes", "unknown"]}
+MIMIC_EXPECTATIONS = {
+    f"{perspective}_{check}": EXPECTED_STATE
+    for perspective in ("legitimate", "security")
+    for check in MIMIC_CHECKS
+}
 
 ROLES = {
     "blue_initial": (
@@ -25,6 +36,27 @@ ROLES = {
         "Choose one read-only verification from the catalogue. Use null if the decision is unpredictable.",
         {"prediction": {"type": ["string", "null"], "enum": [*DECISIONS, None]}, "check": CHECK,
          "hypothesis": TEXT, "evidence_ids": EVIDENCE},
+    ),
+    "mimic_blue": (
+        "You are Blue, a Linux defensive analyst. Assess visible evidence and choose close, review, or escalate. "
+        "Give competing legitimate and security explanations. For each explanation predict the outcome of "
+        "each available verification before seeing it: supports means it corroborates authorization, disputes "
+        "means it raises a concern, and unknown means you predict no reliable independent observation.",
+        {"decision": DECISION, "legitimate": TEXT, "security": TEXT, "reason": TEXT,
+         "evidence_ids": EVIDENCE, **MIMIC_EXPECTATIONS},
+    ),
+    "mimic_control": (
+        "You are an independent defensive reviewer. Pick one defensively valuable evidence check from the catalogue. "
+        "Choose based on the coarse evidence and write a short rationale.",
+        {"check": {"type": "string", "enum": list(MIMIC_CHECKS)}, "reason": TEXT},
+    ),
+    "mimic_forecast": (
+        "You are Red, a defensive reviewer. From this coarse observation summary predict what Blue will "
+        "decide before independent evidence is disclosed. Identify a possible evidence mistake and choose "
+        "one defensive verification. State what would falsify your forecast. Do not invent observations.",
+        {"prediction": {"type": ["string", "null"], "enum": [*DECISIONS, None]},
+         "check": {"type": "string", "enum": list(MIMIC_CHECKS)},
+         "hypothesis": TEXT, "disconfirmation": TEXT},
     ),
     "independent_check": (
         "Independently pick one read-only verification that is most useful for a Linux defensive investigation. "
@@ -83,10 +115,20 @@ def request_result(model, role, properties, instructions, payload):
         raise ValueError("No usable structured model review was received") from error
 
 
-def model_review(role, model, anchor, observations, memory=(), check=None):
+def model_review(role, model, anchor, observations, memory=(), check=None, profile=None):
     instructions, properties = ROLES[role]
     payload = {"events": visible_records(anchor, observations), "checks": CATALOGUE,
                "confirmed_history": list(memory), "completed_check": check}
+    if role in {"mimic_forecast", "mimic_control"}:
+        if profile is None:
+            raise ValueError("A coarse defensive profile is required")
+        payload = {
+            "profile": profile,
+            "checks": MIMIC_CHECKS,
+            "confirmed_history": list(memory),
+        }
+    if role == "mimic_blue":
+        payload["checks"] = MIMIC_CHECKS
     result = request_result(model, role, properties, instructions, payload)
     if not isinstance(result, dict) or set(result) != set(properties):
         raise ValueError("Invalid keys in model review")
@@ -96,6 +138,8 @@ def model_review(role, model, anchor, observations, memory=(), check=None):
             raise ValueError(f"Model provided invalid {key}")
         if schema == TEXT and (not isinstance(value, str) or not value.strip() or len(value) > 600):
             raise ValueError(f"Model provided invalid {key}")
+    if role in {"mimic_forecast", "mimic_control"}:
+        return {**result, "engine": model, "evidence_ids": [], "visible_profile": dict(profile)}
     handles = {f"E{index}": event.id for index, event in enumerate(observations)}
     refs = result["evidence_ids"]
     if (not isinstance(refs, list) or not 0 < len(refs) <= 12

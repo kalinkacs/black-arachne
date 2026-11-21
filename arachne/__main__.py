@@ -4,6 +4,7 @@ import argparse
 from contextlib import nullcontext
 import json
 import os
+from pathlib import Path
 import sqlite3
 import sys
 from urllib.error import HTTPError, URLError
@@ -12,6 +13,7 @@ from .evaluation import evaluate
 from .events import Event, from_journal, read_records
 from .files import load_indicators, scan
 from .lab import run_lab
+from .mimicry import mimic
 from .operations import collect, operational_review, triage
 from .store import confirm_outcome, database, episode, ingest, save_run
 from .web import serve
@@ -54,6 +56,8 @@ def parser():
     benchmark = commands.add_parser("evaluate", help="Compare reviewers on labeled JSONL episodes")
     benchmark.add_argument("file")
     benchmark.add_argument("--model")
+    trial = commands.add_parser("trial", help="Run the packaged perspective comparison and save its dossiers")
+    trial.add_argument("--model")
     scanner = commands.add_parser("scan-files", help="Compare local file hashes with trusted SHA-256 indicators")
     scanner.add_argument("directory")
     scanner.add_argument("--indicators", required=True)
@@ -77,7 +81,7 @@ def main(argv=None):
             return 2 if result["matched"] else 0
         if options.command == "evaluate":
             with open(options.file, encoding="utf-8") as stream:
-                print(json.dumps(evaluate(stream, options.model), indent=2))
+                print(json.dumps(evaluate(stream, options.model, analyze=mimic), indent=2))
             return 0
         if options.command == "serve":
             serve(options.db, options.port)
@@ -115,6 +119,11 @@ def main(argv=None):
             elif options.command == "confirm-outcome":
                 confirm_outcome(connection, options.run_id, options.decision, options.note)
                 result = {"confirmed": options.run_id}
+            elif options.command == "trial":
+                cases = Path(__file__).parent / "data" / "trial.jsonl"
+                with cases.open(encoding="utf-8") as stream:
+                    result = evaluate(stream, options.model, analyze=mimic,
+                                      on_case=lambda report: save_run(connection, report))
             else:
                 result = run_lab(connection, options.model)
         print(json.dumps(result, indent=2, ensure_ascii=False))
