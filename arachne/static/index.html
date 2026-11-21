@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Black Arachne</title>
+  <link rel="stylesheet" href="/style.css">
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <header>
+    <div class="brand"><span class="mark" aria-hidden="true">◆</span><h1>Black Arachne</h1></div>
+    <p>Расследование Linux-инцидентов</p>
+  </header>
+  <main>
+    <aside aria-label="Список расследований">
+      <div class="section-head"><h2>Расследования</h2><button id="reload" type="button">Обновить</button></div>
+      <label class="filter" for="filter">Фильтр по хосту<input id="filter" type="search" placeholder="Имя хоста"></label>
+      <p id="status" role="status"></p>
+      <ul id="runs"></ul>
+    </aside>
+    <article id="case" aria-label="Досье расследования" aria-live="polite">
+      <h2>Досье расследования</h2>
+      <p>Выбери расследование из списка.</p>
+    </article>
+  </main>
+</body>
+</html>
