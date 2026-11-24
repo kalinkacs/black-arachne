@@ -91,6 +91,6 @@ def evaluate(stream, model=None, *, analyze=investigate, on_case=None):
     if forecast_cases:
         result["checks_per_variant"] = {"blue": 0, "standard_review": 1, "assisted": 1, FULL_REFERENCE: 3}
     if role_swap is not None:
-        result["checks_per_variant"].update({"without_swap": 1, "with_swap": 1})
+        result.setdefault("checks_per_variant", {}).update({"without_swap": 1, "with_swap": 1})
         result["role_swap"] = role_swap
     return result
