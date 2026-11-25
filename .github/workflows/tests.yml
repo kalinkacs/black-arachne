@@ -21,11 +21,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install OpenSSH on the disposable VM
+      - name: Install OpenSSH and Linux Audit on the disposable VM
         run: |
-          if ! test -x /usr/sbin/sshd; then
+          if ! test -x /usr/sbin/sshd || ! test -x /usr/sbin/auditctl; then
             sudo apt-get update
-            sudo apt-get install -y openssh-server
+            sudo apt-get install -y openssh-server auditd
           fi
+          sudo systemctl start auditd
+          sudo auditctl -s
       - name: Rehearse local SSH sessions and the installed observer
         run: bash tests/pilot-native.sh

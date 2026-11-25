@@ -13,13 +13,22 @@ pilot_dir=$(mktemp -d "$HOME/.arachne-native.XXXXXX")
 pilot_unit="arachne-native-$$"
 pilot_user=$(id -un)
 pilot_start=$(date --iso-8601=seconds)
+pilot_audit_key="arachne_pilot_$$"
+pilot_decoy="$pilot_dir/test-decoy.txt"
+pilot_watch_installed=false
 [[ "$pilot_user" =~ ^[a-zA-Z0-9_-]+$ ]]
 cleanup() {
+  if "$pilot_watch_installed"; then
+    sudo -n auditctl -W "$pilot_decoy" -p r -k "$pilot_audit_key" >/dev/null 2>&1 || true
+  fi
   sudo -n systemctl stop "$pilot_unit.service" 2>/dev/null || true
   sudo -n rm -f /etc/sudoers.d/black-arachne-native-fixture
   rm -rf -- "$pilot_dir"
 }
 trap cleanup EXIT
+printf '%s\n' 'Harmless decoy used by the Black Arachne pilot.' > "$pilot_decoy"
+sudo -n auditctl -w "$pilot_decoy" -p r -k "$pilot_audit_key"
+pilot_watch_installed=true
 
 pilot_port=$(python3 - <<'PY'
 from socket import socket
@@ -71,6 +80,7 @@ state_dir=$(dirname -- "$0")
 touch "$state_dir/first-ready"
 timeout 15 bash -c 'until [[ -f "$1" ]]; do sleep .2; done' _ "$state_dir/second-ready"
 sudo -n -- /usr/bin/true
+cat -- "$state_dir/test-decoy.txt" >/dev/null
 touch "$state_dir/first-done"
 SCRIPT
 cat > "$pilot_dir/second.sh" <<'SCRIPT'
@@ -109,7 +119,14 @@ sudo -n journalctl --since "$pilot_start" --no-pager -o json \
   SYSLOG_IDENTIFIER=sshd SYSLOG_IDENTIFIER=sshd-session SYSLOG_IDENTIFIER=sudo > "$pilot_dir/native.jsonl"
 python3 -m arachne --db "$pilot_dir/rehearsal.sqlite3" import-journal --native "$pilot_dir/native.jsonl"
 python3 -m arachne --db "$pilot_dir/rehearsal.sqlite3" anchors > "$pilot_dir/anchors.json"
-python3 - "$pilot_dir" <<'PY'
+for attempt in {1..20}; do
+  if sudo -n ausearch -k "$pilot_audit_key" --raw > "$pilot_dir/files.audit"; then
+    break
+  fi
+  sleep .25
+done
+test -s "$pilot_dir/files.audit"
+python3 - "$pilot_dir" "$pilot_audit_key" <<'PY'
 from collections import Counter
 from datetime import datetime, timedelta, timezone
 import json
@@ -118,8 +135,11 @@ import sqlite3
 import subprocess
 import sys
 
+from arachne.audit_files import import_audit_files
+from arachne.dead_souls import case_evidence, register_decoy
 from arachne.events import ANCHOR_KINDS, from_journal
 from arachne.operations import triage
+from arachne.provenance import create_key, load_key
 from arachne.store import database, get_run, ingest
 
 root = Path(sys.argv[1])
@@ -139,6 +159,7 @@ if len(by_session) != 2:
     raise SystemExit(f"Expected two audit-bound SSH sessions, captured {len(by_session)}")
 
 counts = []
+privileged_sessions = set()
 for anchor in by_session.values():
     output = subprocess.check_output(
         [sys.executable, "-m", "arachne", "--db", str(root / "rehearsal.sqlite3"),
@@ -147,8 +168,10 @@ for anchor in by_session.values():
     )
     case = json.loads(output)
     linked = set(case["session_attribution"]["linked"])
-    counts.append(sum(event["kind"] == "privileged_activity" and event["id"] in linked
-                      for event in case["events"]))
+    count = sum(event["kind"] == "privileged_activity" and event["id"] in linked for event in case["events"])
+    counts.append(count)
+    if count:
+        privileged_sessions.add(anchor["session_key"])
 if sorted(counts) != [0, 1]:
     journal_sudo = [row for row in map(json.loads, (root / "native.jsonl").read_text().splitlines())
                     if row.get("SYSLOG_IDENTIFIER") == "sudo"]
@@ -157,6 +180,22 @@ if sorted(counts) != [0, 1]:
                 for row in journal_sudo]
     raise AssertionError((counts, Counter(messages)))
 print("Confirmed native isolation: only the session that ran sudo received the privilege observation.")
+machine_id = Path("/etc/machine-id").read_text().strip()
+boot_id = Path("/proc/sys/kernel/random/boot_id").read_text().strip().replace("-", "")
+host, = {anchor["host"] for anchor in by_session.values()}
+key_path = root / "decoy.key"
+create_key(key_path, "native-pilot", "decoy-monitor", host)
+with database(root / "rehearsal.sqlite3") as db:
+    register_decoy(db, "native-pilot-decoy", "file")
+    with (root / "files.audit").open() as stream:
+        result = import_audit_files(db, stream, load_key(key_path), machine_id, boot_id, sys.argv[2],
+                                    {str(root / "test-decoy.txt"): "native-pilot-decoy"}, 25)
+    assert result["new_verified"] == 1 and result["unattributed"] == 0, result
+    for session, anchor in by_session.items():
+        report = case_evidence(db, anchor["id"])
+        assert report["touch_count"] == int(session in privileged_sessions), (session, result, report)
+print("Confirmed native file attribution: one decoy read, attached only to the session that opened it.")
+
 with sqlite3.connect(root / "rehearsal.sqlite3") as db:
     records = [json.loads(payload) for (payload,) in db.execute(
         "SELECT payload FROM events WHERE json_extract(payload, '$.actor')='black-arachne'"
