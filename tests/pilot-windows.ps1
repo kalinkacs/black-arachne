@@ -58,6 +58,18 @@ for entry in sorted(folder.iterdir()):
         if ($process.ExitCode -ne 0) { throw "Windows control workload failed: $($case.id)" }
         $case.pid = $process.Id
     }
+    function ControlPath([string] $name) {
+        $normalized = $name.ToLowerInvariant()
+        $nameStart = $normalized.IndexOf(('\' + (Split-Path -Leaf $root).ToLowerInvariant() + '\fixtures\'))
+        if ($nameStart -ge 0) { return $normalized.Substring($nameStart) }
+        return ''
+    }
+    $pathIndex = @{}
+    foreach ($case in $cases) {
+        foreach ($path in $case.paths) {
+            $pathIndex[(ControlPath $path)] = @{ case=$case; path=$path }
+        }
+    }
     $coverage = @{}
     for ($attempt=0; $attempt -lt 24; $attempt++) {
         $coverage = @{}
@@ -68,16 +80,16 @@ for entry in sorted(folder.iterdir()):
             foreach ($field in ([xml]$record.ToXml()).Event.EventData.Data) {
                 $payload[$field.GetAttribute('Name')] = $field.InnerText
             }
-            if ($payload.ObjectType -ne 'File' -or $payload.ProcessId -notmatch '^0x[0-9a-f]+$' -or
-                $payload.AccessMask -notmatch '^0x[0-9a-f]+$' -or -not $payload.ObjectName) { continue }
+            $normalized = ControlPath ([string]$payload.ObjectName)
+            if (-not $pathIndex.ContainsKey($normalized)) { continue }
+            $control = $pathIndex[$normalized]
+            if ($payload.ProcessId -notmatch '^0x[0-9a-f]+$' -or $payload.AccessMask -notmatch '^0x[0-9a-f]+$') {
+                continue
+            }
             $mask = [Convert]::ToUInt32($payload.AccessMask.Substring(2), 16)
-            if (($mask -band 6) -eq 0) { continue }
             $pidValue = [Convert]::ToUInt32($payload.ProcessId.Substring(2), 16)
-            $path = $payload.ObjectName.ToLowerInvariant()
-            foreach ($case in $cases) {
-                if ($pidValue -eq $case.pid -and $path -in $case.paths) {
-                    $coverage[$case.id][$path] = @{path=$path; record_id=$record.RecordId}
-                }
+            if (($mask -band 6) -ne 0 -and $pidValue -eq $control.case.pid) {
+                $coverage[$control.case.id][$control.path] = @{path=$control.path; record_id=$record.RecordId}
             }
         }
         $incomplete = @($cases | Where-Object { $coverage[$_.id].Count -ne $_.count })
@@ -86,6 +98,14 @@ for entry in sorted(folder.iterdir()):
     }
     if ($incomplete.Count -gt 0) {
         Write-Host "Read $($records.Count) Windows 4663 records since the fixture began."
+        foreach ($record in @($records | Select-Object -First 3)) {
+            $debug = @{}
+            foreach ($field in ([xml]$record.ToXml()).Event.EventData.Data) {
+                $debug[$field.GetAttribute('Name')] = $field.InnerText
+            }
+            Write-Host ("Event fields: objectType={0}; fixture={1}; mask={2}; expectedPID={3}" -f $debug.ObjectType,
+                [bool](ControlPath ([string]$debug.ObjectName)), $debug.AccessMask, ($debug.ProcessName -like '*python*'))
+        }
         & auditpol.exe /get "/subcategory:$auditSubcategory"
         $control = $cases[0].paths[0]
         Write-Host "Stored audit ACEs on first control: $(@((Get-Acl -LiteralPath $control -Audit).Audit).Count)"
