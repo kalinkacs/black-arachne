@@ -11,6 +11,7 @@ import sys
 from urllib.error import HTTPError, URLError
 
 from . import __version__
+from .audit_files import import_audit_files
 from .dead_souls import KINDS, import_touches, overview, register_decoy
 from .evaluation import evaluate
 from .events import Event, NativeJournalCoverage, from_journal, read_records
@@ -22,6 +23,7 @@ from .observability import MAX_CHECKS, audit_observability
 from .operations import collect, operational_review, triage
 from .pilot import since_cutoff, summary as pilot_summary
 from .provenance import SOURCE_KINDS, create_key, load_key, sign_record
+from .quarantine import isolate, restore
 from .signal_experiment import run_signal_experiment
 from .store import (
     confirm_outcome, database, episode, import_verifications, ingest, save_run, status_snapshot, verify_audit,
@@ -136,6 +138,25 @@ def parser():
     receipt = decoy_actions.add_parser("import")
     receipt.add_argument("file", help="Normalized JSON Lines from a trusted local collector, or -")
     decoy_actions.add_parser("status")
+    audit = decoy_actions.add_parser("import-audit", help="Read a trusted file-open export from Linux Audit")
+    audit.add_argument("file")
+    audit.add_argument("--key", required=True)
+    audit.add_argument("--machine-id", required=True)
+    audit.add_argument("--boot-id", required=True)
+    audit.add_argument("--watch-key", required=True)
+    audit.add_argument("--decoys", required=True, help="JSON mapping from absolute audited paths to registered decoy IDs")
+    audit.add_argument("--burst-threshold", type=positive_int, default=25)
+    quarantine = commands.add_parser("quarantine", help="Operator-confirmed reversible file isolation")
+    quarantine_actions = quarantine.add_subparsers(dest="quarantine_action", required=True)
+    quarantine_add = quarantine_actions.add_parser("isolate")
+    quarantine_add.add_argument("file")
+    quarantine_add.add_argument("--sha256", required=True)
+    quarantine_add.add_argument("--reason", required=True)
+    quarantine_restore = quarantine_actions.add_parser("restore")
+    quarantine_restore.add_argument("receipt")
+    for action in (quarantine_add, quarantine_restore):
+        action.add_argument("--vault", required=True)
+        action.add_argument("--execute", action="store_true", required=True)
     dashboard = commands.add_parser("serve")
     dashboard.add_argument("--operator", action="store_true", help="Enable local confirmation forms")
     dashboard.add_argument("--port", type=int, default=8765)
@@ -153,6 +174,11 @@ def main(argv=None):
             with open(options.file, encoding="utf-8") as stream:
                 for record in read_records(stream):
                     print(json.dumps(sign_record(key, options.anchor, Event.parse(record))))
+            return 0
+        if options.command == "quarantine":
+            result = (isolate(options.vault, options.file, options.sha256, options.reason)
+                      if options.quarantine_action == "isolate" else restore(options.vault, options.receipt))
+            print(json.dumps(result, indent=2, ensure_ascii=False))
             return 0
         if options.command == "scan-files":
             with open(options.indicators, encoding="utf-8") as stream:
@@ -217,6 +243,19 @@ def main(argv=None):
                     stream = nullcontext(sys.stdin) if options.file == "-" else open(options.file, encoding="utf-8")
                     with stream as source:
                         result = import_touches(connection, read_records(source))
+                elif options.decoy_action == "import-audit":
+                    key = load_key(options.key)
+                    with open(options.decoys, encoding="utf-8") as mapping:
+                        paths = json.load(mapping)
+                    if not isinstance(paths, dict) or any(
+                        not Path(path).is_absolute() or not isinstance(decoy_id, str)
+                        for path, decoy_id in paths.items()
+                    ):
+                        raise ValueError("Decoy mapping must map absolute paths to registered decoy IDs")
+                    with open(options.file, encoding="utf-8") as audit:
+                        connection.execute("BEGIN IMMEDIATE")
+                        result = import_audit_files(connection, audit, key, options.machine_id, options.boot_id,
+                                                    options.watch_key, paths, options.burst_threshold)
                 else:
                     result = overview(connection)
             elif options.command in ("import-events", "import-journal"):
