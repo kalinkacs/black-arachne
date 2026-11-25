@@ -58,20 +58,33 @@ def model_proposals(profile, model):
     }
 
 
-def local_proposals(profile):
-    with RoleProcess("blue") as blue, RoleProcess("red") as red, RoleProcess("blue") as solo:
-        payload = {"profile": profile}
-        first_blue = checked_focus(blue.call("signal_initial", payload), first=True)
-        first_red = checked_focus(red.call("signal_initial", payload), first=True)
-        checked_focus(solo.call("signal_initial", payload), first=True)
+def switched_proposals(profile, red_focus=None, blue_focus=None):
+    with RoleProcess("blue") as blue, RoleProcess("red") as red:
+        first_blue = checked_focus(
+            blue.call_with_recovery("signal_initial", {"profile": profile, "focus": blue_focus}), first=True
+        )
+        first_red = checked_focus(
+            red.call_with_recovery("signal_initial", {"profile": profile, "focus": red_focus}), first=True
+        )
         return {
             "before": {"blue": first_blue, "red": first_red},
             "after": {
-                "blue": checked_focus(blue.call("signal_reframe", {"peer": first_red}), adopted=first_red["primary"]),
-                "red": checked_focus(red.call("signal_reframe", {"peer": first_blue}), adopted=first_blue["primary"]),
+                "blue": checked_focus(blue.call_with_recovery("signal_reframe", {"peer": first_red}),
+                                      adopted=first_red["primary"]),
+                "red": checked_focus(red.call_with_recovery("signal_reframe", {"peer": first_blue}),
+                                     adopted=first_blue["primary"]),
             },
-            "solo": checked_focus(solo.call("signal_reframe", {"peer": None})),
         }
+
+
+def solo_proposal(profile):
+    with RoleProcess("blue") as solo:
+        checked_focus(solo.call_with_recovery("signal_initial", {"profile": profile}), first=True)
+        return checked_focus(solo.call_with_recovery("signal_reframe", {"peer": None}))
+
+
+def local_proposals(profile):
+    return {**switched_proposals(profile), "solo": solo_proposal(profile)}
 
 
 def result_state(witness, source):

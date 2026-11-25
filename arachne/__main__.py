@@ -14,6 +14,7 @@ from . import __version__
 from .audit_files import import_audit_files
 from .dead_souls import KINDS, import_touches, overview, register_decoy
 from .evaluation import evaluate
+from .evolution import evolve_signals
 from .events import Event, NativeJournalCoverage, from_journal, read_records
 from .files import FILE_LIMITS, load_indicators, scan
 from .integrity import baseline_catalog, establish, observe, recent_findings, scheduled_checks
@@ -104,6 +105,10 @@ def parser():
     signals.add_argument("discovery", help="Labeled calibration cases in the observe-gaps format")
     signals.add_argument("holdout", help="Labeled cases from disjoint families for evaluation")
     model_options(signals)
+    evolution = commands.add_parser("evolve-signals", help="Select defensive role-switch strategies offline")
+    evolution.add_argument("discovery")
+    evolution.add_argument("holdout")
+    evolution.add_argument("--generations", type=int, choices=range(1, 6), default=3)
     swarm = commands.add_parser("swarm-trial", help="Stress-test local defensive handoffs on replayed cases")
     swarm.add_argument("file", help="Labeled cases in the evaluate JSONL format")
     swarm.add_argument("--copies", type=positive_int, default=8)
@@ -213,6 +218,10 @@ def main(argv=None):
             with holdout as unseen, open(options.file, encoding="utf-8") as stream:
                 report = audit_observability(stream, options.max_checks, options.tolerate_missing, holdout=unseen)
             print(json.dumps(report, indent=2, ensure_ascii=False))
+            return 0
+        if options.command == "evolve-signals":
+            with open(options.discovery, encoding="utf-8") as discovery, open(options.holdout, encoding="utf-8") as holdout:
+                print(json.dumps(evolve_signals(discovery, holdout, options.generations), indent=2))
             return 0
         if options.command == "compare-signals":
             with open(options.discovery, encoding="utf-8") as discovery, open(options.holdout, encoding="utf-8") as unseen:

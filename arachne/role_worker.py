@@ -5,7 +5,7 @@ import json
 import sys
 
 from .learning import hypothesis_model
-from .measurement import PROFILE_FIELDS, checked_focus, local_focus
+from .measurement import ASSURANCES, PROFILE_FIELDS, checked_focus, local_focus
 from .mimicry import (
     CHECKS, CROSS_CHECKS, RESTRICTED_KINDS, blue_hypotheses, checked_commitment,
     observation_profile, reconsider, red_forecast, standard_choice,
@@ -38,10 +38,13 @@ def plan_signal(role, phase, payload, state):
     perspective = "legitimate" if role == "blue" else "security"
     if phase == "signal_initial":
         profile = payload.get("profile")
-        if (set(payload) != {"profile"} or not isinstance(profile, dict) or set(profile) != PROFILE_FIELDS
+        focus = payload.get("focus")
+        if (not {"profile"} <= set(payload) <= {"profile", "focus"}
+                or focus not in (*ASSURANCES, None)
+                or not isinstance(profile, dict) or set(profile) != PROFILE_FIELDS
                 or not all(type(value) is bool for value in profile.values())):
             raise ValueError("Invalid evidence planning profile")
-        result = local_focus(profile, perspective)
+        result = local_focus(profile, perspective) if focus is None else {"primary": focus, "secondary": None}
         state["signal_profile"] = profile
     else:
         if "signal_initial" not in state or set(payload) != {"peer"} or (payload["peer"] is None and role != "blue"):
