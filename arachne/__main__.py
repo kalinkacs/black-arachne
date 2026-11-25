@@ -16,6 +16,7 @@ from .dead_souls import KINDS, import_touches, overview, register_decoy
 from .evaluation import evaluate
 from .evolution import evolve_signals
 from .events import Event, NativeJournalCoverage, from_journal, read_records
+from .failure_trial import run_failure_trial
 from .files import FILE_LIMITS, load_indicators, scan
 from .integrity import baseline_catalog, establish, observe, recent_findings, scheduled_checks
 from .lab import run_lab
@@ -109,6 +110,9 @@ def parser():
     evolution.add_argument("discovery")
     evolution.add_argument("holdout")
     evolution.add_argument("--generations", type=int, choices=range(1, 6), default=3)
+    failure_trial = commands.add_parser("failure-trial", help="Compare solo and role-switched review during outages")
+    failure_trial.add_argument("discovery")
+    failure_trial.add_argument("holdout")
     swarm = commands.add_parser("swarm-trial", help="Stress-test local defensive handoffs on replayed cases")
     swarm.add_argument("file", help="Labeled cases in the evaluate JSONL format")
     swarm.add_argument("--copies", type=positive_int, default=8)
@@ -218,6 +222,10 @@ def main(argv=None):
             with holdout as unseen, open(options.file, encoding="utf-8") as stream:
                 report = audit_observability(stream, options.max_checks, options.tolerate_missing, holdout=unseen)
             print(json.dumps(report, indent=2, ensure_ascii=False))
+            return 0
+        if options.command == "failure-trial":
+            with open(options.discovery, encoding="utf-8") as discovery, open(options.holdout, encoding="utf-8") as holdout:
+                print(json.dumps(run_failure_trial(discovery, holdout), indent=2))
             return 0
         if options.command == "evolve-signals":
             with open(options.discovery, encoding="utf-8") as discovery, open(options.holdout, encoding="utf-8") as holdout:
