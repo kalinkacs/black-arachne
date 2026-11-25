@@ -31,3 +31,15 @@ jobs:
           sudo auditctl -s
       - name: Rehearse local SSH sessions and the installed observer
         run: bash tests/pilot-native.sh
+
+  pilot-windows:
+    runs-on: windows-2025
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compare defensive reviewers on native Windows file events
+        shell: powershell
+        run: .\tests\pilot-windows.ps1

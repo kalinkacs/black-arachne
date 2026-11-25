@@ -12,9 +12,9 @@ SPECIALTIES = {
 }
 
 
-def review(anchor, observations, profile, inspect):
+def review(anchor, observations, profile, inspect, *, specialties=SPECIALTIES):
     def specialist(key):
-        name, kinds = SPECIALTIES[key]
+        name, kinds = specialties[key]
         evidence = tuple(event for event in observations if event.kind in kinds)
         try:
             result = inspect(key, anchor, evidence, dict(profile))
@@ -22,5 +22,5 @@ def review(anchor, observations, profile, inspect):
             return {"check": key, "specialist": name, "state": "unknown", "evidence_ids": [], "available": False}
         return {**result, "specialist": name, "available": True}
 
-    with ThreadPoolExecutor(max_workers=len(SPECIALTIES)) as workers:
-        return dict(zip(SPECIALTIES, workers.map(specialist, SPECIALTIES)))
+    with ThreadPoolExecutor(max_workers=len(specialties)) as workers:
+        return dict(zip(specialties, workers.map(specialist, specialties)))
