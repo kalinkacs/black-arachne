@@ -14,7 +14,7 @@ from .events import Event, journal_session
 from .provenance import sign_record
 from .store import import_verifications
 
-RECORD = re.compile(r"^type=(SYSCALL|PATH) msg=audit\((\d{1,12}(?:\.\d{1,6})?):(\d{1,20})\): (.*)$")
+RECORD = re.compile(r"^(?:node=[^ ]+ )?type=(SYSCALL|PATH) msg=audit\((\d{1,12}(?:\.\d{1,6})?):(\d{1,20})\): (.*)$")
 MAX_LINES = 100_000
 # x86-64 and aarch64. openat2 uses a pointer instead of inline flags.
 OPEN_FLAGS = {("c000003e", "2"): "a1", ("c000003e", "257"): "a2", ("c00000b7", "56"): "a2"}
@@ -30,7 +30,7 @@ def audit_opens(stream, watch_key):
         if not match:
             continue
         record_type, seconds, sequence, fields = match.groups()
-        tokens = dict(part.split("=", 1) for part in shlex.split(fields) if "=" in part)
+        tokens = dict(part.split("=", 1) for part in shlex.split(fields.split("\x1d", 1)[0]) if "=" in part)
         group = groups.setdefault((seconds, sequence), {"paths": set()})
         if record_type == "SYSCALL":
             if "call" in group and group["call"] != tokens:

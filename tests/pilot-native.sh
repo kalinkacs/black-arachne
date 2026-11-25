@@ -134,7 +134,7 @@ python3 -m arachne --db "$pilot_dir/rehearsal.sqlite3" anchors > "$pilot_dir/anc
 # The archive stays inside the temporary fixture directory.
 for attempt in {1..20}; do
   sudo -n cat /var/log/audit/audit.log > "$pilot_dir/files.audit"
-  if grep '^type=SYSCALL ' "$pilot_dir/files.audit" | grep -F "$pilot_audit_key" >/dev/null; then
+  if grep -E '^(node=[^ ]+ )?type=SYSCALL ' "$pilot_dir/files.audit" | grep -F "$pilot_audit_key" >/dev/null; then
     break
   fi
   sleep .25

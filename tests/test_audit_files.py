@@ -27,9 +27,9 @@ class AuditFileTests(unittest.TestCase):
 
         def audit(number, session, path, flags):
             return (
-                f'type=SYSCALL msg=audit({at}.010:{number}): arch=c000003e syscall=257 '
-                f'success=yes a2={flags} pid=2000 ses={session} key="arachne"\n'
-                f'type=PATH msg=audit({at}.010:{number}): item=0 name="{path}" nametype=NORMAL\n'
+                f'node=fixture type=SYSCALL msg=audit({at}.010:{number}): arch=c000003e syscall=257 '
+                f'success=yes a2={flags} pid=2000 ses={session} key="arachne"\x1dARCH=x86_64 SYSCALL=openat\n'
+                f'node=fixture type=PATH msg=audit({at}.010:{number}): item=0 name="{path}" nametype=NORMAL\n'
             )
 
         rows = (audit(1, 25, "/tmp/decoy", "1") + audit(2, 26, "/tmp/elsewhere", "0")
