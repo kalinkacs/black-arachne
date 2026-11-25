@@ -1,0 +1,4 @@
+routine: Windows 4663 covered 3/3 control files
+approved-batch: Windows 4663 covered 25/25 control files
+unapproved-batch: Windows 4663 covered 25/25 control files
+out-of-scope-batch: Windows 4663 covered 25/25 control files

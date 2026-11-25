@@ -1,0 +1,6389 @@
+{
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "repeats": 11,
+  "corpus": [
+    {
+      "id": "routine",
+      "threshold": 20,
+      "expected_escalation": false,
+      "written_paths": [
+        "fixtures/routine/file-000.txt",
+        "fixtures/routine/file-001.txt",
+        "fixtures/routine/file-002.txt"
+      ],
+      "approval": [
+        "fixtures/routine/file-000.txt",
+        "fixtures/routine/file-001.txt",
+        "fixtures/routine/file-002.txt"
+      ],
+      "writes": [
+        {
+          "path": "fixtures/routine/file-000.txt"
+        },
+        {
+          "path": "fixtures/routine/file-001.txt"
+        },
+        {
+          "path": "fixtures/routine/file-002.txt"
+        }
+      ]
+    },
+    {
+      "id": "approved-batch",
+      "threshold": 20,
+      "expected_escalation": false,
+      "written_paths": [
+        "fixtures/approved-batch/file-000.txt",
+        "fixtures/approved-batch/file-001.txt",
+        "fixtures/approved-batch/file-002.txt",
+        "fixtures/approved-batch/file-003.txt",
+        "fixtures/approved-batch/file-004.txt",
+        "fixtures/approved-batch/file-005.txt",
+        "fixtures/approved-batch/file-006.txt",
+        "fixtures/approved-batch/file-007.txt",
+        "fixtures/approved-batch/file-008.txt",
+        "fixtures/approved-batch/file-009.txt",
+        "fixtures/approved-batch/file-010.txt",
+        "fixtures/approved-batch/file-011.txt",
+        "fixtures/approved-batch/file-012.txt",
+        "fixtures/approved-batch/file-013.txt",
+        "fixtures/approved-batch/file-014.txt",
+        "fixtures/approved-batch/file-015.txt",
+        "fixtures/approved-batch/file-016.txt",
+        "fixtures/approved-batch/file-017.txt",
+        "fixtures/approved-batch/file-018.txt",
+        "fixtures/approved-batch/file-019.txt",
+        "fixtures/approved-batch/file-020.txt",
+        "fixtures/approved-batch/file-021.txt",
+        "fixtures/approved-batch/file-022.txt",
+        "fixtures/approved-batch/file-023.txt",
+        "fixtures/approved-batch/file-024.txt"
+      ],
+      "approval": [
+        "fixtures/approved-batch/file-000.txt",
+        "fixtures/approved-batch/file-001.txt",
+        "fixtures/approved-batch/file-002.txt",
+        "fixtures/approved-batch/file-003.txt",
+        "fixtures/approved-batch/file-004.txt",
+        "fixtures/approved-batch/file-005.txt",
+        "fixtures/approved-batch/file-006.txt",
+        "fixtures/approved-batch/file-007.txt",
+        "fixtures/approved-batch/file-008.txt",
+        "fixtures/approved-batch/file-009.txt",
+        "fixtures/approved-batch/file-010.txt",
+        "fixtures/approved-batch/file-011.txt",
+        "fixtures/approved-batch/file-012.txt",
+        "fixtures/approved-batch/file-013.txt",
+        "fixtures/approved-batch/file-014.txt",
+        "fixtures/approved-batch/file-015.txt",
+        "fixtures/approved-batch/file-016.txt",
+        "fixtures/approved-batch/file-017.txt",
+        "fixtures/approved-batch/file-018.txt",
+        "fixtures/approved-batch/file-019.txt",
+        "fixtures/approved-batch/file-020.txt",
+        "fixtures/approved-batch/file-021.txt",
+        "fixtures/approved-batch/file-022.txt",
+        "fixtures/approved-batch/file-023.txt",
+        "fixtures/approved-batch/file-024.txt"
+      ],
+      "writes": [
+        {
+          "path": "fixtures/approved-batch/file-000.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-001.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-002.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-003.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-004.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-005.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-006.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-007.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-008.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-009.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-010.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-011.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-012.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-013.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-014.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-015.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-016.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-017.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-018.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-019.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-020.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-021.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-022.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-023.txt"
+        },
+        {
+          "path": "fixtures/approved-batch/file-024.txt"
+        }
+      ]
+    },
+    {
+      "id": "unapproved-batch",
+      "threshold": 20,
+      "expected_escalation": true,
+      "written_paths": [
+        "fixtures/unapproved-batch/file-000.txt",
+        "fixtures/unapproved-batch/file-001.txt",
+        "fixtures/unapproved-batch/file-002.txt",
+        "fixtures/unapproved-batch/file-003.txt",
+        "fixtures/unapproved-batch/file-004.txt",
+        "fixtures/unapproved-batch/file-005.txt",
+        "fixtures/unapproved-batch/file-006.txt",
+        "fixtures/unapproved-batch/file-007.txt",
+        "fixtures/unapproved-batch/file-008.txt",
+        "fixtures/unapproved-batch/file-009.txt",
+        "fixtures/unapproved-batch/file-010.txt",
+        "fixtures/unapproved-batch/file-011.txt",
+        "fixtures/unapproved-batch/file-012.txt",
+        "fixtures/unapproved-batch/file-013.txt",
+        "fixtures/unapproved-batch/file-014.txt",
+        "fixtures/unapproved-batch/file-015.txt",
+        "fixtures/unapproved-batch/file-016.txt",
+        "fixtures/unapproved-batch/file-017.txt",
+        "fixtures/unapproved-batch/file-018.txt",
+        "fixtures/unapproved-batch/file-019.txt",
+        "fixtures/unapproved-batch/file-020.txt",
+        "fixtures/unapproved-batch/file-021.txt",
+        "fixtures/unapproved-batch/file-022.txt",
+        "fixtures/unapproved-batch/file-023.txt",
+        "fixtures/unapproved-batch/file-024.txt"
+      ],
+      "approval": [],
+      "writes": [
+        {
+          "path": "fixtures/unapproved-batch/file-000.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-001.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-002.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-003.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-004.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-005.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-006.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-007.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-008.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-009.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-010.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-011.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-012.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-013.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-014.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-015.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-016.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-017.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-018.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-019.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-020.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-021.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-022.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-023.txt"
+        },
+        {
+          "path": "fixtures/unapproved-batch/file-024.txt"
+        }
+      ]
+    },
+    {
+      "id": "out-of-scope-batch",
+      "threshold": 20,
+      "expected_escalation": true,
+      "written_paths": [
+        "fixtures/out-of-scope-batch/file-000.txt",
+        "fixtures/out-of-scope-batch/file-001.txt",
+        "fixtures/out-of-scope-batch/file-002.txt",
+        "fixtures/out-of-scope-batch/file-003.txt",
+        "fixtures/out-of-scope-batch/file-004.txt",
+        "fixtures/out-of-scope-batch/file-005.txt",
+        "fixtures/out-of-scope-batch/file-006.txt",
+        "fixtures/out-of-scope-batch/file-007.txt",
+        "fixtures/out-of-scope-batch/file-008.txt",
+        "fixtures/out-of-scope-batch/file-009.txt",
+        "fixtures/out-of-scope-batch/file-010.txt",
+        "fixtures/out-of-scope-batch/file-011.txt",
+        "fixtures/out-of-scope-batch/file-012.txt",
+        "fixtures/out-of-scope-batch/file-013.txt",
+        "fixtures/out-of-scope-batch/file-014.txt",
+        "fixtures/out-of-scope-batch/file-015.txt",
+        "fixtures/out-of-scope-batch/file-016.txt",
+        "fixtures/out-of-scope-batch/file-017.txt",
+        "fixtures/out-of-scope-batch/file-018.txt",
+        "fixtures/out-of-scope-batch/file-019.txt",
+        "fixtures/out-of-scope-batch/file-020.txt",
+        "fixtures/out-of-scope-batch/file-021.txt",
+        "fixtures/out-of-scope-batch/file-022.txt",
+        "fixtures/out-of-scope-batch/file-023.txt",
+        "fixtures/out-of-scope-batch/file-024.txt"
+      ],
+      "approval": [
+        "fixtures/out-of-scope-batch/file-000.txt",
+        "fixtures/out-of-scope-batch/file-001.txt",
+        "fixtures/out-of-scope-batch/file-002.txt",
+        "fixtures/out-of-scope-batch/file-003.txt",
+        "fixtures/out-of-scope-batch/file-004.txt",
+        "fixtures/out-of-scope-batch/file-005.txt",
+        "fixtures/out-of-scope-batch/file-006.txt",
+        "fixtures/out-of-scope-batch/file-007.txt",
+        "fixtures/out-of-scope-batch/file-008.txt",
+        "fixtures/out-of-scope-batch/file-009.txt",
+        "fixtures/out-of-scope-batch/file-010.txt",
+        "fixtures/out-of-scope-batch/file-011.txt",
+        "fixtures/out-of-scope-batch/file-012.txt",
+        "fixtures/out-of-scope-batch/file-013.txt",
+        "fixtures/out-of-scope-batch/file-014.txt",
+        "fixtures/out-of-scope-batch/file-015.txt",
+        "fixtures/out-of-scope-batch/file-016.txt",
+        "fixtures/out-of-scope-batch/file-017.txt",
+        "fixtures/out-of-scope-batch/file-018.txt",
+        "fixtures/out-of-scope-batch/file-019.txt",
+        "fixtures/out-of-scope-batch/file-020.txt",
+        "fixtures/out-of-scope-batch/file-021.txt",
+        "fixtures/out-of-scope-batch/file-022.txt",
+        "fixtures/out-of-scope-batch/file-023.txt"
+      ],
+      "writes": [
+        {
+          "path": "fixtures/out-of-scope-batch/file-000.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-001.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-002.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-003.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-004.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-005.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-006.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-007.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-008.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-009.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-010.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-011.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-012.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-013.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-014.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-015.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-016.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-017.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-018.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-019.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-020.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-021.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-022.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-023.txt"
+        },
+        {
+          "path": "fixtures/out-of-scope-batch/file-024.txt"
+        }
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "scenario": "healthy",
+      "configuration": "solo",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 62868716,
+          "cpu_seconds": 0.059804000000000024,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 34336969,
+          "cpu_seconds": 0.03396299999999999,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 33231428,
+          "cpu_seconds": 0.03270200000000001,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 36528854,
+          "cpu_seconds": 0.03443699999999994,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 51785205,
+          "cpu_seconds": 0.13353699999999996,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 46976044,
+          "cpu_seconds": 0.12068600000000002,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 36458598,
+          "cpu_seconds": 0.09947399999999995,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 50645989,
+          "cpu_seconds": 0.12958800000000004,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 47906690,
+          "cpu_seconds": 0.11231599999999997,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 38468243,
+          "cpu_seconds": 0.10371400000000008,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 51915936,
+          "cpu_seconds": 0.13401200000000002,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 48769260,
+          "cpu_seconds": 0.13154,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 71819702,
+          "cpu_seconds": 0.07055100000000003,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 81340826,
+          "cpu_seconds": 0.0800949999999998,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 72909923,
+          "cpu_seconds": 0.07188600000000034,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 72236274,
+          "cpu_seconds": 0.07122499999999987,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 84054259,
+          "cpu_seconds": 0.16897600000000002,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 76151357,
+          "cpu_seconds": 0.14157300000000017,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 87541390,
+          "cpu_seconds": 0.16345700000000019,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 68536974,
+          "cpu_seconds": 0.1368339999999999,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 87767944,
+          "cpu_seconds": 0.1690879999999999,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 96617384,
+          "cpu_seconds": 0.16393099999999983,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 94231688,
+          "cpu_seconds": 0.16633499999999968,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 73950587,
+          "cpu_seconds": 0.13998500000000025,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 72585284,
+          "cpu_seconds": 0.07092099999999979,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 66470386,
+          "cpu_seconds": 0.06547400000000003,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 71849730,
+          "cpu_seconds": 0.068222,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 72910436,
+          "cpu_seconds": 0.07173799999999986,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 98006522,
+          "cpu_seconds": 0.17386500000000016,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 85881491,
+          "cpu_seconds": 0.14796299999999984,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 72009643,
+          "cpu_seconds": 0.15594699999999984,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 86821091,
+          "cpu_seconds": 0.17584599999999995,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 85425857,
+          "cpu_seconds": 0.1622409999999994,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 74660425,
+          "cpu_seconds": 0.1398470000000005,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 88610611,
+          "cpu_seconds": 0.15758200000000055,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 95372090,
+          "cpu_seconds": 0.18498900000000074,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "solo",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 37740182,
+          "cpu_seconds": 0.03730299999999964,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 47221653,
+          "cpu_seconds": 0.046771999999999814,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 36325869,
+          "cpu_seconds": 0.03560799999999986,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 45569042,
+          "cpu_seconds": 0.04511799999999955,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 51898304,
+          "cpu_seconds": 0.12969299999999961,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 36057689,
+          "cpu_seconds": 0.09804000000000013,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 43125161,
+          "cpu_seconds": 0.11325000000000074,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 48677652,
+          "cpu_seconds": 0.1249129999999985,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 39454607,
+          "cpu_seconds": 0.10337400000000052,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 55829443,
+          "cpu_seconds": 0.1372409999999995,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 54078990,
+          "cpu_seconds": 0.136571,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 38642665,
+          "cpu_seconds": 0.10083599999999926,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 77081994,
+          "cpu_seconds": 0.0763360000000004,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 70612647,
+          "cpu_seconds": 0.07002099999999967,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 68651139,
+          "cpu_seconds": 0.06804900000000025,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 70283415,
+          "cpu_seconds": 0.07003899999999952,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 66849003,
+          "cpu_seconds": 0.1452410000000004,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 69291020,
+          "cpu_seconds": 0.13645399999999963,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 73167053,
+          "cpu_seconds": 0.13650800000000007,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 77560393,
+          "cpu_seconds": 0.14279800000000087,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 71907090,
+          "cpu_seconds": 0.13122499999999881,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 86306799,
+          "cpu_seconds": 0.16575500000000076,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 85333061,
+          "cpu_seconds": 0.16342199999999885,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 85821749,
+          "cpu_seconds": 0.1608659999999995,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 72452032,
+          "cpu_seconds": 0.07156699999999994,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 66401200,
+          "cpu_seconds": 0.06554899999999986,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 65171354,
+          "cpu_seconds": 0.06415300000000013,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 73168673,
+          "cpu_seconds": 0.07230100000000039,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 83312842,
+          "cpu_seconds": 0.16023999999999994,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 76721071,
+          "cpu_seconds": 0.15249999999999986,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 78690723,
+          "cpu_seconds": 0.1540620000000006,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 89105222,
+          "cpu_seconds": 0.1788299999999996,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 91346706,
+          "cpu_seconds": 0.1742639999999991,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 98071588,
+          "cpu_seconds": 0.1774830000000005,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 76093451,
+          "cpu_seconds": 0.1365879999999997,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 84876756,
+          "cpu_seconds": 0.15377800000000086,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "solo",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 33767469,
+          "cpu_seconds": 0.033301999999999055,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 38240656,
+          "cpu_seconds": 0.03782699999999828,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 36584473,
+          "cpu_seconds": 0.036141999999999896,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 32055158,
+          "cpu_seconds": 0.03163900000000197,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 39692090,
+          "cpu_seconds": 0.10211299999999923,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 36357279,
+          "cpu_seconds": 0.09822400000000009,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 36382393,
+          "cpu_seconds": 0.09801500000000019,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 36908402,
+          "cpu_seconds": 0.08510700000000071,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 61823882,
+          "cpu_seconds": 0.14736800000000017,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 48826030,
+          "cpu_seconds": 0.10436900000000016,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 45029260,
+          "cpu_seconds": 0.11039299999999841,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 40743757,
+          "cpu_seconds": 0.10527199999999937,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 64920996,
+          "cpu_seconds": 0.06398000000000081,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 75313326,
+          "cpu_seconds": 0.0742799999999999,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 65759705,
+          "cpu_seconds": 0.06482599999999827,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 65850913,
+          "cpu_seconds": 0.06492199999999926,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 71262908,
+          "cpu_seconds": 0.16431099999999788,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 72747426,
+          "cpu_seconds": 0.13433200000000234,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 73412250,
+          "cpu_seconds": 0.1508149999999997,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 71005458,
+          "cpu_seconds": 0.13596200000000103,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 96876394,
+          "cpu_seconds": 0.17946400000000118,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 87565987,
+          "cpu_seconds": 0.16586399999999912,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 86740402,
+          "cpu_seconds": 0.16267500000000013,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 85040383,
+          "cpu_seconds": 0.16206799999999966,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 66506784,
+          "cpu_seconds": 0.06557799999999858,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 68242686,
+          "cpu_seconds": 0.06738000000000177,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 75836997,
+          "cpu_seconds": 0.07478799999999985,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 94253439,
+          "cpu_seconds": 0.09106099999999806,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 97900526,
+          "cpu_seconds": 0.17685700000000004,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 92391290,
+          "cpu_seconds": 0.1730280000000004,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 87841824,
+          "cpu_seconds": 0.16433300000000095,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 78883960,
+          "cpu_seconds": 0.14404700000000048,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 86490684,
+          "cpu_seconds": 0.15938799999999986,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 86690291,
+          "cpu_seconds": 0.16446400000000239,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 94817115,
+          "cpu_seconds": 0.15363199999999821,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 82055346,
+          "cpu_seconds": 0.14458799999999883,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "solo",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 35257462,
+          "cpu_seconds": 0.034752000000001004,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 34692699,
+          "cpu_seconds": 0.03421300000000116,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 31614834,
+          "cpu_seconds": 0.03112400000000015,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 37398956,
+          "cpu_seconds": 0.035933999999999244,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 38652384,
+          "cpu_seconds": 0.10845199999999977,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 47840661,
+          "cpu_seconds": 0.1240300000000012,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 36242701,
+          "cpu_seconds": 0.10003299999999982,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 53915670,
+          "cpu_seconds": 0.12998900000000013,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 38877375,
+          "cpu_seconds": 0.1010629999999999,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 50512415,
+          "cpu_seconds": 0.12601899999999766,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 39207888,
+          "cpu_seconds": 0.09934699999999985,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 46773485,
+          "cpu_seconds": 0.11167000000000016,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 68112745,
+          "cpu_seconds": 0.06696399999999691,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 65689912,
+          "cpu_seconds": 0.06456400000000073,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 74782843,
+          "cpu_seconds": 0.07375799999999977,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 67570432,
+          "cpu_seconds": 0.0666449999999994,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 73994737,
+          "cpu_seconds": 0.14738200000000035,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 95029329,
+          "cpu_seconds": 0.21044799999999952,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 78286131,
+          "cpu_seconds": 0.18979499999999838,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 70939778,
+          "cpu_seconds": 0.13377800000000128,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 93173999,
+          "cpu_seconds": 0.1682119999999987,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 70781416,
+          "cpu_seconds": 0.13307900000000217,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 92723811,
+          "cpu_seconds": 0.17113099999999903,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 90396454,
+          "cpu_seconds": 0.16830800000000146,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 71753796,
+          "cpu_seconds": 0.07088299999999848,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 70263098,
+          "cpu_seconds": 0.069348999999999,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 71475033,
+          "cpu_seconds": 0.07068800000000053,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 63650112,
+          "cpu_seconds": 0.06264799999999937,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 80353309,
+          "cpu_seconds": 0.17134699999999903,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 88967863,
+          "cpu_seconds": 0.16056000000000026,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 71606116,
+          "cpu_seconds": 0.14622199999999985,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 78034881,
+          "cpu_seconds": 0.13926599999999922,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 71156539,
+          "cpu_seconds": 0.13254500000000036,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 79234564,
+          "cpu_seconds": 0.1413429999999991,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 91116095,
+          "cpu_seconds": 0.18329700000000315,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 77783755,
+          "cpu_seconds": 0.14064400000000177,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "solo",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 33518449,
+          "cpu_seconds": 0.033018999999999465,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 36165305,
+          "cpu_seconds": 0.03336299999999781,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 52688091,
+          "cpu_seconds": 0.052177000000003915,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 36014471,
+          "cpu_seconds": 0.03565499999999844,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 53313122,
+          "cpu_seconds": 0.13404400000000294,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 35829188,
+          "cpu_seconds": 0.09742999999999924,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 44270280,
+          "cpu_seconds": 0.11036700000000366,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 51600003,
+          "cpu_seconds": 0.13462200000000024,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 43041178,
+          "cpu_seconds": 0.10514299999999821,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 49007805,
+          "cpu_seconds": 0.11588799999999821,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 53225433,
+          "cpu_seconds": 0.1324580000000033,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 52224678,
+          "cpu_seconds": 0.13048399999999916,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 69049521,
+          "cpu_seconds": 0.06799600000000083,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 70596839,
+          "cpu_seconds": 0.06938299999999842,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 65631847,
+          "cpu_seconds": 0.06453499999999934,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 69300410,
+          "cpu_seconds": 0.06839500000000243,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 73952488,
+          "cpu_seconds": 0.13801499999999933,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 90530119,
+          "cpu_seconds": 0.18143199999999737,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 83443466,
+          "cpu_seconds": 0.16091499999999925,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 79241989,
+          "cpu_seconds": 0.141173000000002,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 89913011,
+          "cpu_seconds": 0.1638880000000036,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 79765888,
+          "cpu_seconds": 0.14604899999999787,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 72156230,
+          "cpu_seconds": 0.13242200000000182,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 93020651,
+          "cpu_seconds": 0.17428299999999908,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 70968474,
+          "cpu_seconds": 0.0698439999999998,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 77412610,
+          "cpu_seconds": 0.07682399999999845,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 78700321,
+          "cpu_seconds": 0.07912900000000178,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 67249758,
+          "cpu_seconds": 0.06604999999999706,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 76505319,
+          "cpu_seconds": 0.1694289999999974,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 72651853,
+          "cpu_seconds": 0.13610200000000106,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 76722065,
+          "cpu_seconds": 0.16835899999999882,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 69467441,
+          "cpu_seconds": 0.15915100000000137,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 73400993,
+          "cpu_seconds": 0.13450199999999768,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 79018066,
+          "cpu_seconds": 0.14103500000000224,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 71949565,
+          "cpu_seconds": 0.13534600000000196,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 82494326,
+          "cpu_seconds": 0.1574259999999974,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "solo",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 32881319,
+          "cpu_seconds": 0.03243200000000357,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 31718900,
+          "cpu_seconds": 0.031000999999999834,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 34781623,
+          "cpu_seconds": 0.03426399999999674,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 33176375,
+          "cpu_seconds": 0.03259299999999854,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 48169494,
+          "cpu_seconds": 0.12391699999999872,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 40787799,
+          "cpu_seconds": 0.10759799999999942,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 34841669,
+          "cpu_seconds": 0.09647200000000211,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 36204661,
+          "cpu_seconds": 0.09702299999999653,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 49687162,
+          "cpu_seconds": 0.11865600000000143,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 62726759,
+          "cpu_seconds": 0.1301029999999983,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 48108082,
+          "cpu_seconds": 0.11890399999999701,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 44705039,
+          "cpu_seconds": 0.11272300000000257,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 72295018,
+          "cpu_seconds": 0.07112799999999808,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 68381288,
+          "cpu_seconds": 0.06748200000000182,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 66657566,
+          "cpu_seconds": 0.06559500000000185,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 94126031,
+          "cpu_seconds": 0.09319899999999848,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 73395995,
+          "cpu_seconds": 0.13558599999999998,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 74072817,
+          "cpu_seconds": 0.13657399999999953,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 82289774,
+          "cpu_seconds": 0.1553869999999975,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 71238288,
+          "cpu_seconds": 0.13387600000000432,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 78005862,
+          "cpu_seconds": 0.14002399999999682,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 85213370,
+          "cpu_seconds": 0.16061300000000145,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 85001488,
+          "cpu_seconds": 0.16672399999999854,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 83632683,
+          "cpu_seconds": 0.15870799999999718,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 67262378,
+          "cpu_seconds": 0.06611200000000039,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 67092963,
+          "cpu_seconds": 0.06617699999999971,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 66085307,
+          "cpu_seconds": 0.06510700000000114,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 71406652,
+          "cpu_seconds": 0.07024300000000139,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 76999308,
+          "cpu_seconds": 0.13557099999999878,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 86350139,
+          "cpu_seconds": 0.16214700000000448,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 81169131,
+          "cpu_seconds": 0.15529199999999577,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 88908587,
+          "cpu_seconds": 0.1675580000000032,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 80021938,
+          "cpu_seconds": 0.137520999999996,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 77558268,
+          "cpu_seconds": 0.14087299999999914,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 92206194,
+          "cpu_seconds": 0.16776100000000227,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 86927580,
+          "cpu_seconds": 0.16375499999999832,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "solo",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 33573421,
+          "cpu_seconds": 0.03286600000000206,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 33235539,
+          "cpu_seconds": 0.03247499999999803,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 37450804,
+          "cpu_seconds": 0.03734700000000046,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 38137196,
+          "cpu_seconds": 0.037659999999995364,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 35649826,
+          "cpu_seconds": 0.09584100000000362,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 34982795,
+          "cpu_seconds": 0.09578099999999878,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 44650266,
+          "cpu_seconds": 0.10614799999999747,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 54659565,
+          "cpu_seconds": 0.14000400000000113,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 39445126,
+          "cpu_seconds": 0.10433500000000251,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 51771827,
+          "cpu_seconds": 0.12714799999999826,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 40723562,
+          "cpu_seconds": 0.1032470000000032,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 50835392,
+          "cpu_seconds": 0.12476299999999796,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 69246995,
+          "cpu_seconds": 0.06773100000000198,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 71706157,
+          "cpu_seconds": 0.07064999999999699,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 70807164,
+          "cpu_seconds": 0.07206799999999802,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 68256736,
+          "cpu_seconds": 0.06743300000000119,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 77467175,
+          "cpu_seconds": 0.14339100000000116,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 71907015,
+          "cpu_seconds": 0.15352699999999686,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 105612322,
+          "cpu_seconds": 0.18455500000000313,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 72249784,
+          "cpu_seconds": 0.1495439999999988,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 72498788,
+          "cpu_seconds": 0.13141399999999592,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 76978369,
+          "cpu_seconds": 0.13576600000000383,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 70106357,
+          "cpu_seconds": 0.13117099999999837,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 85686121,
+          "cpu_seconds": 0.1652950000000004,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 70777225,
+          "cpu_seconds": 0.06889899999999827,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 65304098,
+          "cpu_seconds": 0.06522299999999603,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 66471016,
+          "cpu_seconds": 0.06563799999999986,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 72713523,
+          "cpu_seconds": 0.07163600000000514,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 85265617,
+          "cpu_seconds": 0.16258500000000353,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 70782481,
+          "cpu_seconds": 0.13209699999999813,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 71353158,
+          "cpu_seconds": 0.13159399999999977,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 70743731,
+          "cpu_seconds": 0.13444900000000004,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 80871902,
+          "cpu_seconds": 0.1551000000000009,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 72203155,
+          "cpu_seconds": 0.13529100000000227,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 71330879,
+          "cpu_seconds": 0.1322709999999958,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 84681033,
+          "cpu_seconds": 0.15955599999999848,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "solo",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 32926293,
+          "cpu_seconds": 0.03241700000000591,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 36269210,
+          "cpu_seconds": 0.03588699999999889,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 34742778,
+          "cpu_seconds": 0.03438300000000183,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 33611976,
+          "cpu_seconds": 0.033149999999999125,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 52004021,
+          "cpu_seconds": 0.13193800000000167,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 39389208,
+          "cpu_seconds": 0.10498600000000025,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 49599977,
+          "cpu_seconds": 0.12831400000000315,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 35352599,
+          "cpu_seconds": 0.09910599999999903,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 36396666,
+          "cpu_seconds": 0.09776099999999843,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 51471599,
+          "cpu_seconds": 0.13047100000000356,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 50764153,
+          "cpu_seconds": 0.1265090000000022,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 38271943,
+          "cpu_seconds": 0.10253999999999763,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 66654347,
+          "cpu_seconds": 0.0657609999999984,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 69127294,
+          "cpu_seconds": 0.06828199999999995,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 68036127,
+          "cpu_seconds": 0.06691199999999853,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 66276326,
+          "cpu_seconds": 0.06504199999999827,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 72407386,
+          "cpu_seconds": 0.14286199999999738,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 84316458,
+          "cpu_seconds": 0.16033500000000345,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 86236185,
+          "cpu_seconds": 0.16729799999999884,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 72787287,
+          "cpu_seconds": 0.15837300000000099,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 81553471,
+          "cpu_seconds": 0.15183599999999942,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 85830795,
+          "cpu_seconds": 0.16133199999999803,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 84854430,
+          "cpu_seconds": 0.15922000000000125,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 94349179,
+          "cpu_seconds": 0.17383299999999835,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 72087053,
+          "cpu_seconds": 0.07222800000000262,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 66323482,
+          "cpu_seconds": 0.0650820000000003,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 69163775,
+          "cpu_seconds": 0.06804500000000147,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 67847208,
+          "cpu_seconds": 0.06666699999999892,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 70613070,
+          "cpu_seconds": 0.1322850000000031,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 75307069,
+          "cpu_seconds": 0.1389279999999964,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 72651588,
+          "cpu_seconds": 0.13373400000000046,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 74490468,
+          "cpu_seconds": 0.13663799999999782,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 86297581,
+          "cpu_seconds": 0.16181199999999762,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 82863933,
+          "cpu_seconds": 0.15663200000000188,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 75462533,
+          "cpu_seconds": 0.1368190000000027,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 74233454,
+          "cpu_seconds": 0.13499500000000353,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "solo",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 33579890,
+          "cpu_seconds": 0.03263600000000366,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 31556733,
+          "cpu_seconds": 0.030906000000001654,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 36680550,
+          "cpu_seconds": 0.036343000000002235,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 32707027,
+          "cpu_seconds": 0.03218800000000499,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 54753903,
+          "cpu_seconds": 0.1338270000000037,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 35604295,
+          "cpu_seconds": 0.10005899999999457,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 50432234,
+          "cpu_seconds": 0.12993900000000025,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 34408092,
+          "cpu_seconds": 0.09675599999999207,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 41366085,
+          "cpu_seconds": 0.10357900000000342,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 54557899,
+          "cpu_seconds": 0.1370239999999967,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 48451994,
+          "cpu_seconds": 0.12276400000000365,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 38402845,
+          "cpu_seconds": 0.10085599999999317,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 67577677,
+          "cpu_seconds": 0.06638699999999886,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 66901350,
+          "cpu_seconds": 0.06602499999999623,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 63008074,
+          "cpu_seconds": 0.06198700000000201,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 67102773,
+          "cpu_seconds": 0.0656190000000052,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 68215644,
+          "cpu_seconds": 0.15886399999998702,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 70959012,
+          "cpu_seconds": 0.1334240000000051,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 73181206,
+          "cpu_seconds": 0.13493800000000533,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 90338581,
+          "cpu_seconds": 0.15536300000000125,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 72468409,
+          "cpu_seconds": 0.13377899999999698,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 95144873,
+          "cpu_seconds": 0.15735500000000258,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 71246473,
+          "cpu_seconds": 0.1344709999999978,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 74929603,
+          "cpu_seconds": 0.13611000000000217,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 64825314,
+          "cpu_seconds": 0.0639630000000011,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 67233639,
+          "cpu_seconds": 0.06625199999999865,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 67873266,
+          "cpu_seconds": 0.06675700000000262,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 64934298,
+          "cpu_seconds": 0.06365999999999872,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 70397278,
+          "cpu_seconds": 0.15962099999999424,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 67457210,
+          "cpu_seconds": 0.1368969999999976,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 106289004,
+          "cpu_seconds": 0.17949499999999574,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 67574345,
+          "cpu_seconds": 0.1291000000000011,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 98426535,
+          "cpu_seconds": 0.15698499999999882,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 89232600,
+          "cpu_seconds": 0.16528900000000135,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 75907520,
+          "cpu_seconds": 0.13730799999999732,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 70950830,
+          "cpu_seconds": 0.13348700000000235,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "solo",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 33092283,
+          "cpu_seconds": 0.03278900000000107,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 36756585,
+          "cpu_seconds": 0.036470999999991704,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 42046036,
+          "cpu_seconds": 0.03148900000000765,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 33457885,
+          "cpu_seconds": 0.03283700000000067,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 48376621,
+          "cpu_seconds": 0.13272900000000476,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 36485711,
+          "cpu_seconds": 0.10191300000001036,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 34174203,
+          "cpu_seconds": 0.09463199999999716,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 47745322,
+          "cpu_seconds": 0.12032499999999402,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 50097974,
+          "cpu_seconds": 0.12498400000000487,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 39415569,
+          "cpu_seconds": 0.10412700000000541,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 40472091,
+          "cpu_seconds": 0.10305300000000273,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 51030559,
+          "cpu_seconds": 0.12851799999999258,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 69162952,
+          "cpu_seconds": 0.06822199999999867,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 68509622,
+          "cpu_seconds": 0.06750399999999956,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 68278390,
+          "cpu_seconds": 0.067218000000004,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 65219671,
+          "cpu_seconds": 0.06393099999999663,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 82691121,
+          "cpu_seconds": 0.15856600000000043,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 86724116,
+          "cpu_seconds": 0.16363700000000136,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 88309428,
+          "cpu_seconds": 0.16849000000000558,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 84247856,
+          "cpu_seconds": 0.1577829999999878,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 85336112,
+          "cpu_seconds": 0.16181200000000473,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 89972554,
+          "cpu_seconds": 0.17113200000000006,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 82996507,
+          "cpu_seconds": 0.1567759999999936,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 164268866,
+          "cpu_seconds": 0.24282800000000293,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 74676728,
+          "cpu_seconds": 0.07468899999999934,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 64457253,
+          "cpu_seconds": 0.063477000000006,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 63866384,
+          "cpu_seconds": 0.06266499999999553,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 70154557,
+          "cpu_seconds": 0.0690969999999993,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 73879434,
+          "cpu_seconds": 0.16350299999999862,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 83590238,
+          "cpu_seconds": 0.16100899999999996,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 83453412,
+          "cpu_seconds": 0.16190699999999936,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 76451304,
+          "cpu_seconds": 0.166640000000001,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 87244497,
+          "cpu_seconds": 0.16321700000000305,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 86992209,
+          "cpu_seconds": 0.15919199999999734,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 86980279,
+          "cpu_seconds": 0.1652830000000023,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 70512658,
+          "cpu_seconds": 0.13388000000000488,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "solo",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 32852648,
+          "cpu_seconds": 0.03236000000000416,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 32294800,
+          "cpu_seconds": 0.03194899999999734,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 35928364,
+          "cpu_seconds": 0.035559999999996705,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 37251474,
+          "cpu_seconds": 0.03672799999999654,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 4,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 41031489,
+          "cpu_seconds": 0.11285799999999568,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "approved-batch": {
+          "wall_ns": 37468487,
+          "cpu_seconds": 0.10080500000000825,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "unapproved-batch": {
+          "wall_ns": 51171724,
+          "cpu_seconds": 0.12713500000000266,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 37953515,
+          "cpu_seconds": 0.10657400000000194,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 1
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 0,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 50870283,
+          "cpu_seconds": 0.1260339999999971,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 38071783,
+          "cpu_seconds": 0.10143900000000627,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 48404154,
+          "cpu_seconds": 0.1261249999999876,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 38703348,
+          "cpu_seconds": 0.10236000000000445,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": null,
+          "forced_stops": 0,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 65971189,
+          "cpu_seconds": 0.06486000000000303,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 66689532,
+          "cpu_seconds": 0.06553699999999196,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 73733704,
+          "cpu_seconds": 0.07305099999999953,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 68599840,
+          "cpu_seconds": 0.0675939999999926,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 86070725,
+          "cpu_seconds": 0.1632590000000107,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 80540709,
+          "cpu_seconds": 0.15688399999999803,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 81827203,
+          "cpu_seconds": 0.15649800000001335,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 82330832,
+          "cpu_seconds": 0.15675899999999388,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "double_loss",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 4,
+        "pending": 0,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 95707683,
+          "cpu_seconds": 0.19252199999999675,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 81656621,
+          "cpu_seconds": 0.15821900000000255,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 82843054,
+          "cpu_seconds": 0.15936700000000315,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 83115105,
+          "cpu_seconds": 0.1617430000000013,
+          "decision": "escalate",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "solo",
+      "counts": {
+        "completed": 0,
+        "correct": 0,
+        "pending": 4,
+        "manual_review": 0,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 0,
+        "forced_stops": 8,
+        "approval_reads": 0,
+        "checkpoint_reads": 8,
+        "max_workers": 1
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 71618734,
+          "cpu_seconds": 0.07049999999999557,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "approved-batch": {
+          "wall_ns": 68403939,
+          "cpu_seconds": 0.06709599999999938,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "unapproved-batch": {
+          "wall_ns": 71419382,
+          "cpu_seconds": 0.07038599999999917,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 70546682,
+          "cpu_seconds": 0.06943300000000363,
+          "decision": "pending",
+          "approval_reads": 0,
+          "handoff": null,
+          "forced_stops": 2,
+          "checkpoint_reads": 2
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "reserve_queue",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 12,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 68112429,
+          "cpu_seconds": 0.13242099999999368,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "approved-batch": {
+          "wall_ns": 74652172,
+          "cpu_seconds": 0.16287900000000377,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "unapproved-batch": {
+          "wall_ns": 71747433,
+          "cpu_seconds": 0.13776599999999206,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 87939126,
+          "cpu_seconds": 0.1654450000000054,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 3
+        }
+      }
+    },
+    {
+      "scenario": "loss_and_delayed_approval",
+      "configuration": "three_teams",
+      "counts": {
+        "completed": 4,
+        "correct": 1,
+        "pending": 0,
+        "manual_review": 3,
+        "incorrect_clearances": 0,
+        "false_escalations": 0,
+        "handoffs": 4,
+        "forced_stops": 8,
+        "approval_reads": 4,
+        "checkpoint_reads": 16,
+        "max_workers": 3
+      },
+      "cases": {
+        "routine": {
+          "wall_ns": 82482927,
+          "cpu_seconds": 0.15683000000000646,
+          "decision": "clear",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "approved-batch": {
+          "wall_ns": 76290803,
+          "cpu_seconds": 0.14203799999999234,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "B",
+            "C"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "unapproved-batch": {
+          "wall_ns": 78738544,
+          "cpu_seconds": 0.1423160000000081,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "C",
+            "A"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        },
+        "out-of-scope-batch": {
+          "wall_ns": 81523778,
+          "cpu_seconds": 0.15461799999999215,
+          "decision": "review",
+          "approval_reads": 1,
+          "handoff": [
+            "A",
+            "B"
+          ],
+          "forced_stops": 2,
+          "checkpoint_reads": 4
+        }
+      }
+    }
+  ]
+}

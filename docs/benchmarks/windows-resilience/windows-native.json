@@ -1,0 +1,125 @@
+{
+  "healthy": {
+    "solo": {
+      "completed": 4,
+      "correct": 4,
+      "pending": 0,
+      "manual_review": 0,
+      "incorrect_clearances": 0,
+      "false_escalations": 0,
+      "handoffs": 0,
+      "forced_stops": 0,
+      "approval_reads": 4,
+      "checkpoint_reads": 4,
+      "max_workers": 1
+    },
+    "reserve_queue": {
+      "completed": 4,
+      "correct": 4,
+      "pending": 0,
+      "manual_review": 0,
+      "incorrect_clearances": 0,
+      "false_escalations": 0,
+      "handoffs": 0,
+      "forced_stops": 0,
+      "approval_reads": 4,
+      "checkpoint_reads": 4,
+      "max_workers": 3
+    },
+    "three_teams": {
+      "completed": 4,
+      "correct": 4,
+      "pending": 0,
+      "manual_review": 0,
+      "incorrect_clearances": 0,
+      "false_escalations": 0,
+      "handoffs": 0,
+      "forced_stops": 0,
+      "approval_reads": 4,
+      "checkpoint_reads": 12,
+      "max_workers": 3
+    }
+  },
+  "double_loss": {
+    "solo": {
+      "completed": 0,
+      "correct": 0,
+      "pending": 4,
+      "manual_review": 0,
+      "incorrect_clearances": 0,
+      "false_escalations": 0,
+      "handoffs": 0,
+      "forced_stops": 8,
+      "approval_reads": 0,
+      "checkpoint_reads": 8,
+      "max_workers": 1
+    },
+    "reserve_queue": {
+      "completed": 4,
+      "correct": 4,
+      "pending": 0,
+      "manual_review": 0,
+      "incorrect_clearances": 0,
+      "false_escalations": 0,
+      "handoffs": 4,
+      "forced_stops": 8,
+      "approval_reads": 4,
+      "checkpoint_reads": 12,
+      "max_workers": 3
+    },
+    "three_teams": {
+      "completed": 4,
+      "correct": 4,
+      "pending": 0,
+      "manual_review": 0,
+      "incorrect_clearances": 0,
+      "false_escalations": 0,
+      "handoffs": 4,
+      "forced_stops": 8,
+      "approval_reads": 4,
+      "checkpoint_reads": 16,
+      "max_workers": 3
+    }
+  },
+  "loss_and_delayed_approval": {
+    "solo": {
+      "completed": 0,
+      "correct": 0,
+      "pending": 4,
+      "manual_review": 0,
+      "incorrect_clearances": 0,
+      "false_escalations": 0,
+      "handoffs": 0,
+      "forced_stops": 8,
+      "approval_reads": 0,
+      "checkpoint_reads": 8,
+      "max_workers": 1
+    },
+    "reserve_queue": {
+      "completed": 4,
+      "correct": 1,
+      "pending": 0,
+      "manual_review": 3,
+      "incorrect_clearances": 0,
+      "false_escalations": 0,
+      "handoffs": 4,
+      "forced_stops": 8,
+      "approval_reads": 4,
+      "checkpoint_reads": 12,
+      "max_workers": 3
+    },
+    "three_teams": {
+      "completed": 4,
+      "correct": 1,
+      "pending": 0,
+      "manual_review": 3,
+      "incorrect_clearances": 0,
+      "false_escalations": 0,
+      "handoffs": 4,
+      "forced_stops": 8,
+      "approval_reads": 4,
+      "checkpoint_reads": 16,
+      "max_workers": 3
+    }
+  }
+}
