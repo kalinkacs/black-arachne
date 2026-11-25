@@ -1,0 +1,6470 @@
+{
+  "shared_limit": {
+    "fields_by_source": {
+      "A": [
+        "field_1",
+        "field_3"
+      ],
+      "B": [
+        "field_6",
+        "field_2"
+      ],
+      "C": [
+        "field_5",
+        "field_4"
+      ]
+    },
+    "initial_examples": [
+      {
+        "id": "initial-09",
+        "audit": {
+          "field_1": 63,
+          "field_3": 284,
+          "field_2": -226,
+          "field_6": 56
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-07",
+        "audit": {
+          "field_1": 35,
+          "field_3": -158,
+          "field_2": 217,
+          "field_6": 2
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-04",
+        "audit": {
+          "field_3": 193,
+          "field_1": 31,
+          "field_2": 289,
+          "field_6": 72
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-11",
+        "audit": {
+          "field_3": 205,
+          "field_1": 58,
+          "field_6": 1,
+          "field_2": 299
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-03",
+        "audit": {
+          "field_3": -286,
+          "field_1": 69,
+          "field_6": 30,
+          "field_2": -190
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-01",
+        "audit": {
+          "field_1": 90,
+          "field_3": -23,
+          "field_6": 89,
+          "field_2": 193
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-00",
+        "audit": {
+          "field_1": 9,
+          "field_3": -297,
+          "field_6": 92,
+          "field_2": 34
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-02",
+        "audit": {
+          "field_3": 280,
+          "field_1": 72,
+          "field_6": 79,
+          "field_2": -237
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-06",
+        "audit": {
+          "field_1": 40,
+          "field_3": -108,
+          "field_2": 121,
+          "field_6": 69
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-10",
+        "audit": {
+          "field_3": -92,
+          "field_1": 48,
+          "field_2": 248,
+          "field_6": 66
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-05",
+        "audit": {
+          "field_1": 93,
+          "field_3": 196,
+          "field_2": 297,
+          "field_6": 53
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-08",
+        "audit": {
+          "field_3": -26,
+          "field_1": 2,
+          "field_6": 33,
+          "field_2": -104
+        },
+        "consistent": true
+      }
+    ],
+    "discovery_examples": [
+      {
+        "id": "discover-10",
+        "audit": {
+          "field_1": 42,
+          "field_3": 171,
+          "field_2": -248,
+          "field_6": 17,
+          "field_5": 62,
+          "field_4": -64
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-21",
+        "audit": {
+          "field_3": 127,
+          "field_1": 51,
+          "field_2": 67,
+          "field_6": 85,
+          "field_5": 121,
+          "field_4": -290
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-26",
+        "audit": {
+          "field_1": 1,
+          "field_3": 164,
+          "field_2": -24,
+          "field_6": 31,
+          "field_5": 45,
+          "field_4": -185
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-31",
+        "audit": {
+          "field_3": -152,
+          "field_1": 15,
+          "field_2": 15,
+          "field_6": 66,
+          "field_4": 55,
+          "field_5": 69
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-00",
+        "audit": {
+          "field_1": 64,
+          "field_3": 284,
+          "field_6": 13,
+          "field_2": 193,
+          "field_5": 90,
+          "field_4": -109
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-30",
+        "audit": {
+          "field_1": 51,
+          "field_3": 115,
+          "field_2": 170,
+          "field_6": 72,
+          "field_5": 128,
+          "field_4": 174
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-27",
+        "audit": {
+          "field_3": -144,
+          "field_1": 28,
+          "field_2": 6,
+          "field_6": 8,
+          "field_4": 83,
+          "field_5": 25
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-19",
+        "audit": {
+          "field_3": 133,
+          "field_1": 9,
+          "field_6": 38,
+          "field_2": 73,
+          "field_5": 38,
+          "field_4": 177
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-16",
+        "audit": {
+          "field_3": 126,
+          "field_1": 76,
+          "field_2": 105,
+          "field_6": 48,
+          "field_5": 130,
+          "field_4": -29
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-06",
+        "audit": {
+          "field_3": -4,
+          "field_1": 14,
+          "field_6": 1,
+          "field_2": -249,
+          "field_4": 285,
+          "field_5": 28
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-03",
+        "audit": {
+          "field_1": 67,
+          "field_3": -131,
+          "field_6": 30,
+          "field_2": 65,
+          "field_5": 82,
+          "field_4": -27
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-38",
+        "audit": {
+          "field_1": 49,
+          "field_3": 131,
+          "field_6": 56,
+          "field_2": 61,
+          "field_5": 111,
+          "field_4": 73
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-18",
+        "audit": {
+          "field_3": -291,
+          "field_1": 68,
+          "field_6": 65,
+          "field_2": -289,
+          "field_4": 248,
+          "field_5": 142
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-24",
+        "audit": {
+          "field_1": 13,
+          "field_3": -83,
+          "field_2": 243,
+          "field_6": 75,
+          "field_4": 197,
+          "field_5": 88
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-35",
+        "audit": {
+          "field_3": 299,
+          "field_1": 90,
+          "field_6": 5,
+          "field_2": 193,
+          "field_5": 88,
+          "field_4": 160
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-02",
+        "audit": {
+          "field_3": 4,
+          "field_1": 91,
+          "field_2": -204,
+          "field_6": 2,
+          "field_4": -5,
+          "field_5": 108
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-17",
+        "audit": {
+          "field_3": -96,
+          "field_1": 34,
+          "field_2": -134,
+          "field_6": 56,
+          "field_4": -139,
+          "field_5": 85
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-28",
+        "audit": {
+          "field_1": 30,
+          "field_3": -37,
+          "field_2": 232,
+          "field_6": 89,
+          "field_4": 106,
+          "field_5": 127
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-04",
+        "audit": {
+          "field_1": 3,
+          "field_3": -134,
+          "field_2": 172,
+          "field_6": 51,
+          "field_4": 42,
+          "field_5": 58
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-09",
+        "audit": {
+          "field_1": 4,
+          "field_3": 236,
+          "field_2": 200,
+          "field_6": 9,
+          "field_5": 12,
+          "field_4": -279
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-13",
+        "audit": {
+          "field_3": -143,
+          "field_1": 58,
+          "field_6": 1,
+          "field_2": -13,
+          "field_5": 55,
+          "field_4": -114
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-20",
+        "audit": {
+          "field_1": 6,
+          "field_3": -20,
+          "field_6": 87,
+          "field_2": -244,
+          "field_5": 101,
+          "field_4": -281
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-32",
+        "audit": {
+          "field_1": 69,
+          "field_3": 161,
+          "field_6": 3,
+          "field_2": 94,
+          "field_4": 295,
+          "field_5": 82
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-15",
+        "audit": {
+          "field_3": 181,
+          "field_1": 44,
+          "field_2": -130,
+          "field_6": 58,
+          "field_4": -53,
+          "field_5": 96
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-39",
+        "audit": {
+          "field_1": 23,
+          "field_3": -141,
+          "field_2": 148,
+          "field_6": 92,
+          "field_5": 103,
+          "field_4": 298
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-05",
+        "audit": {
+          "field_1": 35,
+          "field_3": 43,
+          "field_6": 40,
+          "field_2": 264,
+          "field_4": 133,
+          "field_5": 70
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-29",
+        "audit": {
+          "field_3": 18,
+          "field_1": 31,
+          "field_6": 23,
+          "field_2": 281,
+          "field_5": 51,
+          "field_4": -159
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-23",
+        "audit": {
+          "field_3": 167,
+          "field_1": 48,
+          "field_6": 70,
+          "field_2": 231,
+          "field_5": 111,
+          "field_4": 126
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-14",
+        "audit": {
+          "field_1": 49,
+          "field_3": 242,
+          "field_2": -18,
+          "field_6": 56,
+          "field_4": -207,
+          "field_5": 116
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-22",
+        "audit": {
+          "field_3": -114,
+          "field_1": 52,
+          "field_6": 87,
+          "field_2": 139,
+          "field_5": 144,
+          "field_4": 240
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-25",
+        "audit": {
+          "field_3": -71,
+          "field_1": 79,
+          "field_2": -51,
+          "field_6": 92,
+          "field_4": 140,
+          "field_5": 170
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-37",
+        "audit": {
+          "field_1": 91,
+          "field_3": -185,
+          "field_6": 73,
+          "field_2": -258,
+          "field_4": -85,
+          "field_5": 161
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-08",
+        "audit": {
+          "field_1": 75,
+          "field_3": 11,
+          "field_6": 93,
+          "field_2": 103,
+          "field_4": 222,
+          "field_5": 173
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-34",
+        "audit": {
+          "field_1": 44,
+          "field_3": 51,
+          "field_2": 293,
+          "field_6": 25,
+          "field_5": 83,
+          "field_4": 269
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-11",
+        "audit": {
+          "field_3": 92,
+          "field_1": 32,
+          "field_2": 166,
+          "field_6": 4,
+          "field_4": -135,
+          "field_5": 33
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-01",
+        "audit": {
+          "field_3": -173,
+          "field_1": 40,
+          "field_2": -33,
+          "field_6": 86,
+          "field_4": 239,
+          "field_5": 118
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-12",
+        "audit": {
+          "field_3": 277,
+          "field_1": 1,
+          "field_2": 69,
+          "field_6": 61,
+          "field_5": 72,
+          "field_4": 270
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-36",
+        "audit": {
+          "field_1": 19,
+          "field_3": 289,
+          "field_2": 236,
+          "field_6": 93,
+          "field_5": 123,
+          "field_4": -283
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-33",
+        "audit": {
+          "field_3": 216,
+          "field_1": 74,
+          "field_2": -171,
+          "field_6": 75,
+          "field_5": 140,
+          "field_4": 216
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-07",
+        "audit": {
+          "field_3": -171,
+          "field_1": 85,
+          "field_6": 34,
+          "field_2": -115,
+          "field_4": -242,
+          "field_5": 112
+        },
+        "consistent": false
+      }
+    ],
+    "holdout_inputs": [
+      {
+        "id": "holdout-17",
+        "audit": {
+          "field_3": -60,
+          "field_1": 126,
+          "field_2": 4,
+          "field_6": 176,
+          "field_4": 225,
+          "field_5": 297
+        }
+      },
+      {
+        "id": "holdout-14",
+        "audit": {
+          "field_3": -145,
+          "field_1": 143,
+          "field_2": -24,
+          "field_6": 150,
+          "field_5": 293,
+          "field_4": -146
+        }
+      },
+      {
+        "id": "holdout-11",
+        "audit": {
+          "field_3": -123,
+          "field_1": 112,
+          "field_2": 78,
+          "field_6": 173,
+          "field_5": 281,
+          "field_4": -160
+        }
+      },
+      {
+        "id": "holdout-26",
+        "audit": {
+          "field_1": 97,
+          "field_3": 85,
+          "field_6": 182,
+          "field_2": -16,
+          "field_4": -150,
+          "field_5": 283
+        }
+      },
+      {
+        "id": "holdout-45",
+        "audit": {
+          "field_3": -120,
+          "field_1": 94,
+          "field_6": 155,
+          "field_2": -258,
+          "field_4": 262,
+          "field_5": 239
+        }
+      },
+      {
+        "id": "holdout-22",
+        "audit": {
+          "field_1": 114,
+          "field_3": 114,
+          "field_6": 115,
+          "field_2": 108,
+          "field_4": -223,
+          "field_5": 240
+        }
+      },
+      {
+        "id": "holdout-23",
+        "audit": {
+          "field_1": 98,
+          "field_3": -199,
+          "field_2": 154,
+          "field_6": 115,
+          "field_4": 145,
+          "field_5": 201
+        }
+      },
+      {
+        "id": "holdout-01",
+        "audit": {
+          "field_1": 139,
+          "field_3": -85,
+          "field_2": 185,
+          "field_6": 152,
+          "field_5": 280,
+          "field_4": 269
+        }
+      },
+      {
+        "id": "holdout-06",
+        "audit": {
+          "field_3": 49,
+          "field_1": 189,
+          "field_2": -18,
+          "field_6": 149,
+          "field_4": -94,
+          "field_5": 340
+        }
+      },
+      {
+        "id": "holdout-15",
+        "audit": {
+          "field_3": -249,
+          "field_1": 137,
+          "field_6": 119,
+          "field_2": 290,
+          "field_5": 252,
+          "field_4": 128
+        }
+      },
+      {
+        "id": "holdout-16",
+        "audit": {
+          "field_1": 167,
+          "field_3": 101,
+          "field_6": 109,
+          "field_2": -88,
+          "field_4": 72,
+          "field_5": 291
+        }
+      },
+      {
+        "id": "holdout-39",
+        "audit": {
+          "field_1": 148,
+          "field_3": -31,
+          "field_6": 98,
+          "field_2": -34,
+          "field_4": -293,
+          "field_5": 234
+        }
+      },
+      {
+        "id": "holdout-05",
+        "audit": {
+          "field_3": -252,
+          "field_1": 121,
+          "field_6": 172,
+          "field_2": -47,
+          "field_5": 278,
+          "field_4": -242
+        }
+      },
+      {
+        "id": "holdout-08",
+        "audit": {
+          "field_1": 151,
+          "field_3": -295,
+          "field_2": 286,
+          "field_6": 177,
+          "field_4": -65,
+          "field_5": 343
+        }
+      },
+      {
+        "id": "holdout-35",
+        "audit": {
+          "field_3": -263,
+          "field_1": 114,
+          "field_2": 64,
+          "field_6": 179,
+          "field_5": 284,
+          "field_4": 165
+        }
+      },
+      {
+        "id": "holdout-07",
+        "audit": {
+          "field_1": 134,
+          "field_3": 82,
+          "field_2": -41,
+          "field_6": 131,
+          "field_5": 255,
+          "field_4": 203
+        }
+      },
+      {
+        "id": "holdout-13",
+        "audit": {
+          "field_3": 246,
+          "field_1": 160,
+          "field_6": 106,
+          "field_2": -153,
+          "field_4": 159,
+          "field_5": 254
+        }
+      },
+      {
+        "id": "holdout-46",
+        "audit": {
+          "field_1": 151,
+          "field_3": 127,
+          "field_2": 80,
+          "field_6": 167,
+          "field_4": -158,
+          "field_5": 327
+        }
+      },
+      {
+        "id": "holdout-04",
+        "audit": {
+          "field_3": -45,
+          "field_1": 156,
+          "field_2": -25,
+          "field_6": 161,
+          "field_5": 319,
+          "field_4": 160
+        }
+      },
+      {
+        "id": "holdout-25",
+        "audit": {
+          "field_1": 139,
+          "field_3": -175,
+          "field_2": 219,
+          "field_6": 155,
+          "field_4": 209,
+          "field_5": 288
+        }
+      },
+      {
+        "id": "holdout-21",
+        "audit": {
+          "field_1": 179,
+          "field_3": 110,
+          "field_2": -191,
+          "field_6": 165,
+          "field_4": 89,
+          "field_5": 342
+        }
+      },
+      {
+        "id": "holdout-33",
+        "audit": {
+          "field_1": 95,
+          "field_3": 292,
+          "field_2": -284,
+          "field_6": 112,
+          "field_5": 206,
+          "field_4": 276
+        }
+      },
+      {
+        "id": "holdout-38",
+        "audit": {
+          "field_3": 49,
+          "field_1": 115,
+          "field_2": 5,
+          "field_6": 120,
+          "field_4": 138,
+          "field_5": 249
+        }
+      },
+      {
+        "id": "holdout-34",
+        "audit": {
+          "field_1": 177,
+          "field_3": -92,
+          "field_6": 170,
+          "field_2": -69,
+          "field_4": 210,
+          "field_5": 362
+        }
+      },
+      {
+        "id": "holdout-27",
+        "audit": {
+          "field_3": 226,
+          "field_1": 165,
+          "field_2": -134,
+          "field_6": 186,
+          "field_4": -113,
+          "field_5": 348
+        }
+      },
+      {
+        "id": "holdout-47",
+        "audit": {
+          "field_3": -137,
+          "field_1": 125,
+          "field_2": -79,
+          "field_6": 139,
+          "field_5": 263,
+          "field_4": -249
+        }
+      },
+      {
+        "id": "holdout-24",
+        "audit": {
+          "field_3": 156,
+          "field_1": 171,
+          "field_2": 247,
+          "field_6": 164,
+          "field_5": 349,
+          "field_4": -109
+        }
+      },
+      {
+        "id": "holdout-40",
+        "audit": {
+          "field_1": 107,
+          "field_3": -104,
+          "field_2": 144,
+          "field_6": 115,
+          "field_4": 230,
+          "field_5": 234
+        }
+      },
+      {
+        "id": "holdout-02",
+        "audit": {
+          "field_3": 155,
+          "field_1": 128,
+          "field_2": 98,
+          "field_6": 144,
+          "field_4": 297,
+          "field_5": 279
+        }
+      },
+      {
+        "id": "holdout-42",
+        "audit": {
+          "field_1": 169,
+          "field_3": -74,
+          "field_2": 133,
+          "field_6": 125,
+          "field_4": 28,
+          "field_5": 304
+        }
+      },
+      {
+        "id": "holdout-30",
+        "audit": {
+          "field_1": 135,
+          "field_3": 92,
+          "field_6": 182,
+          "field_2": -94,
+          "field_5": 328,
+          "field_4": -134
+        }
+      },
+      {
+        "id": "holdout-29",
+        "audit": {
+          "field_1": 142,
+          "field_3": -184,
+          "field_6": 164,
+          "field_2": 115,
+          "field_5": 300,
+          "field_4": -79
+        }
+      },
+      {
+        "id": "holdout-31",
+        "audit": {
+          "field_1": 155,
+          "field_3": -185,
+          "field_2": -286,
+          "field_6": 131,
+          "field_5": 277,
+          "field_4": 192
+        }
+      },
+      {
+        "id": "holdout-10",
+        "audit": {
+          "field_3": 81,
+          "field_1": 188,
+          "field_2": 237,
+          "field_6": 118,
+          "field_5": 312,
+          "field_4": -180
+        }
+      },
+      {
+        "id": "holdout-09",
+        "audit": {
+          "field_3": 202,
+          "field_1": 160,
+          "field_2": -262,
+          "field_6": 120,
+          "field_4": 5,
+          "field_5": 268
+        }
+      },
+      {
+        "id": "holdout-36",
+        "audit": {
+          "field_3": 178,
+          "field_1": 135,
+          "field_2": -266,
+          "field_6": 117,
+          "field_4": -93,
+          "field_5": 261
+        }
+      },
+      {
+        "id": "holdout-41",
+        "audit": {
+          "field_3": -9,
+          "field_1": 169,
+          "field_6": 184,
+          "field_2": -97,
+          "field_4": -168,
+          "field_5": 344
+        }
+      },
+      {
+        "id": "holdout-03",
+        "audit": {
+          "field_3": 100,
+          "field_1": 94,
+          "field_6": 98,
+          "field_2": 218,
+          "field_4": -38,
+          "field_5": 181
+        }
+      },
+      {
+        "id": "holdout-19",
+        "audit": {
+          "field_1": 135,
+          "field_3": 120,
+          "field_6": 138,
+          "field_2": -70,
+          "field_4": 224,
+          "field_5": 258
+        }
+      },
+      {
+        "id": "holdout-37",
+        "audit": {
+          "field_3": 22,
+          "field_1": 126,
+          "field_2": -35,
+          "field_6": 172,
+          "field_4": 200,
+          "field_5": 283
+        }
+      },
+      {
+        "id": "holdout-00",
+        "audit": {
+          "field_3": 177,
+          "field_1": 118,
+          "field_6": 181,
+          "field_2": 210,
+          "field_4": -255,
+          "field_5": 300
+        }
+      },
+      {
+        "id": "holdout-12",
+        "audit": {
+          "field_3": 72,
+          "field_1": 119,
+          "field_2": 72,
+          "field_6": 155,
+          "field_4": 130,
+          "field_5": 275
+        }
+      },
+      {
+        "id": "holdout-18",
+        "audit": {
+          "field_1": 159,
+          "field_3": 101,
+          "field_2": -94,
+          "field_6": 127,
+          "field_4": 115,
+          "field_5": 293
+        }
+      },
+      {
+        "id": "holdout-28",
+        "audit": {
+          "field_3": -169,
+          "field_1": 95,
+          "field_6": 156,
+          "field_2": 129,
+          "field_5": 262,
+          "field_4": -65
+        }
+      },
+      {
+        "id": "holdout-44",
+        "audit": {
+          "field_3": 153,
+          "field_1": 142,
+          "field_2": -258,
+          "field_6": 182,
+          "field_5": 331,
+          "field_4": -250
+        }
+      },
+      {
+        "id": "holdout-43",
+        "audit": {
+          "field_3": -264,
+          "field_1": 110,
+          "field_6": 184,
+          "field_2": -204,
+          "field_4": 63,
+          "field_5": 289
+        }
+      },
+      {
+        "id": "holdout-32",
+        "audit": {
+          "field_3": -172,
+          "field_1": 154,
+          "field_2": -239,
+          "field_6": 181,
+          "field_4": -38,
+          "field_5": 342
+        }
+      },
+      {
+        "id": "holdout-20",
+        "audit": {
+          "field_3": 162,
+          "field_1": 141,
+          "field_6": 99,
+          "field_2": -196,
+          "field_5": 249,
+          "field_4": 218
+        }
+      }
+    ],
+    "holdout_answer_key": {
+      "holdout-17": "escalate",
+      "holdout-14": "clear",
+      "holdout-11": "escalate",
+      "holdout-26": "clear",
+      "holdout-45": "escalate",
+      "holdout-22": "clear",
+      "holdout-23": "escalate",
+      "holdout-01": "escalate",
+      "holdout-06": "clear",
+      "holdout-15": "escalate",
+      "holdout-16": "clear",
+      "holdout-39": "escalate",
+      "holdout-05": "escalate",
+      "holdout-08": "clear",
+      "holdout-35": "escalate",
+      "holdout-07": "escalate",
+      "holdout-13": "escalate",
+      "holdout-46": "clear",
+      "holdout-04": "clear",
+      "holdout-25": "escalate",
+      "holdout-21": "escalate",
+      "holdout-33": "escalate",
+      "holdout-38": "clear",
+      "holdout-34": "clear",
+      "holdout-27": "escalate",
+      "holdout-47": "escalate",
+      "holdout-24": "clear",
+      "holdout-40": "clear",
+      "holdout-02": "clear",
+      "holdout-42": "clear",
+      "holdout-30": "clear",
+      "holdout-29": "escalate",
+      "holdout-31": "escalate",
+      "holdout-10": "clear",
+      "holdout-09": "escalate",
+      "holdout-36": "clear",
+      "holdout-41": "escalate",
+      "holdout-03": "escalate",
+      "holdout-19": "escalate",
+      "holdout-37": "escalate",
+      "holdout-00": "clear",
+      "holdout-12": "clear",
+      "holdout-18": "clear",
+      "holdout-28": "clear",
+      "holdout-44": "clear",
+      "holdout-43": "escalate",
+      "holdout-32": "clear",
+      "holdout-20": "clear"
+    },
+    "staged": {
+      "initial": {
+        "rules": [
+          [
+            "<=",
+            "field_1",
+            "field_6"
+          ],
+          [
+            "<",
+            "field_1",
+            "field_6"
+          ]
+        ],
+        "cost": 1,
+        "candidates_examined": 30
+      },
+      "challenges": [
+        {
+          "rule": [
+            "<=",
+            "field_1",
+            "field_6"
+          ],
+          "contradictions": [
+            "discover-10",
+            "discover-21",
+            "discover-31",
+            "discover-00",
+            "discover-19",
+            "discover-16",
+            "discover-06",
+            "discover-18",
+            "discover-02",
+            "discover-17",
+            "discover-09",
+            "discover-32",
+            "discover-15",
+            "discover-39",
+            "discover-05",
+            "discover-23",
+            "discover-25",
+            "discover-34",
+            "discover-01",
+            "discover-33"
+          ]
+        },
+        {
+          "rule": [
+            "<",
+            "field_1",
+            "field_6"
+          ],
+          "contradictions": [
+            "discover-10",
+            "discover-21",
+            "discover-31",
+            "discover-00",
+            "discover-19",
+            "discover-16",
+            "discover-06",
+            "discover-18",
+            "discover-02",
+            "discover-17",
+            "discover-09",
+            "discover-32",
+            "discover-15",
+            "discover-39",
+            "discover-05",
+            "discover-23",
+            "discover-25",
+            "discover-34",
+            "discover-01",
+            "discover-33"
+          ]
+        }
+      ],
+      "revised": {
+        "rules": [
+          [
+            "<=",
+            [
+              "+",
+              "field_1",
+              "field_6"
+            ],
+            "field_5"
+          ],
+          [
+            "<=",
+            "field_6",
+            [
+              "-",
+              "field_5",
+              "field_1"
+            ]
+          ],
+          [
+            "<=",
+            "field_1",
+            [
+              "-",
+              "field_5",
+              "field_6"
+            ]
+          ]
+        ],
+        "cost": 2,
+        "candidates_examined": 975,
+        "action": "searched"
+      },
+      "before": {
+        "holdout-17": "clear",
+        "holdout-14": "clear",
+        "holdout-11": "clear",
+        "holdout-26": "clear",
+        "holdout-45": "clear",
+        "holdout-22": "clear",
+        "holdout-23": "clear",
+        "holdout-01": "clear",
+        "holdout-06": "escalate",
+        "holdout-15": "escalate",
+        "holdout-16": "escalate",
+        "holdout-39": "escalate",
+        "holdout-05": "clear",
+        "holdout-08": "clear",
+        "holdout-35": "clear",
+        "holdout-07": "escalate",
+        "holdout-13": "escalate",
+        "holdout-46": "clear",
+        "holdout-04": "clear",
+        "holdout-25": "clear",
+        "holdout-21": "escalate",
+        "holdout-33": "clear",
+        "holdout-38": "clear",
+        "holdout-34": "escalate",
+        "holdout-27": "clear",
+        "holdout-47": "clear",
+        "holdout-24": "escalate",
+        "holdout-40": "clear",
+        "holdout-02": "clear",
+        "holdout-42": "escalate",
+        "holdout-30": "clear",
+        "holdout-29": "clear",
+        "holdout-31": "escalate",
+        "holdout-10": "escalate",
+        "holdout-09": "escalate",
+        "holdout-36": "escalate",
+        "holdout-41": "clear",
+        "holdout-03": "clear",
+        "holdout-19": "clear",
+        "holdout-37": "clear",
+        "holdout-00": "clear",
+        "holdout-12": "clear",
+        "holdout-18": "escalate",
+        "holdout-28": "clear",
+        "holdout-44": "clear",
+        "holdout-43": "clear",
+        "holdout-32": "clear",
+        "holdout-20": "escalate"
+      },
+      "after": {
+        "holdout-17": "escalate",
+        "holdout-14": "clear",
+        "holdout-11": "escalate",
+        "holdout-26": "clear",
+        "holdout-45": "escalate",
+        "holdout-22": "clear",
+        "holdout-23": "escalate",
+        "holdout-01": "escalate",
+        "holdout-06": "clear",
+        "holdout-15": "escalate",
+        "holdout-16": "clear",
+        "holdout-39": "escalate",
+        "holdout-05": "escalate",
+        "holdout-08": "clear",
+        "holdout-35": "escalate",
+        "holdout-07": "escalate",
+        "holdout-13": "escalate",
+        "holdout-46": "clear",
+        "holdout-04": "clear",
+        "holdout-25": "escalate",
+        "holdout-21": "escalate",
+        "holdout-33": "escalate",
+        "holdout-38": "clear",
+        "holdout-34": "clear",
+        "holdout-27": "escalate",
+        "holdout-47": "escalate",
+        "holdout-24": "clear",
+        "holdout-40": "clear",
+        "holdout-02": "clear",
+        "holdout-42": "clear",
+        "holdout-30": "clear",
+        "holdout-29": "escalate",
+        "holdout-31": "escalate",
+        "holdout-10": "clear",
+        "holdout-09": "escalate",
+        "holdout-36": "clear",
+        "holdout-41": "escalate",
+        "holdout-03": "escalate",
+        "holdout-19": "escalate",
+        "holdout-37": "escalate",
+        "holdout-00": "clear",
+        "holdout-12": "clear",
+        "holdout-18": "clear",
+        "holdout-28": "clear",
+        "holdout-44": "clear",
+        "holdout-43": "escalate",
+        "holdout-32": "clear",
+        "holdout-20": "clear"
+      }
+    },
+    "pooled": {
+      "initial": {
+        "rules": [
+          [
+            "<=",
+            "field_1",
+            "field_6"
+          ],
+          [
+            "<",
+            "field_1",
+            "field_6"
+          ]
+        ],
+        "cost": 1,
+        "candidates_examined": 30
+      },
+      "challenges": [
+        {
+          "rule": [
+            "<=",
+            "field_1",
+            "field_6"
+          ],
+          "contradictions": [
+            "discover-10",
+            "discover-21",
+            "discover-31",
+            "discover-00",
+            "discover-19",
+            "discover-16",
+            "discover-06",
+            "discover-18",
+            "discover-02",
+            "discover-17",
+            "discover-09",
+            "discover-32",
+            "discover-15",
+            "discover-39",
+            "discover-05",
+            "discover-23",
+            "discover-25",
+            "discover-34",
+            "discover-01",
+            "discover-33"
+          ]
+        },
+        {
+          "rule": [
+            "<",
+            "field_1",
+            "field_6"
+          ],
+          "contradictions": [
+            "discover-10",
+            "discover-21",
+            "discover-31",
+            "discover-00",
+            "discover-19",
+            "discover-16",
+            "discover-06",
+            "discover-18",
+            "discover-02",
+            "discover-17",
+            "discover-09",
+            "discover-32",
+            "discover-15",
+            "discover-39",
+            "discover-05",
+            "discover-23",
+            "discover-25",
+            "discover-34",
+            "discover-01",
+            "discover-33"
+          ]
+        }
+      ],
+      "revised": {
+        "rules": [
+          [
+            "<=",
+            [
+              "+",
+              "field_1",
+              "field_6"
+            ],
+            "field_5"
+          ],
+          [
+            "<=",
+            "field_6",
+            [
+              "-",
+              "field_5",
+              "field_1"
+            ]
+          ],
+          [
+            "<=",
+            "field_1",
+            [
+              "-",
+              "field_5",
+              "field_6"
+            ]
+          ]
+        ],
+        "cost": 2,
+        "candidates_examined": 975,
+        "action": "searched"
+      },
+      "before": {
+        "holdout-17": "clear",
+        "holdout-14": "clear",
+        "holdout-11": "clear",
+        "holdout-26": "clear",
+        "holdout-45": "clear",
+        "holdout-22": "clear",
+        "holdout-23": "clear",
+        "holdout-01": "clear",
+        "holdout-06": "escalate",
+        "holdout-15": "escalate",
+        "holdout-16": "escalate",
+        "holdout-39": "escalate",
+        "holdout-05": "clear",
+        "holdout-08": "clear",
+        "holdout-35": "clear",
+        "holdout-07": "escalate",
+        "holdout-13": "escalate",
+        "holdout-46": "clear",
+        "holdout-04": "clear",
+        "holdout-25": "clear",
+        "holdout-21": "escalate",
+        "holdout-33": "clear",
+        "holdout-38": "clear",
+        "holdout-34": "escalate",
+        "holdout-27": "clear",
+        "holdout-47": "clear",
+        "holdout-24": "escalate",
+        "holdout-40": "clear",
+        "holdout-02": "clear",
+        "holdout-42": "escalate",
+        "holdout-30": "clear",
+        "holdout-29": "clear",
+        "holdout-31": "escalate",
+        "holdout-10": "escalate",
+        "holdout-09": "escalate",
+        "holdout-36": "escalate",
+        "holdout-41": "clear",
+        "holdout-03": "clear",
+        "holdout-19": "clear",
+        "holdout-37": "clear",
+        "holdout-00": "clear",
+        "holdout-12": "clear",
+        "holdout-18": "escalate",
+        "holdout-28": "clear",
+        "holdout-44": "clear",
+        "holdout-43": "clear",
+        "holdout-32": "clear",
+        "holdout-20": "escalate"
+      },
+      "after": {
+        "holdout-17": "escalate",
+        "holdout-14": "clear",
+        "holdout-11": "escalate",
+        "holdout-26": "clear",
+        "holdout-45": "escalate",
+        "holdout-22": "clear",
+        "holdout-23": "escalate",
+        "holdout-01": "escalate",
+        "holdout-06": "clear",
+        "holdout-15": "escalate",
+        "holdout-16": "clear",
+        "holdout-39": "escalate",
+        "holdout-05": "escalate",
+        "holdout-08": "clear",
+        "holdout-35": "escalate",
+        "holdout-07": "escalate",
+        "holdout-13": "escalate",
+        "holdout-46": "clear",
+        "holdout-04": "clear",
+        "holdout-25": "escalate",
+        "holdout-21": "escalate",
+        "holdout-33": "escalate",
+        "holdout-38": "clear",
+        "holdout-34": "clear",
+        "holdout-27": "escalate",
+        "holdout-47": "escalate",
+        "holdout-24": "clear",
+        "holdout-40": "clear",
+        "holdout-02": "clear",
+        "holdout-42": "clear",
+        "holdout-30": "clear",
+        "holdout-29": "escalate",
+        "holdout-31": "escalate",
+        "holdout-10": "clear",
+        "holdout-09": "escalate",
+        "holdout-36": "clear",
+        "holdout-41": "escalate",
+        "holdout-03": "escalate",
+        "holdout-19": "escalate",
+        "holdout-37": "escalate",
+        "holdout-00": "clear",
+        "holdout-12": "clear",
+        "holdout-18": "clear",
+        "holdout-28": "clear",
+        "holdout-44": "clear",
+        "holdout-43": "escalate",
+        "holdout-32": "clear",
+        "holdout-20": "clear"
+      }
+    },
+    "scores": {
+      "initial": {
+        "correct": 22,
+        "false_alerts": 9,
+        "incorrect_clearances": 17,
+        "reviews": 0
+      },
+      "staged": {
+        "correct": 48,
+        "false_alerts": 0,
+        "incorrect_clearances": 0,
+        "reviews": 0
+      },
+      "pooled": {
+        "correct": 48,
+        "false_alerts": 0,
+        "incorrect_clearances": 0,
+        "reviews": 0
+      }
+    }
+  },
+  "balance": {
+    "fields_by_source": {
+      "A": [
+        "field_5",
+        "field_6"
+      ],
+      "B": [
+        "field_1",
+        "field_4"
+      ],
+      "C": [
+        "field_3",
+        "field_2"
+      ]
+    },
+    "initial_examples": [
+      {
+        "id": "initial-04",
+        "audit": {
+          "field_6": -261,
+          "field_5": 6,
+          "field_1": 23,
+          "field_4": -34
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-06",
+        "audit": {
+          "field_5": 31,
+          "field_6": -104,
+          "field_1": 40,
+          "field_4": -1
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-02",
+        "audit": {
+          "field_6": 111,
+          "field_5": 31,
+          "field_1": 64,
+          "field_4": 187
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-11",
+        "audit": {
+          "field_6": -211,
+          "field_5": 73,
+          "field_1": 21,
+          "field_4": 92
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-10",
+        "audit": {
+          "field_5": 2,
+          "field_6": 154,
+          "field_1": 23,
+          "field_4": -161
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-09",
+        "audit": {
+          "field_6": -43,
+          "field_5": 41,
+          "field_1": 14,
+          "field_4": 9
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-07",
+        "audit": {
+          "field_6": -54,
+          "field_5": 74,
+          "field_1": 45,
+          "field_4": 53
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-01",
+        "audit": {
+          "field_5": 87,
+          "field_6": 162,
+          "field_4": 240,
+          "field_1": 51
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-08",
+        "audit": {
+          "field_5": 15,
+          "field_6": -285,
+          "field_4": 216,
+          "field_1": 26
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-03",
+        "audit": {
+          "field_6": -40,
+          "field_5": 91,
+          "field_1": 85,
+          "field_4": 182
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-05",
+        "audit": {
+          "field_6": -75,
+          "field_5": 28,
+          "field_4": 146,
+          "field_1": 26
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-00",
+        "audit": {
+          "field_5": 50,
+          "field_6": 119,
+          "field_4": -100,
+          "field_1": 83
+        },
+        "consistent": true
+      }
+    ],
+    "discovery_examples": [
+      {
+        "id": "discover-05",
+        "audit": {
+          "field_6": 78,
+          "field_5": 30,
+          "field_4": -62,
+          "field_1": 19,
+          "field_2": 293,
+          "field_3": 15
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-34",
+        "audit": {
+          "field_5": 63,
+          "field_6": -291,
+          "field_1": 77,
+          "field_4": -22,
+          "field_3": -14,
+          "field_2": 44
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-16",
+        "audit": {
+          "field_5": 33,
+          "field_6": -46,
+          "field_1": 89,
+          "field_4": -68,
+          "field_3": -56,
+          "field_2": -144
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-33",
+        "audit": {
+          "field_6": 205,
+          "field_5": 39,
+          "field_4": -245,
+          "field_1": 10,
+          "field_2": -123,
+          "field_3": 41
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-21",
+        "audit": {
+          "field_5": 56,
+          "field_6": 193,
+          "field_1": 88,
+          "field_4": 84,
+          "field_3": -39,
+          "field_2": -249
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-20",
+        "audit": {
+          "field_6": 95,
+          "field_5": 41,
+          "field_4": 193,
+          "field_1": 73,
+          "field_3": -32,
+          "field_2": -63
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-30",
+        "audit": {
+          "field_5": 89,
+          "field_6": 67,
+          "field_4": 291,
+          "field_1": 40,
+          "field_2": 167,
+          "field_3": 49
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-08",
+        "audit": {
+          "field_5": 91,
+          "field_6": 263,
+          "field_4": 164,
+          "field_1": 84,
+          "field_2": 90,
+          "field_3": 7
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-18",
+        "audit": {
+          "field_5": 31,
+          "field_6": -59,
+          "field_1": 66,
+          "field_4": 262,
+          "field_3": -35,
+          "field_2": 168
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-27",
+        "audit": {
+          "field_5": 34,
+          "field_6": 5,
+          "field_4": 223,
+          "field_1": 84,
+          "field_3": -47,
+          "field_2": 175
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-19",
+        "audit": {
+          "field_6": -185,
+          "field_5": 45,
+          "field_1": 64,
+          "field_4": -221,
+          "field_3": -23,
+          "field_2": 258
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-15",
+        "audit": {
+          "field_5": 51,
+          "field_6": -294,
+          "field_4": -127,
+          "field_1": 24,
+          "field_3": 40,
+          "field_2": -52
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-37",
+        "audit": {
+          "field_5": 40,
+          "field_6": -52,
+          "field_4": 251,
+          "field_1": 46,
+          "field_3": -14,
+          "field_2": -295
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-22",
+        "audit": {
+          "field_5": 41,
+          "field_6": 256,
+          "field_1": 78,
+          "field_4": 285,
+          "field_3": -37,
+          "field_2": 177
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-12",
+        "audit": {
+          "field_6": -221,
+          "field_5": 15,
+          "field_4": -276,
+          "field_1": 10,
+          "field_3": 5,
+          "field_2": -272
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-11",
+        "audit": {
+          "field_5": 50,
+          "field_6": 156,
+          "field_4": -33,
+          "field_1": 37,
+          "field_2": 255,
+          "field_3": 22
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-29",
+        "audit": {
+          "field_6": -105,
+          "field_5": 81,
+          "field_4": -29,
+          "field_1": 40,
+          "field_2": 139,
+          "field_3": 30
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-24",
+        "audit": {
+          "field_6": 137,
+          "field_5": 87,
+          "field_4": 279,
+          "field_1": 47,
+          "field_3": 40,
+          "field_2": 43
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-35",
+        "audit": {
+          "field_6": -252,
+          "field_5": 23,
+          "field_4": 291,
+          "field_1": 71,
+          "field_3": -41,
+          "field_2": -53
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-03",
+        "audit": {
+          "field_6": 278,
+          "field_5": 87,
+          "field_1": 48,
+          "field_4": -12,
+          "field_3": 29,
+          "field_2": 271
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-01",
+        "audit": {
+          "field_5": 73,
+          "field_6": 189,
+          "field_4": -120,
+          "field_1": 52,
+          "field_3": 20,
+          "field_2": 197
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-06",
+        "audit": {
+          "field_5": 50,
+          "field_6": -168,
+          "field_1": 89,
+          "field_4": -109,
+          "field_2": -118,
+          "field_3": -39
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-02",
+        "audit": {
+          "field_5": 13,
+          "field_6": -300,
+          "field_4": -1,
+          "field_1": 20,
+          "field_3": -7,
+          "field_2": -29
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-39",
+        "audit": {
+          "field_5": 75,
+          "field_6": 284,
+          "field_4": -251,
+          "field_1": 61,
+          "field_2": -293,
+          "field_3": 25
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-10",
+        "audit": {
+          "field_6": 68,
+          "field_5": 32,
+          "field_4": -270,
+          "field_1": 65,
+          "field_3": -33,
+          "field_2": 286
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-07",
+        "audit": {
+          "field_5": 11,
+          "field_6": 58,
+          "field_4": -242,
+          "field_1": 26,
+          "field_2": -154,
+          "field_3": -6
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-38",
+        "audit": {
+          "field_6": -203,
+          "field_5": 38,
+          "field_4": 192,
+          "field_1": 29,
+          "field_2": -139,
+          "field_3": 9
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-09",
+        "audit": {
+          "field_6": 102,
+          "field_5": 19,
+          "field_1": 69,
+          "field_4": -117,
+          "field_3": -49,
+          "field_2": -138
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-31",
+        "audit": {
+          "field_5": 20,
+          "field_6": 215,
+          "field_1": 79,
+          "field_4": 199,
+          "field_3": -67,
+          "field_2": 26
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-13",
+        "audit": {
+          "field_6": -159,
+          "field_5": 34,
+          "field_1": 71,
+          "field_4": -298,
+          "field_3": -25,
+          "field_2": 60
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-36",
+        "audit": {
+          "field_6": -240,
+          "field_5": 20,
+          "field_4": -22,
+          "field_1": 9,
+          "field_3": 11,
+          "field_2": -256
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-28",
+        "audit": {
+          "field_5": 35,
+          "field_6": -56,
+          "field_4": -62,
+          "field_1": 92,
+          "field_3": -57,
+          "field_2": -172
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-17",
+        "audit": {
+          "field_5": 53,
+          "field_6": 178,
+          "field_1": 79,
+          "field_4": -3,
+          "field_2": -51,
+          "field_3": -35
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-23",
+        "audit": {
+          "field_5": 43,
+          "field_6": -22,
+          "field_4": 275,
+          "field_1": 64,
+          "field_3": -35,
+          "field_2": -33
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-25",
+        "audit": {
+          "field_6": -234,
+          "field_5": 41,
+          "field_4": 106,
+          "field_1": 50,
+          "field_3": -8,
+          "field_2": -32
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-32",
+        "audit": {
+          "field_5": 88,
+          "field_6": -8,
+          "field_4": -282,
+          "field_1": 8,
+          "field_3": 80,
+          "field_2": -128
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-14",
+        "audit": {
+          "field_6": -69,
+          "field_5": 14,
+          "field_1": 76,
+          "field_4": -268,
+          "field_3": -62,
+          "field_2": 258
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-26",
+        "audit": {
+          "field_5": 14,
+          "field_6": 29,
+          "field_4": 191,
+          "field_1": 93,
+          "field_3": -79,
+          "field_2": 256
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-00",
+        "audit": {
+          "field_5": 63,
+          "field_6": 115,
+          "field_1": 13,
+          "field_4": 262,
+          "field_3": 50,
+          "field_2": 118
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-04",
+        "audit": {
+          "field_6": -137,
+          "field_5": 29,
+          "field_1": 39,
+          "field_4": 279,
+          "field_2": 137,
+          "field_3": -10
+        },
+        "consistent": true
+      }
+    ],
+    "holdout_inputs": [
+      {
+        "id": "holdout-14",
+        "audit": {
+          "field_5": 95,
+          "field_6": 248,
+          "field_4": -294,
+          "field_1": 167,
+          "field_2": 262,
+          "field_3": -72
+        }
+      },
+      {
+        "id": "holdout-18",
+        "audit": {
+          "field_6": -240,
+          "field_5": 133,
+          "field_1": 145,
+          "field_4": 261,
+          "field_3": -12,
+          "field_2": -16
+        }
+      },
+      {
+        "id": "holdout-23",
+        "audit": {
+          "field_6": -130,
+          "field_5": 162,
+          "field_1": 163,
+          "field_4": -130,
+          "field_2": 140,
+          "field_3": -8
+        }
+      },
+      {
+        "id": "holdout-01",
+        "audit": {
+          "field_5": 107,
+          "field_6": 149,
+          "field_4": 22,
+          "field_1": 163,
+          "field_2": 218,
+          "field_3": -62
+        }
+      },
+      {
+        "id": "holdout-21",
+        "audit": {
+          "field_5": 146,
+          "field_6": -237,
+          "field_4": -60,
+          "field_1": 134,
+          "field_3": 13,
+          "field_2": 112
+        }
+      },
+      {
+        "id": "holdout-02",
+        "audit": {
+          "field_6": 217,
+          "field_5": 111,
+          "field_4": 198,
+          "field_1": 110,
+          "field_2": -127,
+          "field_3": 1
+        }
+      },
+      {
+        "id": "holdout-20",
+        "audit": {
+          "field_6": 124,
+          "field_5": 183,
+          "field_1": 148,
+          "field_4": 5,
+          "field_3": 35,
+          "field_2": 186
+        }
+      },
+      {
+        "id": "holdout-24",
+        "audit": {
+          "field_6": 16,
+          "field_5": 110,
+          "field_4": 132,
+          "field_1": 162,
+          "field_2": 118,
+          "field_3": -52
+        }
+      },
+      {
+        "id": "holdout-29",
+        "audit": {
+          "field_6": -17,
+          "field_5": 109,
+          "field_1": 104,
+          "field_4": 25,
+          "field_3": 8,
+          "field_2": 133
+        }
+      },
+      {
+        "id": "holdout-41",
+        "audit": {
+          "field_6": -30,
+          "field_5": 139,
+          "field_4": 91,
+          "field_1": 175,
+          "field_3": -42,
+          "field_2": 11
+        }
+      },
+      {
+        "id": "holdout-16",
+        "audit": {
+          "field_5": 137,
+          "field_6": -282,
+          "field_4": 50,
+          "field_1": 147,
+          "field_2": 258,
+          "field_3": -10
+        }
+      },
+      {
+        "id": "holdout-27",
+        "audit": {
+          "field_5": 117,
+          "field_6": -167,
+          "field_1": 181,
+          "field_4": 151,
+          "field_2": 293,
+          "field_3": -68
+        }
+      },
+      {
+        "id": "holdout-22",
+        "audit": {
+          "field_6": -157,
+          "field_5": 156,
+          "field_1": 132,
+          "field_4": 154,
+          "field_2": -196,
+          "field_3": 24
+        }
+      },
+      {
+        "id": "holdout-34",
+        "audit": {
+          "field_5": 111,
+          "field_6": 288,
+          "field_1": 137,
+          "field_4": 234,
+          "field_2": 292,
+          "field_3": -26
+        }
+      },
+      {
+        "id": "holdout-30",
+        "audit": {
+          "field_6": 203,
+          "field_5": 169,
+          "field_4": 124,
+          "field_1": 141,
+          "field_2": -279,
+          "field_3": 28
+        }
+      },
+      {
+        "id": "holdout-08",
+        "audit": {
+          "field_5": 176,
+          "field_6": 24,
+          "field_1": 135,
+          "field_4": -194,
+          "field_3": 41,
+          "field_2": -257
+        }
+      },
+      {
+        "id": "holdout-40",
+        "audit": {
+          "field_5": 127,
+          "field_6": 239,
+          "field_1": 98,
+          "field_4": -179,
+          "field_2": -65,
+          "field_3": 29
+        }
+      },
+      {
+        "id": "holdout-05",
+        "audit": {
+          "field_6": -205,
+          "field_5": 123,
+          "field_1": 140,
+          "field_4": -48,
+          "field_2": 161,
+          "field_3": -10
+        }
+      },
+      {
+        "id": "holdout-00",
+        "audit": {
+          "field_5": 145,
+          "field_6": 242,
+          "field_1": 117,
+          "field_4": 173,
+          "field_3": 28,
+          "field_2": 88
+        }
+      },
+      {
+        "id": "holdout-39",
+        "audit": {
+          "field_5": 176,
+          "field_6": 190,
+          "field_1": 136,
+          "field_4": -30,
+          "field_3": 42,
+          "field_2": -59
+        }
+      },
+      {
+        "id": "holdout-28",
+        "audit": {
+          "field_6": -85,
+          "field_5": 107,
+          "field_1": 129,
+          "field_4": 92,
+          "field_3": -22,
+          "field_2": -262
+        }
+      },
+      {
+        "id": "holdout-35",
+        "audit": {
+          "field_6": -57,
+          "field_5": 126,
+          "field_1": 138,
+          "field_4": 280,
+          "field_3": -6,
+          "field_2": -294
+        }
+      },
+      {
+        "id": "holdout-43",
+        "audit": {
+          "field_6": 82,
+          "field_5": 147,
+          "field_4": -177,
+          "field_1": 119,
+          "field_2": 227,
+          "field_3": 21
+        }
+      },
+      {
+        "id": "holdout-06",
+        "audit": {
+          "field_6": -176,
+          "field_5": 186,
+          "field_1": 174,
+          "field_4": 206,
+          "field_2": 37,
+          "field_3": 12
+        }
+      },
+      {
+        "id": "holdout-09",
+        "audit": {
+          "field_6": -263,
+          "field_5": 151,
+          "field_4": 189,
+          "field_1": 179,
+          "field_2": 68,
+          "field_3": -24
+        }
+      },
+      {
+        "id": "holdout-36",
+        "audit": {
+          "field_5": 132,
+          "field_6": -107,
+          "field_1": 98,
+          "field_4": -66,
+          "field_2": 197,
+          "field_3": 34
+        }
+      },
+      {
+        "id": "holdout-15",
+        "audit": {
+          "field_6": -11,
+          "field_5": 136,
+          "field_1": 112,
+          "field_4": 27,
+          "field_3": 10,
+          "field_2": 217
+        }
+      },
+      {
+        "id": "holdout-45",
+        "audit": {
+          "field_6": 144,
+          "field_5": 130,
+          "field_1": 99,
+          "field_4": 291,
+          "field_2": 51,
+          "field_3": 26
+        }
+      },
+      {
+        "id": "holdout-25",
+        "audit": {
+          "field_5": 168,
+          "field_6": -254,
+          "field_4": 6,
+          "field_1": 129,
+          "field_2": 261,
+          "field_3": 31
+        }
+      },
+      {
+        "id": "holdout-17",
+        "audit": {
+          "field_5": 101,
+          "field_6": -211,
+          "field_4": -278,
+          "field_1": 176,
+          "field_2": 7,
+          "field_3": -88
+        }
+      },
+      {
+        "id": "holdout-03",
+        "audit": {
+          "field_6": -152,
+          "field_5": 145,
+          "field_1": 184,
+          "field_4": 103,
+          "field_2": -106,
+          "field_3": -40
+        }
+      },
+      {
+        "id": "holdout-10",
+        "audit": {
+          "field_6": -111,
+          "field_5": 126,
+          "field_4": -90,
+          "field_1": 174,
+          "field_2": 221,
+          "field_3": -48
+        }
+      },
+      {
+        "id": "holdout-19",
+        "audit": {
+          "field_6": -264,
+          "field_5": 136,
+          "field_4": 296,
+          "field_1": 108,
+          "field_3": 41,
+          "field_2": 260
+        }
+      },
+      {
+        "id": "holdout-11",
+        "audit": {
+          "field_6": -138,
+          "field_5": 184,
+          "field_4": 273,
+          "field_1": 140,
+          "field_3": 41,
+          "field_2": -260
+        }
+      },
+      {
+        "id": "holdout-46",
+        "audit": {
+          "field_5": 107,
+          "field_6": -59,
+          "field_4": 67,
+          "field_1": 130,
+          "field_2": 223,
+          "field_3": -23
+        }
+      },
+      {
+        "id": "holdout-13",
+        "audit": {
+          "field_5": 176,
+          "field_6": -93,
+          "field_4": -226,
+          "field_1": 164,
+          "field_2": 287,
+          "field_3": 5
+        }
+      },
+      {
+        "id": "holdout-44",
+        "audit": {
+          "field_5": 120,
+          "field_6": 231,
+          "field_4": -219,
+          "field_1": 115,
+          "field_3": 5,
+          "field_2": -246
+        }
+      },
+      {
+        "id": "holdout-26",
+        "audit": {
+          "field_5": 160,
+          "field_6": -78,
+          "field_4": 55,
+          "field_1": 189,
+          "field_3": -29,
+          "field_2": 199
+        }
+      },
+      {
+        "id": "holdout-38",
+        "audit": {
+          "field_6": 22,
+          "field_5": 160,
+          "field_1": 148,
+          "field_4": 207,
+          "field_2": 190,
+          "field_3": 12
+        }
+      },
+      {
+        "id": "holdout-42",
+        "audit": {
+          "field_5": 102,
+          "field_6": 98,
+          "field_1": 138,
+          "field_4": -200,
+          "field_2": 6,
+          "field_3": -36
+        }
+      },
+      {
+        "id": "holdout-04",
+        "audit": {
+          "field_6": 84,
+          "field_5": 98,
+          "field_4": -232,
+          "field_1": 184,
+          "field_3": -86,
+          "field_2": 52
+        }
+      },
+      {
+        "id": "holdout-32",
+        "audit": {
+          "field_6": -53,
+          "field_5": 120,
+          "field_1": 114,
+          "field_4": -77,
+          "field_3": 6,
+          "field_2": -234
+        }
+      },
+      {
+        "id": "holdout-33",
+        "audit": {
+          "field_6": 299,
+          "field_5": 119,
+          "field_1": 94,
+          "field_4": 276,
+          "field_3": 38,
+          "field_2": 295
+        }
+      },
+      {
+        "id": "holdout-07",
+        "audit": {
+          "field_5": 154,
+          "field_6": 174,
+          "field_4": -53,
+          "field_1": 149,
+          "field_3": -9,
+          "field_2": -54
+        }
+      },
+      {
+        "id": "holdout-31",
+        "audit": {
+          "field_5": 160,
+          "field_6": 0,
+          "field_1": 148,
+          "field_4": 231,
+          "field_2": -153,
+          "field_3": -1
+        }
+      },
+      {
+        "id": "holdout-37",
+        "audit": {
+          "field_6": 188,
+          "field_5": 146,
+          "field_1": 100,
+          "field_4": -192,
+          "field_3": 38,
+          "field_2": -180
+        }
+      },
+      {
+        "id": "holdout-47",
+        "audit": {
+          "field_5": 125,
+          "field_6": -150,
+          "field_1": 179,
+          "field_4": 251,
+          "field_3": -62,
+          "field_2": 291
+        }
+      },
+      {
+        "id": "holdout-12",
+        "audit": {
+          "field_6": 236,
+          "field_5": 179,
+          "field_4": -256,
+          "field_1": 106,
+          "field_2": 162,
+          "field_3": 73
+        }
+      }
+    ],
+    "holdout_answer_key": {
+      "holdout-14": "clear",
+      "holdout-18": "clear",
+      "holdout-23": "escalate",
+      "holdout-01": "escalate",
+      "holdout-21": "escalate",
+      "holdout-02": "clear",
+      "holdout-20": "clear",
+      "holdout-24": "clear",
+      "holdout-29": "escalate",
+      "holdout-41": "escalate",
+      "holdout-16": "clear",
+      "holdout-27": "escalate",
+      "holdout-22": "clear",
+      "holdout-34": "clear",
+      "holdout-30": "clear",
+      "holdout-08": "clear",
+      "holdout-40": "clear",
+      "holdout-05": "escalate",
+      "holdout-00": "clear",
+      "holdout-39": "escalate",
+      "holdout-28": "clear",
+      "holdout-35": "escalate",
+      "holdout-43": "escalate",
+      "holdout-06": "clear",
+      "holdout-09": "escalate",
+      "holdout-36": "clear",
+      "holdout-15": "escalate",
+      "holdout-45": "escalate",
+      "holdout-25": "escalate",
+      "holdout-17": "escalate",
+      "holdout-03": "escalate",
+      "holdout-10": "clear",
+      "holdout-19": "escalate",
+      "holdout-11": "escalate",
+      "holdout-46": "clear",
+      "holdout-13": "escalate",
+      "holdout-44": "clear",
+      "holdout-26": "clear",
+      "holdout-38": "clear",
+      "holdout-42": "clear",
+      "holdout-04": "clear",
+      "holdout-32": "clear",
+      "holdout-33": "escalate",
+      "holdout-07": "escalate",
+      "holdout-31": "escalate",
+      "holdout-37": "escalate",
+      "holdout-47": "escalate",
+      "holdout-12": "clear"
+    },
+    "staged": {
+      "initial": {
+        "rules": [
+          [
+            "<=",
+            "field_5",
+            "field_1"
+          ],
+          [
+            "<",
+            "field_5",
+            "field_1"
+          ]
+        ],
+        "cost": 1,
+        "candidates_examined": 30
+      },
+      "challenges": [
+        {
+          "rule": [
+            "<=",
+            "field_5",
+            "field_1"
+          ],
+          "contradictions": [
+            "discover-21",
+            "discover-30",
+            "discover-08",
+            "discover-27",
+            "discover-19",
+            "discover-37",
+            "discover-12",
+            "discover-24",
+            "discover-35",
+            "discover-07",
+            "discover-38",
+            "discover-09",
+            "discover-31",
+            "discover-13",
+            "discover-36",
+            "discover-17",
+            "discover-23",
+            "discover-25",
+            "discover-32",
+            "discover-00"
+          ]
+        },
+        {
+          "rule": [
+            "<",
+            "field_5",
+            "field_1"
+          ],
+          "contradictions": [
+            "discover-21",
+            "discover-30",
+            "discover-08",
+            "discover-27",
+            "discover-19",
+            "discover-37",
+            "discover-12",
+            "discover-24",
+            "discover-35",
+            "discover-07",
+            "discover-38",
+            "discover-09",
+            "discover-31",
+            "discover-13",
+            "discover-36",
+            "discover-17",
+            "discover-23",
+            "discover-25",
+            "discover-32",
+            "discover-00"
+          ]
+        }
+      ],
+      "revised": {
+        "rules": [
+          [
+            "==",
+            [
+              "+",
+              "field_1",
+              "field_3"
+            ],
+            "field_5"
+          ],
+          [
+            "==",
+            [
+              "-",
+              "field_5",
+              "field_1"
+            ],
+            "field_3"
+          ],
+          [
+            "==",
+            [
+              "-",
+              "field_5",
+              "field_3"
+            ],
+            "field_1"
+          ]
+        ],
+        "cost": 2,
+        "candidates_examined": 975,
+        "action": "searched"
+      },
+      "before": {
+        "holdout-14": "clear",
+        "holdout-18": "clear",
+        "holdout-23": "clear",
+        "holdout-01": "clear",
+        "holdout-21": "escalate",
+        "holdout-02": "escalate",
+        "holdout-20": "escalate",
+        "holdout-24": "clear",
+        "holdout-29": "escalate",
+        "holdout-41": "clear",
+        "holdout-16": "clear",
+        "holdout-27": "clear",
+        "holdout-22": "escalate",
+        "holdout-34": "clear",
+        "holdout-30": "escalate",
+        "holdout-08": "escalate",
+        "holdout-40": "escalate",
+        "holdout-05": "clear",
+        "holdout-00": "escalate",
+        "holdout-39": "escalate",
+        "holdout-28": "clear",
+        "holdout-35": "clear",
+        "holdout-43": "escalate",
+        "holdout-06": "escalate",
+        "holdout-09": "clear",
+        "holdout-36": "escalate",
+        "holdout-15": "escalate",
+        "holdout-45": "escalate",
+        "holdout-25": "escalate",
+        "holdout-17": "clear",
+        "holdout-03": "clear",
+        "holdout-10": "clear",
+        "holdout-19": "escalate",
+        "holdout-11": "escalate",
+        "holdout-46": "clear",
+        "holdout-13": "escalate",
+        "holdout-44": "escalate",
+        "holdout-26": "clear",
+        "holdout-38": "escalate",
+        "holdout-42": "clear",
+        "holdout-04": "clear",
+        "holdout-32": "escalate",
+        "holdout-33": "escalate",
+        "holdout-07": "escalate",
+        "holdout-31": "escalate",
+        "holdout-37": "escalate",
+        "holdout-47": "clear",
+        "holdout-12": "escalate"
+      },
+      "after": {
+        "holdout-14": "clear",
+        "holdout-18": "clear",
+        "holdout-23": "escalate",
+        "holdout-01": "escalate",
+        "holdout-21": "escalate",
+        "holdout-02": "clear",
+        "holdout-20": "clear",
+        "holdout-24": "clear",
+        "holdout-29": "escalate",
+        "holdout-41": "escalate",
+        "holdout-16": "clear",
+        "holdout-27": "escalate",
+        "holdout-22": "clear",
+        "holdout-34": "clear",
+        "holdout-30": "clear",
+        "holdout-08": "clear",
+        "holdout-40": "clear",
+        "holdout-05": "escalate",
+        "holdout-00": "clear",
+        "holdout-39": "escalate",
+        "holdout-28": "clear",
+        "holdout-35": "escalate",
+        "holdout-43": "escalate",
+        "holdout-06": "clear",
+        "holdout-09": "escalate",
+        "holdout-36": "clear",
+        "holdout-15": "escalate",
+        "holdout-45": "escalate",
+        "holdout-25": "escalate",
+        "holdout-17": "escalate",
+        "holdout-03": "escalate",
+        "holdout-10": "clear",
+        "holdout-19": "escalate",
+        "holdout-11": "escalate",
+        "holdout-46": "clear",
+        "holdout-13": "escalate",
+        "holdout-44": "clear",
+        "holdout-26": "clear",
+        "holdout-38": "clear",
+        "holdout-42": "clear",
+        "holdout-04": "clear",
+        "holdout-32": "clear",
+        "holdout-33": "escalate",
+        "holdout-07": "escalate",
+        "holdout-31": "escalate",
+        "holdout-37": "escalate",
+        "holdout-47": "escalate",
+        "holdout-12": "clear"
+      }
+    },
+    "pooled": {
+      "initial": {
+        "rules": [
+          [
+            "<=",
+            "field_5",
+            "field_1"
+          ],
+          [
+            "<",
+            "field_5",
+            "field_1"
+          ]
+        ],
+        "cost": 1,
+        "candidates_examined": 30
+      },
+      "challenges": [
+        {
+          "rule": [
+            "<=",
+            "field_5",
+            "field_1"
+          ],
+          "contradictions": [
+            "discover-21",
+            "discover-30",
+            "discover-08",
+            "discover-27",
+            "discover-19",
+            "discover-37",
+            "discover-12",
+            "discover-24",
+            "discover-35",
+            "discover-07",
+            "discover-38",
+            "discover-09",
+            "discover-31",
+            "discover-13",
+            "discover-36",
+            "discover-17",
+            "discover-23",
+            "discover-25",
+            "discover-32",
+            "discover-00"
+          ]
+        },
+        {
+          "rule": [
+            "<",
+            "field_5",
+            "field_1"
+          ],
+          "contradictions": [
+            "discover-21",
+            "discover-30",
+            "discover-08",
+            "discover-27",
+            "discover-19",
+            "discover-37",
+            "discover-12",
+            "discover-24",
+            "discover-35",
+            "discover-07",
+            "discover-38",
+            "discover-09",
+            "discover-31",
+            "discover-13",
+            "discover-36",
+            "discover-17",
+            "discover-23",
+            "discover-25",
+            "discover-32",
+            "discover-00"
+          ]
+        }
+      ],
+      "revised": {
+        "rules": [
+          [
+            "==",
+            [
+              "+",
+              "field_1",
+              "field_3"
+            ],
+            "field_5"
+          ],
+          [
+            "==",
+            [
+              "-",
+              "field_5",
+              "field_1"
+            ],
+            "field_3"
+          ],
+          [
+            "==",
+            [
+              "-",
+              "field_5",
+              "field_3"
+            ],
+            "field_1"
+          ]
+        ],
+        "cost": 2,
+        "candidates_examined": 975,
+        "action": "searched"
+      },
+      "before": {
+        "holdout-14": "clear",
+        "holdout-18": "clear",
+        "holdout-23": "clear",
+        "holdout-01": "clear",
+        "holdout-21": "escalate",
+        "holdout-02": "escalate",
+        "holdout-20": "escalate",
+        "holdout-24": "clear",
+        "holdout-29": "escalate",
+        "holdout-41": "clear",
+        "holdout-16": "clear",
+        "holdout-27": "clear",
+        "holdout-22": "escalate",
+        "holdout-34": "clear",
+        "holdout-30": "escalate",
+        "holdout-08": "escalate",
+        "holdout-40": "escalate",
+        "holdout-05": "clear",
+        "holdout-00": "escalate",
+        "holdout-39": "escalate",
+        "holdout-28": "clear",
+        "holdout-35": "clear",
+        "holdout-43": "escalate",
+        "holdout-06": "escalate",
+        "holdout-09": "clear",
+        "holdout-36": "escalate",
+        "holdout-15": "escalate",
+        "holdout-45": "escalate",
+        "holdout-25": "escalate",
+        "holdout-17": "clear",
+        "holdout-03": "clear",
+        "holdout-10": "clear",
+        "holdout-19": "escalate",
+        "holdout-11": "escalate",
+        "holdout-46": "clear",
+        "holdout-13": "escalate",
+        "holdout-44": "escalate",
+        "holdout-26": "clear",
+        "holdout-38": "escalate",
+        "holdout-42": "clear",
+        "holdout-04": "clear",
+        "holdout-32": "escalate",
+        "holdout-33": "escalate",
+        "holdout-07": "escalate",
+        "holdout-31": "escalate",
+        "holdout-37": "escalate",
+        "holdout-47": "clear",
+        "holdout-12": "escalate"
+      },
+      "after": {
+        "holdout-14": "clear",
+        "holdout-18": "clear",
+        "holdout-23": "escalate",
+        "holdout-01": "escalate",
+        "holdout-21": "escalate",
+        "holdout-02": "clear",
+        "holdout-20": "clear",
+        "holdout-24": "clear",
+        "holdout-29": "escalate",
+        "holdout-41": "escalate",
+        "holdout-16": "clear",
+        "holdout-27": "escalate",
+        "holdout-22": "clear",
+        "holdout-34": "clear",
+        "holdout-30": "clear",
+        "holdout-08": "clear",
+        "holdout-40": "clear",
+        "holdout-05": "escalate",
+        "holdout-00": "clear",
+        "holdout-39": "escalate",
+        "holdout-28": "clear",
+        "holdout-35": "escalate",
+        "holdout-43": "escalate",
+        "holdout-06": "clear",
+        "holdout-09": "escalate",
+        "holdout-36": "clear",
+        "holdout-15": "escalate",
+        "holdout-45": "escalate",
+        "holdout-25": "escalate",
+        "holdout-17": "escalate",
+        "holdout-03": "escalate",
+        "holdout-10": "clear",
+        "holdout-19": "escalate",
+        "holdout-11": "escalate",
+        "holdout-46": "clear",
+        "holdout-13": "escalate",
+        "holdout-44": "clear",
+        "holdout-26": "clear",
+        "holdout-38": "clear",
+        "holdout-42": "clear",
+        "holdout-04": "clear",
+        "holdout-32": "clear",
+        "holdout-33": "escalate",
+        "holdout-07": "escalate",
+        "holdout-31": "escalate",
+        "holdout-37": "escalate",
+        "holdout-47": "escalate",
+        "holdout-12": "clear"
+      }
+    },
+    "scores": {
+      "initial": {
+        "correct": 25,
+        "false_alerts": 13,
+        "incorrect_clearances": 10,
+        "reviews": 0
+      },
+      "staged": {
+        "correct": 48,
+        "false_alerts": 0,
+        "incorrect_clearances": 0,
+        "reviews": 0
+      },
+      "pooled": {
+        "correct": 48,
+        "false_alerts": 0,
+        "incorrect_clearances": 0,
+        "reviews": 0
+      }
+    }
+  },
+  "ordering": {
+    "fields_by_source": {
+      "A": [
+        "field_1",
+        "field_2"
+      ],
+      "B": [
+        "field_6",
+        "field_3"
+      ],
+      "C": [
+        "field_5",
+        "field_4"
+      ]
+    },
+    "initial_examples": [
+      {
+        "id": "initial-04",
+        "audit": {
+          "field_2": -283,
+          "field_1": 34,
+          "field_6": 79,
+          "field_3": -158
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-09",
+        "audit": {
+          "field_1": 75,
+          "field_2": -9,
+          "field_3": 152,
+          "field_6": 8
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-10",
+        "audit": {
+          "field_2": -53,
+          "field_1": 17,
+          "field_6": 86,
+          "field_3": -229
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-07",
+        "audit": {
+          "field_1": 10,
+          "field_2": -267,
+          "field_6": 6,
+          "field_3": 228
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-05",
+        "audit": {
+          "field_1": 48,
+          "field_2": 144,
+          "field_6": 9,
+          "field_3": 31
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-11",
+        "audit": {
+          "field_2": 250,
+          "field_1": 22,
+          "field_3": -269,
+          "field_6": 9
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-00",
+        "audit": {
+          "field_2": -271,
+          "field_1": 63,
+          "field_6": 77,
+          "field_3": -58
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-06",
+        "audit": {
+          "field_2": -170,
+          "field_1": 7,
+          "field_3": -205,
+          "field_6": 30
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-02",
+        "audit": {
+          "field_1": 14,
+          "field_2": 285,
+          "field_6": 72,
+          "field_3": 91
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-01",
+        "audit": {
+          "field_1": 93,
+          "field_2": -202,
+          "field_3": -180,
+          "field_6": 3
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-03",
+        "audit": {
+          "field_2": 5,
+          "field_1": 57,
+          "field_3": 165,
+          "field_6": 26
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-08",
+        "audit": {
+          "field_1": 5,
+          "field_2": 80,
+          "field_3": -94,
+          "field_6": 43
+        },
+        "consistent": true
+      }
+    ],
+    "discovery_examples": [
+      {
+        "id": "discover-35",
+        "audit": {
+          "field_2": 83,
+          "field_1": 82,
+          "field_3": 130,
+          "field_6": 17,
+          "field_4": -275,
+          "field_5": 71
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-05",
+        "audit": {
+          "field_2": -193,
+          "field_1": 24,
+          "field_3": -129,
+          "field_6": 59,
+          "field_5": 22,
+          "field_4": -222
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-25",
+        "audit": {
+          "field_2": -61,
+          "field_1": 1,
+          "field_6": 82,
+          "field_3": -113,
+          "field_4": -38,
+          "field_5": -14
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-39",
+        "audit": {
+          "field_1": 70,
+          "field_2": 291,
+          "field_3": -12,
+          "field_6": 19,
+          "field_5": 62,
+          "field_4": -86
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-23",
+        "audit": {
+          "field_1": 73,
+          "field_2": -84,
+          "field_6": 83,
+          "field_3": 257,
+          "field_4": -120,
+          "field_5": 66
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-29",
+        "audit": {
+          "field_2": -38,
+          "field_1": 86,
+          "field_3": 167,
+          "field_6": 37,
+          "field_4": -19,
+          "field_5": 85
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-38",
+        "audit": {
+          "field_1": 72,
+          "field_2": -182,
+          "field_6": 48,
+          "field_3": -69,
+          "field_4": 166,
+          "field_5": 85
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-20",
+        "audit": {
+          "field_2": 27,
+          "field_1": 40,
+          "field_6": 71,
+          "field_3": 105,
+          "field_5": 53,
+          "field_4": 217
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-27",
+        "audit": {
+          "field_1": 77,
+          "field_2": -121,
+          "field_6": 72,
+          "field_3": -68,
+          "field_5": 63,
+          "field_4": -274
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-19",
+        "audit": {
+          "field_1": 71,
+          "field_2": -55,
+          "field_3": -153,
+          "field_6": 82,
+          "field_4": 287,
+          "field_5": 71
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-22",
+        "audit": {
+          "field_2": 266,
+          "field_1": 64,
+          "field_6": 17,
+          "field_3": 22,
+          "field_5": 70,
+          "field_4": -157
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-08",
+        "audit": {
+          "field_1": 62,
+          "field_2": -227,
+          "field_3": -143,
+          "field_6": 18,
+          "field_4": 64,
+          "field_5": 64
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-12",
+        "audit": {
+          "field_1": 35,
+          "field_2": -281,
+          "field_6": 38,
+          "field_3": -96,
+          "field_5": 46,
+          "field_4": 1
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-10",
+        "audit": {
+          "field_1": 34,
+          "field_2": -19,
+          "field_6": 77,
+          "field_3": 88,
+          "field_4": -157,
+          "field_5": 49
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-02",
+        "audit": {
+          "field_2": 297,
+          "field_1": 20,
+          "field_6": 59,
+          "field_3": 174,
+          "field_4": 180,
+          "field_5": 23
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-37",
+        "audit": {
+          "field_1": 84,
+          "field_2": -206,
+          "field_3": 40,
+          "field_6": 86,
+          "field_4": 44,
+          "field_5": 78
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-11",
+        "audit": {
+          "field_2": 156,
+          "field_1": 23,
+          "field_3": -77,
+          "field_6": 50,
+          "field_4": -277,
+          "field_5": 14
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-16",
+        "audit": {
+          "field_1": 87,
+          "field_2": 128,
+          "field_3": -120,
+          "field_6": 65,
+          "field_4": -293,
+          "field_5": 98
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-06",
+        "audit": {
+          "field_2": -7,
+          "field_1": 90,
+          "field_6": 89,
+          "field_3": 229,
+          "field_5": 94,
+          "field_4": 95
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-14",
+        "audit": {
+          "field_2": 255,
+          "field_1": 68,
+          "field_6": 71,
+          "field_3": 101,
+          "field_4": -118,
+          "field_5": 73
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-01",
+        "audit": {
+          "field_1": 71,
+          "field_2": -147,
+          "field_3": -36,
+          "field_6": 49,
+          "field_4": -152,
+          "field_5": 60
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-24",
+        "audit": {
+          "field_2": -225,
+          "field_1": 81,
+          "field_6": 23,
+          "field_3": -295,
+          "field_5": 90,
+          "field_4": -286
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-07",
+        "audit": {
+          "field_1": 42,
+          "field_2": -81,
+          "field_6": 59,
+          "field_3": -94,
+          "field_5": 41,
+          "field_4": -160
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-04",
+        "audit": {
+          "field_2": 50,
+          "field_1": 70,
+          "field_6": 47,
+          "field_3": -292,
+          "field_5": 80,
+          "field_4": 193
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-30",
+        "audit": {
+          "field_2": -271,
+          "field_1": 29,
+          "field_6": 90,
+          "field_3": -229,
+          "field_4": 173,
+          "field_5": 44
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-15",
+        "audit": {
+          "field_1": 51,
+          "field_2": -229,
+          "field_3": 279,
+          "field_6": 28,
+          "field_5": 48,
+          "field_4": 208
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-36",
+        "audit": {
+          "field_2": -117,
+          "field_1": 46,
+          "field_6": 10,
+          "field_3": 196,
+          "field_5": 48,
+          "field_4": 204
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-17",
+        "audit": {
+          "field_2": 9,
+          "field_1": 86,
+          "field_3": 84,
+          "field_6": 79,
+          "field_4": -192,
+          "field_5": 72
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-32",
+        "audit": {
+          "field_1": 6,
+          "field_2": 13,
+          "field_6": 76,
+          "field_3": 234,
+          "field_4": 83,
+          "field_5": 15
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-09",
+        "audit": {
+          "field_2": -195,
+          "field_1": 65,
+          "field_3": 61,
+          "field_6": 23,
+          "field_5": 54,
+          "field_4": -100
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-18",
+        "audit": {
+          "field_2": 291,
+          "field_1": 3,
+          "field_6": 53,
+          "field_3": -61,
+          "field_4": -74,
+          "field_5": 17
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-33",
+        "audit": {
+          "field_2": -20,
+          "field_1": 30,
+          "field_3": -208,
+          "field_6": 71,
+          "field_5": 23,
+          "field_4": 138
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-00",
+        "audit": {
+          "field_2": -136,
+          "field_1": 32,
+          "field_6": 80,
+          "field_3": 188,
+          "field_4": 241,
+          "field_5": 38
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-34",
+        "audit": {
+          "field_2": -22,
+          "field_1": 79,
+          "field_3": -164,
+          "field_6": 91,
+          "field_5": 86,
+          "field_4": -207
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-26",
+        "audit": {
+          "field_1": 51,
+          "field_2": 182,
+          "field_6": 90,
+          "field_3": 247,
+          "field_4": 130,
+          "field_5": 53
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-03",
+        "audit": {
+          "field_2": -140,
+          "field_1": 66,
+          "field_6": 55,
+          "field_3": -3,
+          "field_4": 59,
+          "field_5": 59
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-31",
+        "audit": {
+          "field_1": 1,
+          "field_2": 70,
+          "field_3": -195,
+          "field_6": 17,
+          "field_4": -247,
+          "field_5": 1
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-13",
+        "audit": {
+          "field_1": 50,
+          "field_2": 269,
+          "field_3": 80,
+          "field_6": 25,
+          "field_4": 192,
+          "field_5": 38
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-21",
+        "audit": {
+          "field_2": -147,
+          "field_1": 60,
+          "field_6": 47,
+          "field_3": -5,
+          "field_4": 151,
+          "field_5": 55
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-28",
+        "audit": {
+          "field_1": 56,
+          "field_2": 121,
+          "field_3": 23,
+          "field_6": 66,
+          "field_5": 70,
+          "field_4": -288
+        },
+        "consistent": true
+      }
+    ],
+    "holdout_inputs": [
+      {
+        "id": "holdout-30",
+        "audit": {
+          "field_1": 138,
+          "field_2": 80,
+          "field_6": 119,
+          "field_3": -106,
+          "field_4": -285,
+          "field_5": 149
+        }
+      },
+      {
+        "id": "holdout-39",
+        "audit": {
+          "field_1": 141,
+          "field_2": 266,
+          "field_3": -8,
+          "field_6": 103,
+          "field_5": 135,
+          "field_4": 131
+        }
+      },
+      {
+        "id": "holdout-32",
+        "audit": {
+          "field_1": 158,
+          "field_2": 86,
+          "field_6": 115,
+          "field_3": -57,
+          "field_5": 172,
+          "field_4": 202
+        }
+      },
+      {
+        "id": "holdout-19",
+        "audit": {
+          "field_1": 166,
+          "field_2": -269,
+          "field_3": -192,
+          "field_6": 132,
+          "field_5": 158,
+          "field_4": -280
+        }
+      },
+      {
+        "id": "holdout-43",
+        "audit": {
+          "field_2": 253,
+          "field_1": 173,
+          "field_6": 145,
+          "field_3": 82,
+          "field_5": 162,
+          "field_4": 6
+        }
+      },
+      {
+        "id": "holdout-09",
+        "audit": {
+          "field_2": -222,
+          "field_1": 136,
+          "field_3": 234,
+          "field_6": 133,
+          "field_4": 222,
+          "field_5": 125
+        }
+      },
+      {
+        "id": "holdout-41",
+        "audit": {
+          "field_1": 121,
+          "field_2": -269,
+          "field_6": 141,
+          "field_3": 10,
+          "field_4": -291,
+          "field_5": 106
+        }
+      },
+      {
+        "id": "holdout-01",
+        "audit": {
+          "field_2": 118,
+          "field_1": 152,
+          "field_3": 21,
+          "field_6": 101,
+          "field_4": -47,
+          "field_5": 138
+        }
+      },
+      {
+        "id": "holdout-07",
+        "audit": {
+          "field_1": 147,
+          "field_2": 253,
+          "field_3": -108,
+          "field_6": 178,
+          "field_4": 118,
+          "field_5": 137
+        }
+      },
+      {
+        "id": "holdout-46",
+        "audit": {
+          "field_1": 171,
+          "field_2": 298,
+          "field_3": 70,
+          "field_6": 105,
+          "field_5": 177,
+          "field_4": 140
+        }
+      },
+      {
+        "id": "holdout-08",
+        "audit": {
+          "field_2": 213,
+          "field_1": 100,
+          "field_6": 120,
+          "field_3": 130,
+          "field_5": 108,
+          "field_4": 283
+        }
+      },
+      {
+        "id": "holdout-33",
+        "audit": {
+          "field_1": 133,
+          "field_2": 153,
+          "field_3": -135,
+          "field_6": 183,
+          "field_4": -23,
+          "field_5": 132
+        }
+      },
+      {
+        "id": "holdout-31",
+        "audit": {
+          "field_2": 215,
+          "field_1": 160,
+          "field_6": 145,
+          "field_3": -146,
+          "field_5": 146,
+          "field_4": 158
+        }
+      },
+      {
+        "id": "holdout-45",
+        "audit": {
+          "field_2": -43,
+          "field_1": 105,
+          "field_6": 125,
+          "field_3": -295,
+          "field_4": 105,
+          "field_5": 103
+        }
+      },
+      {
+        "id": "holdout-18",
+        "audit": {
+          "field_1": 98,
+          "field_2": -63,
+          "field_6": 101,
+          "field_3": -198,
+          "field_4": 212,
+          "field_5": 105
+        }
+      },
+      {
+        "id": "holdout-06",
+        "audit": {
+          "field_1": 146,
+          "field_2": 296,
+          "field_6": 108,
+          "field_3": 27,
+          "field_4": 288,
+          "field_5": 155
+        }
+      },
+      {
+        "id": "holdout-38",
+        "audit": {
+          "field_1": 105,
+          "field_2": -166,
+          "field_3": -192,
+          "field_6": 144,
+          "field_5": 113,
+          "field_4": -251
+        }
+      },
+      {
+        "id": "holdout-03",
+        "audit": {
+          "field_1": 150,
+          "field_2": -266,
+          "field_3": 46,
+          "field_6": 176,
+          "field_4": -30,
+          "field_5": 141
+        }
+      },
+      {
+        "id": "holdout-10",
+        "audit": {
+          "field_1": 177,
+          "field_2": -95,
+          "field_3": 133,
+          "field_6": 101,
+          "field_4": -270,
+          "field_5": 182
+        }
+      },
+      {
+        "id": "holdout-22",
+        "audit": {
+          "field_2": 142,
+          "field_1": 141,
+          "field_6": 123,
+          "field_3": 201,
+          "field_4": -154,
+          "field_5": 152
+        }
+      },
+      {
+        "id": "holdout-47",
+        "audit": {
+          "field_2": -298,
+          "field_1": 111,
+          "field_6": 144,
+          "field_3": -269,
+          "field_4": 53,
+          "field_5": 106
+        }
+      },
+      {
+        "id": "holdout-37",
+        "audit": {
+          "field_2": 95,
+          "field_1": 95,
+          "field_6": 161,
+          "field_3": -178,
+          "field_4": 253,
+          "field_5": 89
+        }
+      },
+      {
+        "id": "holdout-28",
+        "audit": {
+          "field_1": 94,
+          "field_2": 176,
+          "field_3": -133,
+          "field_6": 107,
+          "field_4": -146,
+          "field_5": 106
+        }
+      },
+      {
+        "id": "holdout-13",
+        "audit": {
+          "field_1": 142,
+          "field_2": 229,
+          "field_3": 295,
+          "field_6": 182,
+          "field_5": 137,
+          "field_4": -80
+        }
+      },
+      {
+        "id": "holdout-25",
+        "audit": {
+          "field_2": 80,
+          "field_1": 100,
+          "field_3": -24,
+          "field_6": 104,
+          "field_5": 99,
+          "field_4": -134
+        }
+      },
+      {
+        "id": "holdout-35",
+        "audit": {
+          "field_2": 212,
+          "field_1": 147,
+          "field_6": 158,
+          "field_3": -63,
+          "field_4": -237,
+          "field_5": 143
+        }
+      },
+      {
+        "id": "holdout-20",
+        "audit": {
+          "field_2": -8,
+          "field_1": 122,
+          "field_6": 136,
+          "field_3": -77,
+          "field_5": 137,
+          "field_4": 221
+        }
+      },
+      {
+        "id": "holdout-12",
+        "audit": {
+          "field_2": 225,
+          "field_1": 94,
+          "field_3": 128,
+          "field_6": 158,
+          "field_4": 73,
+          "field_5": 96
+        }
+      },
+      {
+        "id": "holdout-02",
+        "audit": {
+          "field_2": -294,
+          "field_1": 116,
+          "field_3": -115,
+          "field_6": 155,
+          "field_4": -2,
+          "field_5": 118
+        }
+      },
+      {
+        "id": "holdout-36",
+        "audit": {
+          "field_1": 129,
+          "field_2": -251,
+          "field_3": -267,
+          "field_6": 96,
+          "field_5": 137,
+          "field_4": 92
+        }
+      },
+      {
+        "id": "holdout-23",
+        "audit": {
+          "field_1": 173,
+          "field_2": -28,
+          "field_3": -255,
+          "field_6": 114,
+          "field_5": 162,
+          "field_4": 78
+        }
+      },
+      {
+        "id": "holdout-00",
+        "audit": {
+          "field_1": 115,
+          "field_2": 156,
+          "field_3": 291,
+          "field_6": 164,
+          "field_4": -221,
+          "field_5": 125
+        }
+      },
+      {
+        "id": "holdout-14",
+        "audit": {
+          "field_1": 138,
+          "field_2": -194,
+          "field_3": 15,
+          "field_6": 132,
+          "field_5": 148,
+          "field_4": 161
+        }
+      },
+      {
+        "id": "holdout-34",
+        "audit": {
+          "field_2": -216,
+          "field_1": 164,
+          "field_6": 123,
+          "field_3": 264,
+          "field_5": 170,
+          "field_4": -141
+        }
+      },
+      {
+        "id": "holdout-40",
+        "audit": {
+          "field_2": -47,
+          "field_1": 109,
+          "field_3": 73,
+          "field_6": 162,
+          "field_5": 121,
+          "field_4": -74
+        }
+      },
+      {
+        "id": "holdout-44",
+        "audit": {
+          "field_2": -109,
+          "field_1": 172,
+          "field_6": 140,
+          "field_3": -243,
+          "field_5": 186,
+          "field_4": -164
+        }
+      },
+      {
+        "id": "holdout-24",
+        "audit": {
+          "field_2": -249,
+          "field_1": 113,
+          "field_3": 268,
+          "field_6": 135,
+          "field_5": 114,
+          "field_4": -257
+        }
+      },
+      {
+        "id": "holdout-21",
+        "audit": {
+          "field_2": -288,
+          "field_1": 146,
+          "field_3": 46,
+          "field_6": 156,
+          "field_5": 136,
+          "field_4": -154
+        }
+      },
+      {
+        "id": "holdout-26",
+        "audit": {
+          "field_1": 132,
+          "field_2": 259,
+          "field_3": -19,
+          "field_6": 106,
+          "field_4": 233,
+          "field_5": 136
+        }
+      },
+      {
+        "id": "holdout-11",
+        "audit": {
+          "field_2": -116,
+          "field_1": 143,
+          "field_6": 117,
+          "field_3": -17,
+          "field_4": -122,
+          "field_5": 142
+        }
+      },
+      {
+        "id": "holdout-05",
+        "audit": {
+          "field_1": 151,
+          "field_2": 82,
+          "field_6": 110,
+          "field_3": -43,
+          "field_5": 150,
+          "field_4": -206
+        }
+      },
+      {
+        "id": "holdout-16",
+        "audit": {
+          "field_1": 114,
+          "field_2": -118,
+          "field_6": 131,
+          "field_3": -6,
+          "field_4": 269,
+          "field_5": 118
+        }
+      },
+      {
+        "id": "holdout-17",
+        "audit": {
+          "field_2": 233,
+          "field_1": 164,
+          "field_6": 189,
+          "field_3": -87,
+          "field_4": -4,
+          "field_5": 149
+        }
+      },
+      {
+        "id": "holdout-15",
+        "audit": {
+          "field_1": 151,
+          "field_2": 167,
+          "field_6": 111,
+          "field_3": 168,
+          "field_5": 150,
+          "field_4": 140
+        }
+      },
+      {
+        "id": "holdout-27",
+        "audit": {
+          "field_1": 141,
+          "field_2": -288,
+          "field_3": 171,
+          "field_6": 125,
+          "field_4": -140,
+          "field_5": 130
+        }
+      },
+      {
+        "id": "holdout-04",
+        "audit": {
+          "field_2": 178,
+          "field_1": 125,
+          "field_3": -19,
+          "field_6": 105,
+          "field_5": 133,
+          "field_4": 65
+        }
+      },
+      {
+        "id": "holdout-29",
+        "audit": {
+          "field_1": 104,
+          "field_2": -112,
+          "field_6": 131,
+          "field_3": -174,
+          "field_5": 96,
+          "field_4": 102
+        }
+      },
+      {
+        "id": "holdout-42",
+        "audit": {
+          "field_1": 127,
+          "field_2": -180,
+          "field_6": 186,
+          "field_3": 87,
+          "field_5": 138,
+          "field_4": 278
+        }
+      }
+    ],
+    "holdout_answer_key": {
+      "holdout-30": "clear",
+      "holdout-39": "escalate",
+      "holdout-32": "clear",
+      "holdout-19": "escalate",
+      "holdout-43": "escalate",
+      "holdout-09": "escalate",
+      "holdout-41": "escalate",
+      "holdout-01": "escalate",
+      "holdout-07": "escalate",
+      "holdout-46": "clear",
+      "holdout-08": "clear",
+      "holdout-33": "escalate",
+      "holdout-31": "escalate",
+      "holdout-45": "escalate",
+      "holdout-18": "clear",
+      "holdout-06": "clear",
+      "holdout-38": "clear",
+      "holdout-03": "escalate",
+      "holdout-10": "clear",
+      "holdout-22": "clear",
+      "holdout-47": "escalate",
+      "holdout-37": "escalate",
+      "holdout-28": "clear",
+      "holdout-13": "escalate",
+      "holdout-25": "escalate",
+      "holdout-35": "escalate",
+      "holdout-20": "clear",
+      "holdout-12": "clear",
+      "holdout-02": "clear",
+      "holdout-36": "clear",
+      "holdout-23": "escalate",
+      "holdout-00": "clear",
+      "holdout-14": "clear",
+      "holdout-34": "clear",
+      "holdout-40": "clear",
+      "holdout-44": "clear",
+      "holdout-24": "clear",
+      "holdout-21": "escalate",
+      "holdout-26": "clear",
+      "holdout-11": "escalate",
+      "holdout-05": "escalate",
+      "holdout-16": "clear",
+      "holdout-17": "escalate",
+      "holdout-15": "escalate",
+      "holdout-27": "escalate",
+      "holdout-04": "clear",
+      "holdout-29": "escalate",
+      "holdout-42": "clear"
+    },
+    "staged": {
+      "initial": {
+        "rules": [
+          [
+            "<=",
+            "field_1",
+            "field_6"
+          ],
+          [
+            "<",
+            "field_1",
+            "field_6"
+          ]
+        ],
+        "cost": 1,
+        "candidates_examined": 30
+      },
+      "challenges": [
+        {
+          "rule": [
+            "<=",
+            "field_1",
+            "field_6"
+          ],
+          "contradictions": [
+            "discover-05",
+            "discover-25",
+            "discover-23",
+            "discover-38",
+            "discover-19",
+            "discover-22",
+            "discover-08",
+            "discover-37",
+            "discover-11",
+            "discover-16",
+            "discover-06",
+            "discover-24",
+            "discover-07",
+            "discover-04",
+            "discover-36",
+            "discover-33",
+            "discover-31"
+          ]
+        },
+        {
+          "rule": [
+            "<",
+            "field_1",
+            "field_6"
+          ],
+          "contradictions": [
+            "discover-05",
+            "discover-25",
+            "discover-23",
+            "discover-38",
+            "discover-19",
+            "discover-22",
+            "discover-08",
+            "discover-37",
+            "discover-11",
+            "discover-16",
+            "discover-06",
+            "discover-24",
+            "discover-07",
+            "discover-04",
+            "discover-36",
+            "discover-33",
+            "discover-31"
+          ]
+        }
+      ],
+      "revised": {
+        "rules": [
+          [
+            "<",
+            "field_1",
+            "field_5"
+          ]
+        ],
+        "cost": 1,
+        "candidates_examined": 75,
+        "action": "searched"
+      },
+      "before": {
+        "holdout-30": "escalate",
+        "holdout-39": "escalate",
+        "holdout-32": "escalate",
+        "holdout-19": "escalate",
+        "holdout-43": "escalate",
+        "holdout-09": "escalate",
+        "holdout-41": "clear",
+        "holdout-01": "escalate",
+        "holdout-07": "clear",
+        "holdout-46": "escalate",
+        "holdout-08": "clear",
+        "holdout-33": "clear",
+        "holdout-31": "escalate",
+        "holdout-45": "clear",
+        "holdout-18": "clear",
+        "holdout-06": "escalate",
+        "holdout-38": "clear",
+        "holdout-03": "clear",
+        "holdout-10": "escalate",
+        "holdout-22": "escalate",
+        "holdout-47": "clear",
+        "holdout-37": "clear",
+        "holdout-28": "clear",
+        "holdout-13": "clear",
+        "holdout-25": "clear",
+        "holdout-35": "clear",
+        "holdout-20": "clear",
+        "holdout-12": "clear",
+        "holdout-02": "clear",
+        "holdout-36": "escalate",
+        "holdout-23": "escalate",
+        "holdout-00": "clear",
+        "holdout-14": "escalate",
+        "holdout-34": "escalate",
+        "holdout-40": "clear",
+        "holdout-44": "escalate",
+        "holdout-24": "clear",
+        "holdout-21": "clear",
+        "holdout-26": "escalate",
+        "holdout-11": "escalate",
+        "holdout-05": "escalate",
+        "holdout-16": "clear",
+        "holdout-17": "clear",
+        "holdout-15": "escalate",
+        "holdout-27": "escalate",
+        "holdout-04": "escalate",
+        "holdout-29": "clear",
+        "holdout-42": "clear"
+      },
+      "after": {
+        "holdout-30": "clear",
+        "holdout-39": "escalate",
+        "holdout-32": "clear",
+        "holdout-19": "escalate",
+        "holdout-43": "escalate",
+        "holdout-09": "escalate",
+        "holdout-41": "escalate",
+        "holdout-01": "escalate",
+        "holdout-07": "escalate",
+        "holdout-46": "clear",
+        "holdout-08": "clear",
+        "holdout-33": "escalate",
+        "holdout-31": "escalate",
+        "holdout-45": "escalate",
+        "holdout-18": "clear",
+        "holdout-06": "clear",
+        "holdout-38": "clear",
+        "holdout-03": "escalate",
+        "holdout-10": "clear",
+        "holdout-22": "clear",
+        "holdout-47": "escalate",
+        "holdout-37": "escalate",
+        "holdout-28": "clear",
+        "holdout-13": "escalate",
+        "holdout-25": "escalate",
+        "holdout-35": "escalate",
+        "holdout-20": "clear",
+        "holdout-12": "clear",
+        "holdout-02": "clear",
+        "holdout-36": "clear",
+        "holdout-23": "escalate",
+        "holdout-00": "clear",
+        "holdout-14": "clear",
+        "holdout-34": "clear",
+        "holdout-40": "clear",
+        "holdout-44": "clear",
+        "holdout-24": "clear",
+        "holdout-21": "escalate",
+        "holdout-26": "clear",
+        "holdout-11": "escalate",
+        "holdout-05": "escalate",
+        "holdout-16": "clear",
+        "holdout-17": "escalate",
+        "holdout-15": "escalate",
+        "holdout-27": "escalate",
+        "holdout-04": "clear",
+        "holdout-29": "escalate",
+        "holdout-42": "clear"
+      }
+    },
+    "pooled": {
+      "initial": {
+        "rules": [
+          [
+            "<=",
+            "field_1",
+            "field_6"
+          ],
+          [
+            "<",
+            "field_1",
+            "field_6"
+          ]
+        ],
+        "cost": 1,
+        "candidates_examined": 30
+      },
+      "challenges": [
+        {
+          "rule": [
+            "<=",
+            "field_1",
+            "field_6"
+          ],
+          "contradictions": [
+            "discover-05",
+            "discover-25",
+            "discover-23",
+            "discover-38",
+            "discover-19",
+            "discover-22",
+            "discover-08",
+            "discover-37",
+            "discover-11",
+            "discover-16",
+            "discover-06",
+            "discover-24",
+            "discover-07",
+            "discover-04",
+            "discover-36",
+            "discover-33",
+            "discover-31"
+          ]
+        },
+        {
+          "rule": [
+            "<",
+            "field_1",
+            "field_6"
+          ],
+          "contradictions": [
+            "discover-05",
+            "discover-25",
+            "discover-23",
+            "discover-38",
+            "discover-19",
+            "discover-22",
+            "discover-08",
+            "discover-37",
+            "discover-11",
+            "discover-16",
+            "discover-06",
+            "discover-24",
+            "discover-07",
+            "discover-04",
+            "discover-36",
+            "discover-33",
+            "discover-31"
+          ]
+        }
+      ],
+      "revised": {
+        "rules": [
+          [
+            "<",
+            "field_1",
+            "field_5"
+          ]
+        ],
+        "cost": 1,
+        "candidates_examined": 75,
+        "action": "searched"
+      },
+      "before": {
+        "holdout-30": "escalate",
+        "holdout-39": "escalate",
+        "holdout-32": "escalate",
+        "holdout-19": "escalate",
+        "holdout-43": "escalate",
+        "holdout-09": "escalate",
+        "holdout-41": "clear",
+        "holdout-01": "escalate",
+        "holdout-07": "clear",
+        "holdout-46": "escalate",
+        "holdout-08": "clear",
+        "holdout-33": "clear",
+        "holdout-31": "escalate",
+        "holdout-45": "clear",
+        "holdout-18": "clear",
+        "holdout-06": "escalate",
+        "holdout-38": "clear",
+        "holdout-03": "clear",
+        "holdout-10": "escalate",
+        "holdout-22": "escalate",
+        "holdout-47": "clear",
+        "holdout-37": "clear",
+        "holdout-28": "clear",
+        "holdout-13": "clear",
+        "holdout-25": "clear",
+        "holdout-35": "clear",
+        "holdout-20": "clear",
+        "holdout-12": "clear",
+        "holdout-02": "clear",
+        "holdout-36": "escalate",
+        "holdout-23": "escalate",
+        "holdout-00": "clear",
+        "holdout-14": "escalate",
+        "holdout-34": "escalate",
+        "holdout-40": "clear",
+        "holdout-44": "escalate",
+        "holdout-24": "clear",
+        "holdout-21": "clear",
+        "holdout-26": "escalate",
+        "holdout-11": "escalate",
+        "holdout-05": "escalate",
+        "holdout-16": "clear",
+        "holdout-17": "clear",
+        "holdout-15": "escalate",
+        "holdout-27": "escalate",
+        "holdout-04": "escalate",
+        "holdout-29": "clear",
+        "holdout-42": "clear"
+      },
+      "after": {
+        "holdout-30": "clear",
+        "holdout-39": "escalate",
+        "holdout-32": "clear",
+        "holdout-19": "escalate",
+        "holdout-43": "escalate",
+        "holdout-09": "escalate",
+        "holdout-41": "escalate",
+        "holdout-01": "escalate",
+        "holdout-07": "escalate",
+        "holdout-46": "clear",
+        "holdout-08": "clear",
+        "holdout-33": "escalate",
+        "holdout-31": "escalate",
+        "holdout-45": "escalate",
+        "holdout-18": "clear",
+        "holdout-06": "clear",
+        "holdout-38": "clear",
+        "holdout-03": "escalate",
+        "holdout-10": "clear",
+        "holdout-22": "clear",
+        "holdout-47": "escalate",
+        "holdout-37": "escalate",
+        "holdout-28": "clear",
+        "holdout-13": "escalate",
+        "holdout-25": "escalate",
+        "holdout-35": "escalate",
+        "holdout-20": "clear",
+        "holdout-12": "clear",
+        "holdout-02": "clear",
+        "holdout-36": "clear",
+        "holdout-23": "escalate",
+        "holdout-00": "clear",
+        "holdout-14": "clear",
+        "holdout-34": "clear",
+        "holdout-40": "clear",
+        "holdout-44": "clear",
+        "holdout-24": "clear",
+        "holdout-21": "escalate",
+        "holdout-26": "clear",
+        "holdout-11": "escalate",
+        "holdout-05": "escalate",
+        "holdout-16": "clear",
+        "holdout-17": "escalate",
+        "holdout-15": "escalate",
+        "holdout-27": "escalate",
+        "holdout-04": "clear",
+        "holdout-29": "escalate",
+        "holdout-42": "clear"
+      }
+    },
+    "scores": {
+      "initial": {
+        "correct": 23,
+        "false_alerts": 12,
+        "incorrect_clearances": 13,
+        "reviews": 0
+      },
+      "staged": {
+        "correct": 48,
+        "false_alerts": 0,
+        "incorrect_clearances": 0,
+        "reviews": 0
+      },
+      "pooled": {
+        "correct": 48,
+        "false_alerts": 0,
+        "incorrect_clearances": 0,
+        "reviews": 0
+      }
+    }
+  },
+  "outside_grammar": {
+    "fields_by_source": {
+      "A": [
+        "field_4",
+        "field_5"
+      ],
+      "B": [
+        "field_2",
+        "field_6"
+      ],
+      "C": [
+        "field_3",
+        "field_1"
+      ]
+    },
+    "initial_examples": [
+      {
+        "id": "initial-08",
+        "audit": {
+          "field_4": 59,
+          "field_5": 76,
+          "field_2": 75,
+          "field_6": 136
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-01",
+        "audit": {
+          "field_4": 53,
+          "field_5": 237,
+          "field_2": 10,
+          "field_6": -146
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-00",
+        "audit": {
+          "field_4": 17,
+          "field_5": 40,
+          "field_6": 278,
+          "field_2": 53
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-09",
+        "audit": {
+          "field_4": 59,
+          "field_5": -98,
+          "field_6": 93,
+          "field_2": 37
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-02",
+        "audit": {
+          "field_4": 26,
+          "field_5": -58,
+          "field_6": -126,
+          "field_2": 30
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-10",
+        "audit": {
+          "field_5": 203,
+          "field_4": 72,
+          "field_2": 78,
+          "field_6": -278
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-06",
+        "audit": {
+          "field_5": 157,
+          "field_4": 2,
+          "field_2": 58,
+          "field_6": 104
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-05",
+        "audit": {
+          "field_4": 68,
+          "field_5": -113,
+          "field_2": 9,
+          "field_6": -6
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-04",
+        "audit": {
+          "field_4": 17,
+          "field_5": 158,
+          "field_2": 73,
+          "field_6": 80
+        },
+        "consistent": true
+      },
+      {
+        "id": "initial-03",
+        "audit": {
+          "field_4": 49,
+          "field_5": -163,
+          "field_2": 27,
+          "field_6": 234
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-11",
+        "audit": {
+          "field_4": 27,
+          "field_5": -4,
+          "field_6": 116,
+          "field_2": 15
+        },
+        "consistent": false
+      },
+      {
+        "id": "initial-07",
+        "audit": {
+          "field_5": -160,
+          "field_4": 93,
+          "field_2": 4,
+          "field_6": -262
+        },
+        "consistent": false
+      }
+    ],
+    "discovery_examples": [
+      {
+        "id": "discover-32",
+        "audit": {
+          "field_5": 100,
+          "field_4": 50,
+          "field_2": 69,
+          "field_6": -114,
+          "field_3": 3450,
+          "field_1": 157
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-01",
+        "audit": {
+          "field_4": 51,
+          "field_5": -208,
+          "field_6": -117,
+          "field_2": 13,
+          "field_1": -105,
+          "field_3": 648
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-05",
+        "audit": {
+          "field_5": 128,
+          "field_4": 42,
+          "field_6": 175,
+          "field_2": 45,
+          "field_1": 147,
+          "field_3": 1901
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-24",
+        "audit": {
+          "field_5": -144,
+          "field_4": 65,
+          "field_6": 270,
+          "field_2": 40,
+          "field_1": 112,
+          "field_3": 2600
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-36",
+        "audit": {
+          "field_4": 49,
+          "field_5": 186,
+          "field_2": 10,
+          "field_6": 214,
+          "field_1": 153,
+          "field_3": 490
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-22",
+        "audit": {
+          "field_5": -75,
+          "field_4": 12,
+          "field_2": 63,
+          "field_6": 265,
+          "field_3": 756,
+          "field_1": -280
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-39",
+        "audit": {
+          "field_4": 84,
+          "field_5": 291,
+          "field_2": 64,
+          "field_6": -115,
+          "field_3": 5386,
+          "field_1": -97
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-27",
+        "audit": {
+          "field_4": 38,
+          "field_5": -217,
+          "field_6": 264,
+          "field_2": 50,
+          "field_3": 1909,
+          "field_1": 30
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-16",
+        "audit": {
+          "field_5": -56,
+          "field_4": 1,
+          "field_2": 32,
+          "field_6": -263,
+          "field_1": 201,
+          "field_3": 32
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-06",
+        "audit": {
+          "field_4": 34,
+          "field_5": -99,
+          "field_6": -154,
+          "field_2": 33,
+          "field_3": 1122,
+          "field_1": -225
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-21",
+        "audit": {
+          "field_4": 57,
+          "field_5": 176,
+          "field_6": 201,
+          "field_2": 41,
+          "field_1": -17,
+          "field_3": 2325
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-30",
+        "audit": {
+          "field_5": -8,
+          "field_4": 88,
+          "field_6": -287,
+          "field_2": 34,
+          "field_1": 207,
+          "field_3": 2992
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-33",
+        "audit": {
+          "field_5": -286,
+          "field_4": 18,
+          "field_2": 76,
+          "field_6": -174,
+          "field_3": 1381,
+          "field_1": 27
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-20",
+        "audit": {
+          "field_5": 119,
+          "field_4": 46,
+          "field_6": 156,
+          "field_2": 53,
+          "field_1": 64,
+          "field_3": 2438
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-11",
+        "audit": {
+          "field_4": 9,
+          "field_5": -159,
+          "field_2": 13,
+          "field_6": -188,
+          "field_3": 114,
+          "field_1": 226
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-17",
+        "audit": {
+          "field_5": 209,
+          "field_4": 55,
+          "field_6": 169,
+          "field_2": 64,
+          "field_1": -69,
+          "field_3": 3519
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-25",
+        "audit": {
+          "field_4": 35,
+          "field_5": -87,
+          "field_2": 82,
+          "field_6": 247,
+          "field_1": 250,
+          "field_3": 2855
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-14",
+        "audit": {
+          "field_5": 132,
+          "field_4": 65,
+          "field_2": 14,
+          "field_6": 224,
+          "field_1": -147,
+          "field_3": 910
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-18",
+        "audit": {
+          "field_4": 60,
+          "field_5": -283,
+          "field_2": 73,
+          "field_6": -156,
+          "field_3": 4380,
+          "field_1": -32
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-34",
+        "audit": {
+          "field_4": 59,
+          "field_5": -208,
+          "field_2": 32,
+          "field_6": -51,
+          "field_1": -273,
+          "field_3": 1888
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-23",
+        "audit": {
+          "field_5": -141,
+          "field_4": 20,
+          "field_6": -54,
+          "field_2": 62,
+          "field_3": 1235,
+          "field_1": -169
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-09",
+        "audit": {
+          "field_4": 74,
+          "field_5": -201,
+          "field_2": 11,
+          "field_6": -177,
+          "field_3": 809,
+          "field_1": -172
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-03",
+        "audit": {
+          "field_5": -22,
+          "field_4": 44,
+          "field_6": 135,
+          "field_2": 70,
+          "field_3": 3078,
+          "field_1": 139
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-31",
+        "audit": {
+          "field_5": 30,
+          "field_4": 49,
+          "field_2": 26,
+          "field_6": -258,
+          "field_1": 145,
+          "field_3": 1272
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-13",
+        "audit": {
+          "field_4": 68,
+          "field_5": 72,
+          "field_6": 157,
+          "field_2": 86,
+          "field_3": 5855,
+          "field_1": 76
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-19",
+        "audit": {
+          "field_4": 11,
+          "field_5": 80,
+          "field_2": 88,
+          "field_6": 191,
+          "field_3": 977,
+          "field_1": 220
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-15",
+        "audit": {
+          "field_5": 12,
+          "field_4": 75,
+          "field_6": -221,
+          "field_2": 6,
+          "field_1": -155,
+          "field_3": 451
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-35",
+        "audit": {
+          "field_5": 49,
+          "field_4": 72,
+          "field_2": 5,
+          "field_6": -289,
+          "field_1": -197,
+          "field_3": 374
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-00",
+        "audit": {
+          "field_5": 230,
+          "field_4": 12,
+          "field_6": -203,
+          "field_2": 52,
+          "field_3": 624,
+          "field_1": -163
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-02",
+        "audit": {
+          "field_5": 9,
+          "field_4": 19,
+          "field_2": 65,
+          "field_6": -27,
+          "field_1": -17,
+          "field_3": 1235
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-37",
+        "audit": {
+          "field_4": 20,
+          "field_5": 47,
+          "field_2": 32,
+          "field_6": -10,
+          "field_1": 183,
+          "field_3": 651
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-38",
+        "audit": {
+          "field_5": -83,
+          "field_4": 57,
+          "field_2": 77,
+          "field_6": -196,
+          "field_1": -3,
+          "field_3": 4389
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-04",
+        "audit": {
+          "field_4": 78,
+          "field_5": -188,
+          "field_6": 3,
+          "field_2": 21,
+          "field_1": 235,
+          "field_3": 1638
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-08",
+        "audit": {
+          "field_4": 38,
+          "field_5": -11,
+          "field_6": 179,
+          "field_2": 73,
+          "field_1": -109,
+          "field_3": 2774
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-28",
+        "audit": {
+          "field_5": 96,
+          "field_4": 61,
+          "field_6": 111,
+          "field_2": 30,
+          "field_1": -143,
+          "field_3": 1830
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-07",
+        "audit": {
+          "field_5": -195,
+          "field_4": 59,
+          "field_2": 2,
+          "field_6": -257,
+          "field_3": 125,
+          "field_1": 264
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-29",
+        "audit": {
+          "field_4": 13,
+          "field_5": 223,
+          "field_6": 199,
+          "field_2": 91,
+          "field_3": 1192,
+          "field_1": -87
+        },
+        "consistent": false
+      },
+      {
+        "id": "discover-12",
+        "audit": {
+          "field_4": 16,
+          "field_5": 181,
+          "field_2": 73,
+          "field_6": 237,
+          "field_3": 1168,
+          "field_1": -88
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-26",
+        "audit": {
+          "field_4": 16,
+          "field_5": 197,
+          "field_2": 92,
+          "field_6": -131,
+          "field_3": 1472,
+          "field_1": 289
+        },
+        "consistent": true
+      },
+      {
+        "id": "discover-10",
+        "audit": {
+          "field_4": 30,
+          "field_5": -97,
+          "field_2": 21,
+          "field_6": 182,
+          "field_1": 124,
+          "field_3": 630
+        },
+        "consistent": true
+      }
+    ],
+    "holdout_inputs": [
+      {
+        "id": "holdout-18",
+        "audit": {
+          "field_4": 122,
+          "field_5": 77,
+          "field_2": 120,
+          "field_6": -217,
+          "field_3": 14640,
+          "field_1": -65
+        }
+      },
+      {
+        "id": "holdout-10",
+        "audit": {
+          "field_5": -155,
+          "field_4": 172,
+          "field_6": 23,
+          "field_2": 127,
+          "field_1": 141,
+          "field_3": 21844
+        }
+      },
+      {
+        "id": "holdout-39",
+        "audit": {
+          "field_4": 147,
+          "field_5": 173,
+          "field_2": 159,
+          "field_6": -226,
+          "field_1": -298,
+          "field_3": 23363
+        }
+      },
+      {
+        "id": "holdout-12",
+        "audit": {
+          "field_4": 96,
+          "field_5": -62,
+          "field_2": 189,
+          "field_6": -193,
+          "field_1": 135,
+          "field_3": 18144
+        }
+      },
+      {
+        "id": "holdout-13",
+        "audit": {
+          "field_4": 100,
+          "field_5": 238,
+          "field_2": 174,
+          "field_6": -122,
+          "field_3": 17396,
+          "field_1": -192
+        }
+      },
+      {
+        "id": "holdout-19",
+        "audit": {
+          "field_5": -286,
+          "field_4": 151,
+          "field_2": 165,
+          "field_6": -272,
+          "field_3": 24920,
+          "field_1": -91
+        }
+      },
+      {
+        "id": "holdout-14",
+        "audit": {
+          "field_5": -141,
+          "field_4": 151,
+          "field_2": 119,
+          "field_6": 191,
+          "field_3": 17969,
+          "field_1": -191
+        }
+      },
+      {
+        "id": "holdout-22",
+        "audit": {
+          "field_4": 121,
+          "field_5": 214,
+          "field_6": 228,
+          "field_2": 102,
+          "field_3": 12342,
+          "field_1": 82
+        }
+      },
+      {
+        "id": "holdout-08",
+        "audit": {
+          "field_4": 173,
+          "field_5": 23,
+          "field_6": 99,
+          "field_2": 157,
+          "field_3": 27161,
+          "field_1": -159
+        }
+      },
+      {
+        "id": "holdout-25",
+        "audit": {
+          "field_5": -230,
+          "field_4": 106,
+          "field_2": 101,
+          "field_6": 212,
+          "field_3": 10705,
+          "field_1": 170
+        }
+      },
+      {
+        "id": "holdout-44",
+        "audit": {
+          "field_4": 161,
+          "field_5": 72,
+          "field_2": 164,
+          "field_6": 27,
+          "field_3": 26404,
+          "field_1": -132
+        }
+      },
+      {
+        "id": "holdout-43",
+        "audit": {
+          "field_5": 98,
+          "field_4": 172,
+          "field_2": 186,
+          "field_6": -282,
+          "field_1": 14,
+          "field_3": 31991
+        }
+      },
+      {
+        "id": "holdout-26",
+        "audit": {
+          "field_5": -154,
+          "field_4": 150,
+          "field_6": -59,
+          "field_2": 122,
+          "field_1": 273,
+          "field_3": 18300
+        }
+      },
+      {
+        "id": "holdout-00",
+        "audit": {
+          "field_4": 102,
+          "field_5": 75,
+          "field_2": 119,
+          "field_6": 103,
+          "field_3": 12138,
+          "field_1": 1
+        }
+      },
+      {
+        "id": "holdout-27",
+        "audit": {
+          "field_4": 110,
+          "field_5": -96,
+          "field_6": 51,
+          "field_2": 144,
+          "field_3": 15849,
+          "field_1": 263
+        }
+      },
+      {
+        "id": "holdout-41",
+        "audit": {
+          "field_5": -257,
+          "field_4": 108,
+          "field_2": 118,
+          "field_6": 237,
+          "field_1": 3,
+          "field_3": 12746
+        }
+      },
+      {
+        "id": "holdout-29",
+        "audit": {
+          "field_5": 77,
+          "field_4": 108,
+          "field_2": 129,
+          "field_6": -300,
+          "field_3": 13945,
+          "field_1": 267
+        }
+      },
+      {
+        "id": "holdout-11",
+        "audit": {
+          "field_4": 130,
+          "field_5": -186,
+          "field_2": 168,
+          "field_6": -10,
+          "field_1": 150,
+          "field_3": 21833
+        }
+      },
+      {
+        "id": "holdout-46",
+        "audit": {
+          "field_4": 155,
+          "field_5": -143,
+          "field_6": 116,
+          "field_2": 130,
+          "field_3": 20150,
+          "field_1": -255
+        }
+      },
+      {
+        "id": "holdout-47",
+        "audit": {
+          "field_5": 225,
+          "field_4": 171,
+          "field_2": 178,
+          "field_6": 151,
+          "field_1": 134,
+          "field_3": 30431
+        }
+      },
+      {
+        "id": "holdout-33",
+        "audit": {
+          "field_4": 143,
+          "field_5": -184,
+          "field_2": 160,
+          "field_6": -92,
+          "field_3": 22869,
+          "field_1": -47
+        }
+      },
+      {
+        "id": "holdout-34",
+        "audit": {
+          "field_5": 295,
+          "field_4": 100,
+          "field_6": -284,
+          "field_2": 176,
+          "field_1": -27,
+          "field_3": 17600
+        }
+      },
+      {
+        "id": "holdout-07",
+        "audit": {
+          "field_4": 179,
+          "field_5": 217,
+          "field_6": 294,
+          "field_2": 125,
+          "field_1": 42,
+          "field_3": 22369
+        }
+      },
+      {
+        "id": "holdout-21",
+        "audit": {
+          "field_5": -49,
+          "field_4": 104,
+          "field_6": 150,
+          "field_2": 185,
+          "field_3": 19239,
+          "field_1": -5
+        }
+      },
+      {
+        "id": "holdout-02",
+        "audit": {
+          "field_4": 179,
+          "field_5": -267,
+          "field_6": 185,
+          "field_2": 134,
+          "field_1": 250,
+          "field_3": 23986
+        }
+      },
+      {
+        "id": "holdout-36",
+        "audit": {
+          "field_5": 214,
+          "field_4": 150,
+          "field_2": 168,
+          "field_6": 15,
+          "field_3": 25200,
+          "field_1": -124
+        }
+      },
+      {
+        "id": "holdout-20",
+        "audit": {
+          "field_5": 54,
+          "field_4": 122,
+          "field_2": 141,
+          "field_6": 274,
+          "field_1": 96,
+          "field_3": 17202
+        }
+      },
+      {
+        "id": "holdout-32",
+        "audit": {
+          "field_5": 106,
+          "field_4": 148,
+          "field_6": 271,
+          "field_2": 162,
+          "field_1": -191,
+          "field_3": 23976
+        }
+      },
+      {
+        "id": "holdout-03",
+        "audit": {
+          "field_5": 189,
+          "field_4": 152,
+          "field_6": 246,
+          "field_2": 147,
+          "field_3": 22350,
+          "field_1": -265
+        }
+      },
+      {
+        "id": "holdout-17",
+        "audit": {
+          "field_4": 136,
+          "field_5": -188,
+          "field_6": -81,
+          "field_2": 141,
+          "field_1": -140,
+          "field_3": 19171
+        }
+      },
+      {
+        "id": "holdout-05",
+        "audit": {
+          "field_5": 119,
+          "field_4": 183,
+          "field_6": 179,
+          "field_2": 101,
+          "field_3": 18493,
+          "field_1": 68
+        }
+      },
+      {
+        "id": "holdout-40",
+        "audit": {
+          "field_5": 214,
+          "field_4": 173,
+          "field_2": 101,
+          "field_6": -167,
+          "field_1": -162,
+          "field_3": 17473
+        }
+      },
+      {
+        "id": "holdout-28",
+        "audit": {
+          "field_5": -214,
+          "field_4": 185,
+          "field_6": 22,
+          "field_2": 148,
+          "field_3": 27380,
+          "field_1": 199
+        }
+      },
+      {
+        "id": "holdout-42",
+        "audit": {
+          "field_5": -193,
+          "field_4": 148,
+          "field_6": -139,
+          "field_2": 176,
+          "field_3": 26048,
+          "field_1": 242
+        }
+      },
+      {
+        "id": "holdout-30",
+        "audit": {
+          "field_4": 101,
+          "field_5": 205,
+          "field_6": 172,
+          "field_2": 126,
+          "field_3": 12726,
+          "field_1": -288
+        }
+      },
+      {
+        "id": "holdout-31",
+        "audit": {
+          "field_4": 98,
+          "field_5": -204,
+          "field_6": -235,
+          "field_2": 175,
+          "field_3": 17163,
+          "field_1": 243
+        }
+      },
+      {
+        "id": "holdout-16",
+        "audit": {
+          "field_4": 141,
+          "field_5": -134,
+          "field_6": -234,
+          "field_2": 114,
+          "field_3": 16074,
+          "field_1": -227
+        }
+      },
+      {
+        "id": "holdout-09",
+        "audit": {
+          "field_5": -26,
+          "field_4": 122,
+          "field_6": -50,
+          "field_2": 144,
+          "field_3": 17580,
+          "field_1": 222
+        }
+      },
+      {
+        "id": "holdout-15",
+        "audit": {
+          "field_5": -99,
+          "field_4": 126,
+          "field_2": 158,
+          "field_6": 128,
+          "field_1": 146,
+          "field_3": 19910
+        }
+      },
+      {
+        "id": "holdout-06",
+        "audit": {
+          "field_4": 164,
+          "field_5": 22,
+          "field_2": 183,
+          "field_6": 248,
+          "field_1": 80,
+          "field_3": 30012
+        }
+      },
+      {
+        "id": "holdout-45",
+        "audit": {
+          "field_4": 144,
+          "field_5": 84,
+          "field_2": 126,
+          "field_6": -68,
+          "field_3": 18147,
+          "field_1": -224
+        }
+      },
+      {
+        "id": "holdout-23",
+        "audit": {
+          "field_5": 7,
+          "field_4": 176,
+          "field_6": 259,
+          "field_2": 122,
+          "field_1": 242,
+          "field_3": 21473
+        }
+      },
+      {
+        "id": "holdout-04",
+        "audit": {
+          "field_5": 195,
+          "field_4": 113,
+          "field_2": 159,
+          "field_6": -72,
+          "field_3": 17967,
+          "field_1": 120
+        }
+      },
+      {
+        "id": "holdout-35",
+        "audit": {
+          "field_4": 182,
+          "field_5": 225,
+          "field_2": 132,
+          "field_6": 4,
+          "field_3": 24032,
+          "field_1": 270
+        }
+      },
+      {
+        "id": "holdout-01",
+        "audit": {
+          "field_5": 226,
+          "field_4": 181,
+          "field_2": 158,
+          "field_6": 209,
+          "field_3": 28583,
+          "field_1": 9
+        }
+      },
+      {
+        "id": "holdout-38",
+        "audit": {
+          "field_5": -259,
+          "field_4": 135,
+          "field_2": 152,
+          "field_6": 257,
+          "field_3": 20520,
+          "field_1": 290
+        }
+      },
+      {
+        "id": "holdout-24",
+        "audit": {
+          "field_5": 6,
+          "field_4": 161,
+          "field_6": 161,
+          "field_2": 103,
+          "field_1": 217,
+          "field_3": 16583
+        }
+      },
+      {
+        "id": "holdout-37",
+        "audit": {
+          "field_5": 10,
+          "field_4": 109,
+          "field_6": -37,
+          "field_2": 171,
+          "field_1": 161,
+          "field_3": 18625
+        }
+      }
+    ],
+    "holdout_answer_key": {
+      "holdout-18": "clear",
+      "holdout-10": "clear",
+      "holdout-39": "escalate",
+      "holdout-12": "clear",
+      "holdout-13": "escalate",
+      "holdout-19": "escalate",
+      "holdout-14": "clear",
+      "holdout-22": "clear",
+      "holdout-08": "clear",
+      "holdout-25": "escalate",
+      "holdout-44": "clear",
+      "holdout-43": "escalate",
+      "holdout-26": "clear",
+      "holdout-00": "clear",
+      "holdout-27": "escalate",
+      "holdout-41": "escalate",
+      "holdout-29": "escalate",
+      "holdout-11": "escalate",
+      "holdout-46": "clear",
+      "holdout-47": "escalate",
+      "holdout-33": "escalate",
+      "holdout-34": "clear",
+      "holdout-07": "escalate",
+      "holdout-21": "escalate",
+      "holdout-02": "clear",
+      "holdout-36": "clear",
+      "holdout-20": "clear",
+      "holdout-32": "clear",
+      "holdout-03": "escalate",
+      "holdout-17": "escalate",
+      "holdout-05": "escalate",
+      "holdout-40": "clear",
+      "holdout-28": "clear",
+      "holdout-42": "clear",
+      "holdout-30": "clear",
+      "holdout-31": "escalate",
+      "holdout-16": "clear",
+      "holdout-09": "escalate",
+      "holdout-15": "escalate",
+      "holdout-06": "clear",
+      "holdout-45": "escalate",
+      "holdout-23": "escalate",
+      "holdout-04": "clear",
+      "holdout-35": "escalate",
+      "holdout-01": "escalate",
+      "holdout-38": "clear",
+      "holdout-24": "clear",
+      "holdout-37": "escalate"
+    },
+    "staged": {
+      "initial": {
+        "rules": [
+          [
+            "<=",
+            "field_4",
+            "field_2"
+          ],
+          [
+            "<",
+            "field_4",
+            "field_2"
+          ]
+        ],
+        "cost": 1,
+        "candidates_examined": 30
+      },
+      "challenges": [
+        {
+          "rule": [
+            "<=",
+            "field_4",
+            "field_2"
+          ],
+          "contradictions": [
+            "discover-05",
+            "discover-24",
+            "discover-36",
+            "discover-27",
+            "discover-06",
+            "discover-30",
+            "discover-33",
+            "discover-11",
+            "discover-17",
+            "discover-25",
+            "discover-14",
+            "discover-34",
+            "discover-23",
+            "discover-03",
+            "discover-13",
+            "discover-19",
+            "discover-37",
+            "discover-04",
+            "discover-28",
+            "discover-29",
+            "discover-10"
+          ]
+        },
+        {
+          "rule": [
+            "<",
+            "field_4",
+            "field_2"
+          ],
+          "contradictions": [
+            "discover-05",
+            "discover-24",
+            "discover-36",
+            "discover-27",
+            "discover-06",
+            "discover-30",
+            "discover-33",
+            "discover-11",
+            "discover-17",
+            "discover-25",
+            "discover-14",
+            "discover-34",
+            "discover-23",
+            "discover-03",
+            "discover-13",
+            "discover-19",
+            "discover-37",
+            "discover-04",
+            "discover-28",
+            "discover-29",
+            "discover-10"
+          ]
+        }
+      ],
+      "revised": {
+        "rules": [],
+        "cost": null,
+        "candidates_examined": 975,
+        "action": "searched"
+      },
+      "before": {
+        "holdout-18": "escalate",
+        "holdout-10": "escalate",
+        "holdout-39": "clear",
+        "holdout-12": "clear",
+        "holdout-13": "clear",
+        "holdout-19": "clear",
+        "holdout-14": "escalate",
+        "holdout-22": "escalate",
+        "holdout-08": "escalate",
+        "holdout-25": "escalate",
+        "holdout-44": "clear",
+        "holdout-43": "clear",
+        "holdout-26": "escalate",
+        "holdout-00": "clear",
+        "holdout-27": "clear",
+        "holdout-41": "clear",
+        "holdout-29": "clear",
+        "holdout-11": "clear",
+        "holdout-46": "escalate",
+        "holdout-47": "clear",
+        "holdout-33": "clear",
+        "holdout-34": "clear",
+        "holdout-07": "escalate",
+        "holdout-21": "clear",
+        "holdout-02": "escalate",
+        "holdout-36": "clear",
+        "holdout-20": "clear",
+        "holdout-32": "clear",
+        "holdout-03": "escalate",
+        "holdout-17": "clear",
+        "holdout-05": "escalate",
+        "holdout-40": "escalate",
+        "holdout-28": "escalate",
+        "holdout-42": "clear",
+        "holdout-30": "clear",
+        "holdout-31": "clear",
+        "holdout-16": "escalate",
+        "holdout-09": "clear",
+        "holdout-15": "clear",
+        "holdout-06": "clear",
+        "holdout-45": "escalate",
+        "holdout-23": "escalate",
+        "holdout-04": "clear",
+        "holdout-35": "escalate",
+        "holdout-01": "escalate",
+        "holdout-38": "clear",
+        "holdout-24": "escalate",
+        "holdout-37": "clear"
+      },
+      "after": {
+        "holdout-18": "review",
+        "holdout-10": "review",
+        "holdout-39": "review",
+        "holdout-12": "review",
+        "holdout-13": "review",
+        "holdout-19": "review",
+        "holdout-14": "review",
+        "holdout-22": "review",
+        "holdout-08": "review",
+        "holdout-25": "review",
+        "holdout-44": "review",
+        "holdout-43": "review",
+        "holdout-26": "review",
+        "holdout-00": "review",
+        "holdout-27": "review",
+        "holdout-41": "review",
+        "holdout-29": "review",
+        "holdout-11": "review",
+        "holdout-46": "review",
+        "holdout-47": "review",
+        "holdout-33": "review",
+        "holdout-34": "review",
+        "holdout-07": "review",
+        "holdout-21": "review",
+        "holdout-02": "review",
+        "holdout-36": "review",
+        "holdout-20": "review",
+        "holdout-32": "review",
+        "holdout-03": "review",
+        "holdout-17": "review",
+        "holdout-05": "review",
+        "holdout-40": "review",
+        "holdout-28": "review",
+        "holdout-42": "review",
+        "holdout-30": "review",
+        "holdout-31": "review",
+        "holdout-16": "review",
+        "holdout-09": "review",
+        "holdout-15": "review",
+        "holdout-06": "review",
+        "holdout-45": "review",
+        "holdout-23": "review",
+        "holdout-04": "review",
+        "holdout-35": "review",
+        "holdout-01": "review",
+        "holdout-38": "review",
+        "holdout-24": "review",
+        "holdout-37": "review"
+      }
+    },
+    "pooled": {
+      "initial": {
+        "rules": [
+          [
+            "<=",
+            "field_4",
+            "field_2"
+          ],
+          [
+            "<",
+            "field_4",
+            "field_2"
+          ]
+        ],
+        "cost": 1,
+        "candidates_examined": 30
+      },
+      "challenges": [
+        {
+          "rule": [
+            "<=",
+            "field_4",
+            "field_2"
+          ],
+          "contradictions": [
+            "discover-05",
+            "discover-24",
+            "discover-36",
+            "discover-27",
+            "discover-06",
+            "discover-30",
+            "discover-33",
+            "discover-11",
+            "discover-17",
+            "discover-25",
+            "discover-14",
+            "discover-34",
+            "discover-23",
+            "discover-03",
+            "discover-13",
+            "discover-19",
+            "discover-37",
+            "discover-04",
+            "discover-28",
+            "discover-29",
+            "discover-10"
+          ]
+        },
+        {
+          "rule": [
+            "<",
+            "field_4",
+            "field_2"
+          ],
+          "contradictions": [
+            "discover-05",
+            "discover-24",
+            "discover-36",
+            "discover-27",
+            "discover-06",
+            "discover-30",
+            "discover-33",
+            "discover-11",
+            "discover-17",
+            "discover-25",
+            "discover-14",
+            "discover-34",
+            "discover-23",
+            "discover-03",
+            "discover-13",
+            "discover-19",
+            "discover-37",
+            "discover-04",
+            "discover-28",
+            "discover-29",
+            "discover-10"
+          ]
+        }
+      ],
+      "revised": {
+        "rules": [],
+        "cost": null,
+        "candidates_examined": 975,
+        "action": "searched"
+      },
+      "before": {
+        "holdout-18": "escalate",
+        "holdout-10": "escalate",
+        "holdout-39": "clear",
+        "holdout-12": "clear",
+        "holdout-13": "clear",
+        "holdout-19": "clear",
+        "holdout-14": "escalate",
+        "holdout-22": "escalate",
+        "holdout-08": "escalate",
+        "holdout-25": "escalate",
+        "holdout-44": "clear",
+        "holdout-43": "clear",
+        "holdout-26": "escalate",
+        "holdout-00": "clear",
+        "holdout-27": "clear",
+        "holdout-41": "clear",
+        "holdout-29": "clear",
+        "holdout-11": "clear",
+        "holdout-46": "escalate",
+        "holdout-47": "clear",
+        "holdout-33": "clear",
+        "holdout-34": "clear",
+        "holdout-07": "escalate",
+        "holdout-21": "clear",
+        "holdout-02": "escalate",
+        "holdout-36": "clear",
+        "holdout-20": "clear",
+        "holdout-32": "clear",
+        "holdout-03": "escalate",
+        "holdout-17": "clear",
+        "holdout-05": "escalate",
+        "holdout-40": "escalate",
+        "holdout-28": "escalate",
+        "holdout-42": "clear",
+        "holdout-30": "clear",
+        "holdout-31": "clear",
+        "holdout-16": "escalate",
+        "holdout-09": "clear",
+        "holdout-15": "clear",
+        "holdout-06": "clear",
+        "holdout-45": "escalate",
+        "holdout-23": "escalate",
+        "holdout-04": "clear",
+        "holdout-35": "escalate",
+        "holdout-01": "escalate",
+        "holdout-38": "clear",
+        "holdout-24": "escalate",
+        "holdout-37": "clear"
+      },
+      "after": {
+        "holdout-18": "review",
+        "holdout-10": "review",
+        "holdout-39": "review",
+        "holdout-12": "review",
+        "holdout-13": "review",
+        "holdout-19": "review",
+        "holdout-14": "review",
+        "holdout-22": "review",
+        "holdout-08": "review",
+        "holdout-25": "review",
+        "holdout-44": "review",
+        "holdout-43": "review",
+        "holdout-26": "review",
+        "holdout-00": "review",
+        "holdout-27": "review",
+        "holdout-41": "review",
+        "holdout-29": "review",
+        "holdout-11": "review",
+        "holdout-46": "review",
+        "holdout-47": "review",
+        "holdout-33": "review",
+        "holdout-34": "review",
+        "holdout-07": "review",
+        "holdout-21": "review",
+        "holdout-02": "review",
+        "holdout-36": "review",
+        "holdout-20": "review",
+        "holdout-32": "review",
+        "holdout-03": "review",
+        "holdout-17": "review",
+        "holdout-05": "review",
+        "holdout-40": "review",
+        "holdout-28": "review",
+        "holdout-42": "review",
+        "holdout-30": "review",
+        "holdout-31": "review",
+        "holdout-16": "review",
+        "holdout-09": "review",
+        "holdout-15": "review",
+        "holdout-06": "review",
+        "holdout-45": "review",
+        "holdout-23": "review",
+        "holdout-04": "review",
+        "holdout-35": "review",
+        "holdout-01": "review",
+        "holdout-38": "review",
+        "holdout-24": "review",
+        "holdout-37": "review"
+      }
+    },
+    "scores": {
+      "initial": {
+        "correct": 20,
+        "false_alerts": 12,
+        "incorrect_clearances": 16,
+        "reviews": 0
+      },
+      "staged": {
+        "correct": 0,
+        "false_alerts": 0,
+        "incorrect_clearances": 0,
+        "reviews": 48
+      },
+      "pooled": {
+        "correct": 0,
+        "false_alerts": 0,
+        "incorrect_clearances": 0,
+        "reviews": 48
+      }
+    }
+  }
+}
