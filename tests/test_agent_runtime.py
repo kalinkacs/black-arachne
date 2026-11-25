@@ -39,6 +39,49 @@ class RuntimeTests(unittest.TestCase):
             with self.assertRaises(RoleFailure):
                 worker.call("assess", {})
 
+    def test_investigation_replaces_blue_and_preserves_the_frozen_assessment(self):
+        stopped = []
+
+        class InterruptedBlue(RoleProcess):
+            def call(self, phase, payload):
+                if self.role == "blue" and phase == "reconsider" and not stopped:
+                    stopped.append(self.process)
+                    self.process.kill()
+                    self.process.wait(timeout=2)
+                return super().call(phase, payload)
+
+        anchor, events = sample("change-confirmed")
+        original = mimic(anchor, events)
+        with patch("arachne.mimicry.RoleProcess", InterruptedBlue):
+            recovered = mimic(anchor, events)
+
+        self.assertEqual(len(stopped), 1)
+        self.assertEqual(recovered["recommendation"], original["recommendation"])
+        self.assertEqual(recovered["mimicry"], original["mimicry"])
+        self.assertEqual(
+            [step for step in recovered["role_runtime"]["trace"] if step.get("replaced_worker")],
+            [{"role": "blue", "phase": "reconsider", "replaced_worker": True}],
+        )
+
+    def test_replacement_refuses_to_continue_if_a_previous_response_changes(self):
+        coarse = {"profile": {"declared_change": False, "prior_failures": False, "privileged_activity": False},
+                  "history": []}
+        comparison = {"actual": "review", "result": "escalate", "observation": "disputes"}
+        with RoleProcess("red") as worker:
+            worker.call_with_recovery("forecast", coarse)
+            worker.process.kill()
+            worker.process.wait(timeout=2)
+            # Let the first write observe the dead pipe, then simulate a different forecast.
+            exchange = worker._exchange
+
+            def replay_with_different_forecast(phase, payload, deadline):
+                result = exchange(phase, payload, deadline)
+                return {**result, "prediction": "close"} if phase == "forecast" else result
+
+            with patch.object(worker, "_exchange", side_effect=replay_with_different_forecast):
+                with self.assertRaisesRegex(RoleFailure, "replacement changed its previous response"):
+                    worker.call_with_recovery("compare", comparison)
+
     def test_initial_projections_do_not_change_when_hidden_evidence_is_inserted(self):
         initial_passes = []
 

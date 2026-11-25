@@ -200,8 +200,12 @@ def isolated_branches(anchor, scoped, visible, profile, history, *, cross_examin
     trace = []
 
     def step(worker, phase, payload):
-        result = worker.call(phase, payload)
-        trace.append({"role": worker.role, "phase": phase})
+        already_recovered = worker.recovery_used
+        result = worker.call_with_recovery(phase, payload)
+        entry = {"role": worker.role, "phase": phase}
+        if worker.recovery_used and not already_recovered:
+            entry["replaced_worker"] = True
+        trace.append(entry)
         return result
 
     def map_refs(result, mapping):

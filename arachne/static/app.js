@@ -89,7 +89,10 @@ function roleTimeline(runtime) {
   const panel = node("section", undefined, "card");
   const timeline = node("ol");
   for (const step of runtime.trace) {
-    timeline.append(node("li", labels[step.role] + " · " + phases[step.phase]));
+    if (step.replaced_worker) {
+      timeline.append(node("li", labels[step.role] + " · Новый процесс подтвердил прежние ответы"));
+    }
+    timeline.append(node("li", labels[step.role] + " · " + (phases[step.phase] || step.phase)));
   }
   panel.append(node("h3", "Обмен между агентами"), timeline);
   return panel;
