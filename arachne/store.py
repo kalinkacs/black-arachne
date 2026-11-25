@@ -33,6 +33,9 @@ CREATE TABLE IF NOT EXISTS runs (
     id TEXT PRIMARY KEY, created TEXT NOT NULL, payload TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS runs_by_time ON runs(created DESC, id);
+CREATE INDEX IF NOT EXISTS runs_by_objection_anchor
+ON runs(json_extract(payload, '$.anchor_id'), created DESC, id DESC)
+WHERE json_type(payload, '$.objection_journal') = 'object';
 CREATE TABLE IF NOT EXISTS outcomes (
     run_id TEXT PRIMARY KEY REFERENCES runs(id),
     decision TEXT NOT NULL CHECK(decision IN ('close', 'review', 'escalate')),
@@ -233,6 +236,18 @@ def list_runs(connection):
 def get_run(connection, run_id):
     row = connection.execute("SELECT payload FROM runs WHERE id = ?", (run_id,)).fetchone()
     return json.loads(row[0]) if row else None
+
+
+def latest_objection_journal(connection, anchor_id):
+    row = connection.execute(
+        """SELECT id, json_extract(payload, '$.objection_journal.items')
+           FROM runs WHERE json_extract(payload, '$.anchor_id') = ?
+             AND json_type(payload, '$.objection_journal') = 'object'
+           ORDER BY created DESC, id DESC LIMIT 1""",
+        (anchor_id,),
+    ).fetchone()
+    return (row[0], json.loads(row[1])) if row else (None, [])
+
 
 
 def confirm_outcome(connection, run_id, decision, note):

@@ -8,7 +8,7 @@ from .mimicry import mimic
 from .role_runtime import RoleFailure
 from .sessions import attributed_events, attribution
 from .store import (
-    EvidenceWindowOverflow, confirmed_history, database, episode, ingest, save_run, verifications_for,
+    EvidenceWindowOverflow, confirmed_history, database, episode, ingest, latest_objection_journal, save_run, verifications_for,
 )
 
 JOURNAL_IDENTIFIERS = ("sshd", "sshd-session", "sudo")
@@ -71,7 +71,9 @@ def operational_review(connection, anchor, events, model):
     verified = verifications_for(connection, anchor.id)
     scope = attribution(anchor, events, verified)
     history = confirmed_history(connection, anchor, attributed_events(anchor, events, scope))
-    return mimic(anchor, events, history, model, verified=verified, session_scope=scope)
+    previous_run, objections = latest_objection_journal(connection, anchor.id)
+    return mimic(anchor, events, history, model, verified=verified, session_scope=scope,
+                 objection_checkpoint=(previous_run, objections))
 
 
 def triage(path, model=None, limit=20, now=None):

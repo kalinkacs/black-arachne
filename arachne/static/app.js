@@ -98,6 +98,32 @@ function roleTimeline(runtime) {
   return panel;
 }
 
+function objectionPanel(journal, indices) {
+  const names = { change_record: "Подтверждение заявленных работ",
+    identity_record: "Подтверждение использования учётной записи" };
+  const states = { unknown: "Ожидает подтверждения", conflict: "Подтверждения противоречат друг другу",
+    supports: "Подтверждено", disputes: "Подтверждение опровергает исходную версию" };
+  const panel = node("section", undefined, "card");
+  panel.append(node("h3", "Журнал возражений"));
+  if (journal.previous_run_id) {
+    const previous = node("button", "Предыдущее досье");
+    previous.type = "button";
+    previous.addEventListener("click", () => display(journal.previous_run_id));
+    panel.append(previous);
+  }
+  const list = node("ul");
+  for (const objection of journal.items) {
+    const item = node("li");
+    item.append(node("strong", names[objection.check]), node("div", states[objection.state]),
+      node("small", "Источник: " + objection.source));
+    const refs = evidence(objection.evidence_ids, indices);
+    if (refs) item.append(node("small", " · Улики " + refs));
+    list.append(item);
+  }
+  panel.append(list);
+  return panel;
+}
+
 function outcomePanel(report) {
   const panel = node("section", undefined, "card");
   if (report.outcome) {
@@ -206,6 +232,7 @@ function render(report) {
   if (report.recommendation) {
     caseElement.append(decisionCard("Защитная рекомендация", report.recommendation, indices));
   }
+  if (report.objection_journal?.items.length) caseElement.append(objectionPanel(report.objection_journal, indices));
   if (report.full_evidence_reference) {
     caseElement.append(decisionCard("Правила со всеми проверками", report.full_evidence_reference, indices, report.label));
   }

@@ -150,6 +150,26 @@ def operational_policy(anchor, observations, profile, initial, assisted):
     return assisted
 
 
+def update_objections(anchor, observations, profile, checkpoint):
+    previous_run, previous_items = checkpoint
+    reasons = {item["check"]: item["reason"] for item in previous_items}
+    if profile["declared_change"]:
+        reasons.setdefault("change_record", "declared_change")
+    if profile["prior_failures"] or profile["repeated_privilege_denials"]:
+        reasons.setdefault("identity_record", "authentication_risk")
+
+    items = []
+    for check, reason in sorted(reasons.items()):
+        observation = check_observations(check, anchor, observations, profile)
+        items.append({
+            **observation,
+            "source": CHECKS[check]["source"],
+            "reason": reason,
+            "open": observation["state"] in ("unknown", "conflict"),
+        })
+    return {"previous_run_id": previous_run, "items": items}
+
+
 def full_evidence_reference(anchor, observations, profile):
     """Reference using every check, independently of either model's selection."""
     checks = {check: check_observations(check, anchor, observations, profile) for check in CHECKS}
@@ -335,7 +355,8 @@ def external_branches(anchor, scoped, visible, profile, history, model):
             "assisted": reconsider(initial, assisted_result, anchor), "role_runtime": {"mode": "external-model"}}
 
 
-def mimic(anchor, events, history=(), model=None, *, verified=None, session_scope=None, cross_examine=False, worker_factory=None):
+def mimic(anchor, events, history=(), model=None, *, verified=None, session_scope=None, cross_examine=False, worker_factory=None,
+          objection_checkpoint=None):
     """Freeze both perspectives before either branch receives any verification."""
     if model and cross_examine:
         raise ValueError("Experimental role switching requires offline workers")
@@ -364,7 +385,23 @@ def mimic(anchor, events, history=(), model=None, *, verified=None, session_scop
     recommendation = operational_policy(anchor, scoped, profile, initial, assisted)
     if session_scope is not None and recommendation["decision"] == "close" and not profile["privileged_activity"]:
         recommendation = finding("review", "Closure requires privilege activity attributed to the same SSH session.", [anchor])
+    journal = {}
+    if objection_checkpoint is not None:
+        objections = update_objections(anchor, scoped, profile, objection_checkpoint)
+        journal = {"objection_journal": objections}
+        unresolved = [item for item in objections["items"] if item["open"]]
+        if unresolved and recommendation["decision"] == "close":
+            evidence_ids = list(dict.fromkeys([
+                *recommendation["evidence_ids"],
+                *(ref for item in unresolved for ref in item["evidence_ids"]),
+            ]))
+            recommendation = {
+                "decision": "review",
+                "reason": "Independent evidence is still missing or conflicting for an open objection.",
+                "evidence_ids": evidence_ids,
+            }
     return {
+        **journal,
         "engine_version": "0.7",
         "provenance": provenance,
         "session_attribution": session_scope,
