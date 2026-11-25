@@ -122,6 +122,8 @@ for entry in sorted(folder.iterdir()):
     ConvertTo-Json -InputObject @($data) -Depth 6 | Set-Content -LiteralPath $result -Encoding utf8
     & $python -c "import runpy; runpy.run_path('tests/windows_pilot_score.py', run_name='__main__')" $result
     if ($LASTEXITCODE -ne 0) { throw 'Windows pilot scoring failed.' }
+    & $python tests/windows_pilot_resilience.py $result
+    if ($LASTEXITCODE -ne 0) { throw 'Windows process-loss comparison failed.' }
 }
 finally {
     & auditpol.exe /restore "/file:$backup" | Out-Null
