@@ -25,6 +25,7 @@ from .signal_experiment import run_signal_experiment
 from .store import (
     confirm_outcome, database, episode, import_verifications, ingest, save_run, status_snapshot, verify_audit,
 )
+from .swarm import benchmark_swarm
 from .web import serve
 
 
@@ -100,6 +101,11 @@ def parser():
     signals.add_argument("discovery", help="Labeled calibration cases in the observe-gaps format")
     signals.add_argument("holdout", help="Labeled cases from disjoint families for evaluation")
     model_options(signals)
+    swarm = commands.add_parser("swarm-trial", help="Stress-test local defensive handoffs on replayed cases")
+    swarm.add_argument("file", help="Labeled cases in the evaluate JSONL format")
+    swarm.add_argument("--copies", type=positive_int, default=8)
+    swarm.add_argument("--teams", nargs="+", type=int, choices=range(1, 9), default=[1, 2, 4, 8])
+    swarm.add_argument("--follow-up-budget", type=positive_int, default=48)
     trial = commands.add_parser("trial", help="Run the packaged perspective comparison and save its dossiers")
     model_options(trial)
     scanner = commands.add_parser("scan-files", help="Compare local file hashes with trusted SHA-256 indicators")
@@ -161,6 +167,11 @@ def main(argv=None):
             with open(options.file, encoding="utf-8") as stream:
                 analyze = partial(mimic, cross_examine=True) if options.cross_examine else mimic
                 print(json.dumps(evaluate(stream, options.model, analyze=analyze), indent=2))
+            return 0
+        if options.command == "swarm-trial":
+            with open(options.file, encoding="utf-8") as stream:
+                report = benchmark_swarm(stream, options.copies, options.teams, options.follow_up_budget)
+            print(json.dumps(report, indent=2, ensure_ascii=False))
             return 0
         if options.command == "observe-gaps":
             holdout = open(options.holdout, encoding="utf-8") if options.holdout else nullcontext()

@@ -170,7 +170,7 @@ def full_evidence_reference(anchor, observations, profile):
     return finding("review", "The full-evidence rule needs further context.", [anchor])
 
 
-def isolated_branches(anchor, scoped, visible, profile, history, *, cross_examine=False):
+def isolated_branches(anchor, scoped, visible, profile, history, *, cross_examine=False, worker_factory=None):
     """Send each role a separate minimized projection, then compare its responses."""
     handles = {event.id: f"E{index}" for index, event in enumerate(visible)}
     undisclosed = [event for event in scoped if event.id not in handles]
@@ -220,7 +220,8 @@ def isolated_branches(anchor, scoped, visible, profile, history, *, cross_examin
         return result
 
     coarse = {"profile": profile, "history": red_history}
-    with RoleProcess("red") as red, RoleProcess("blue") as blue, RoleProcess("control") as control:
+    worker = worker_factory or RoleProcess
+    with worker("red") as red, worker("blue") as blue, worker("control") as control:
         forecast = step(red, "forecast", coarse)
         standard = step(control, "select", coarse)
         assessed = step(blue, "assess", {"observations": visible_events, "anchor": anchor_handle, "history": blue_history})
@@ -334,7 +335,7 @@ def external_branches(anchor, scoped, visible, profile, history, model):
             "assisted": reconsider(initial, assisted_result, anchor), "role_runtime": {"mode": "external-model"}}
 
 
-def mimic(anchor, events, history=(), model=None, *, verified=None, session_scope=None, cross_examine=False):
+def mimic(anchor, events, history=(), model=None, *, verified=None, session_scope=None, cross_examine=False, worker_factory=None):
     """Freeze both perspectives before either branch receives any verification."""
     if model and cross_examine:
         raise ValueError("Experimental role switching requires offline workers")
@@ -352,7 +353,8 @@ def mimic(anchor, events, history=(), model=None, *, verified=None, session_scop
     visible = [event for event in scoped if event.kind not in RESTRICTED_KINDS]
     profile = observation_profile(anchor, visible)
     branches = (external_branches(anchor, scoped, visible, profile, history, model) if model
-                else isolated_branches(anchor, scoped, visible, profile, history, cross_examine=cross_examine))
+                else isolated_branches(anchor, scoped, visible, profile, history, cross_examine=cross_examine,
+                                       worker_factory=worker_factory))
     challenger, initial = branches["forecast"], branches["initial"]
     hypotheses = branches["hypotheses"]
     observed = branches["assisted_result"]
