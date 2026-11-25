@@ -341,17 +341,46 @@ async function refreshIntegrity() {
   }
 }
 
-function switchView(integrity) {
-  document.querySelector("#cases-view").hidden = integrity;
-  document.querySelector("#integrity-view").hidden = !integrity;
-  casesTab.setAttribute("aria-pressed", String(!integrity));
-  integrityTab.setAttribute("aria-pressed", String(integrity));
-  if (integrity) refreshIntegrity();
+async function refreshDecoys() {
+  const content = document.querySelector("#decoys-content");
+  content.replaceChildren(node("p", "Загрузка…"));
+  try {
+    const report = await read("/api/dead-souls");
+    const windows = node("ol");
+    for (const window of report.windows) {
+      windows.append(node("li", formatTime(window.minute) + " UTC · Срабатывания: " +
+        window.touches + " · Приманки: " + window.decoys + " · Особого внимания: " + window.important));
+    }
+    const actions = { credential_use: "Использование учётных данных", write_attempt: "Попытка записи" };
+    const signals = node("ol");
+    for (const signal of report.important) {
+      signals.append(node("li", actions[signal.action] + " · " + signal.decoy_id + " · " +
+        signal.sensor + " · " + formatTime(signal.timestamp) + " UTC"));
+    }
+    content.replaceChildren(node("p", "Зарегистрировано приманок: " + report.registered),
+      node("h3", "Срабатывания по минутам"), report.windows.length ? windows : node("p", "Срабатываний пока нет."),
+      node("h3", "Особого внимания"), report.important.length ? signals : node("p", "Таких событий пока нет."));
+  } catch (error) {
+    content.replaceChildren(node("p", error.message));
+  }
 }
 
-casesTab.addEventListener("click", () => switchView(false));
-integrityTab.addEventListener("click", () => switchView(true));
+const sections = [
+  ["cases", casesTab, null],
+  ["integrity", integrityTab, refreshIntegrity],
+  ["decoys", document.querySelector("#decoys-tab"), refreshDecoys],
+];
+for (const [selected, tab, refreshSection] of sections) {
+  tab.addEventListener("click", () => {
+    for (const [name, button] of sections) {
+      document.querySelector("#" + name + "-view").hidden = name !== selected;
+      button.setAttribute("aria-pressed", String(name === selected));
+    }
+    if (refreshSection) refreshSection();
+  });
+}
 document.querySelector("#integrity-reload").addEventListener("click", refreshIntegrity);
+document.querySelector("#decoys-reload").addEventListener("click", refreshDecoys);
 filter.addEventListener("input", renderList);
 document.querySelector("#reload").addEventListener("click", boot);
 boot();

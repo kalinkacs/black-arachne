@@ -11,6 +11,7 @@ import sys
 from urllib.error import HTTPError, URLError
 
 from . import __version__
+from .dead_souls import KINDS, import_touches, overview, register_decoy
 from .evaluation import evaluate
 from .events import Event, NativeJournalCoverage, from_journal, read_records
 from .files import FILE_LIMITS, load_indicators, scan
@@ -127,6 +128,14 @@ def parser():
     pilot.add_argument("--since", help="Only include telemetry and dossiers at or after this RFC3339 timestamp")
     commands.add_parser("status", help="Print local collection and triage status")
     commands.add_parser("verify-audit", help="Verify linkage and content of operator outcomes")
+    decoys = commands.add_parser("dead-souls", help="Register decoys and inspect passive telemetry")
+    decoy_actions = decoys.add_subparsers(dest="decoy_action", required=True)
+    register = decoy_actions.add_parser("register")
+    register.add_argument("id")
+    register.add_argument("--kind", choices=KINDS, required=True)
+    receipt = decoy_actions.add_parser("import")
+    receipt.add_argument("file", help="Normalized JSON Lines from a trusted local collector, or -")
+    decoy_actions.add_parser("status")
     dashboard = commands.add_parser("serve")
     dashboard.add_argument("--operator", action="store_true", help="Enable local confirmation forms")
     dashboard.add_argument("--port", type=int, default=8765)
@@ -201,7 +210,16 @@ def main(argv=None):
             failed_scan = any(not result["complete"] for result in collection.get("integrity", ()))
             return 1 if "journal_error" in collection or failed_scan else 0
         with database(options.db) as connection:
-            if options.command in ("import-events", "import-journal"):
+            if options.command == "dead-souls":
+                if options.decoy_action == "register":
+                    result = register_decoy(connection, options.id, options.kind)
+                elif options.decoy_action == "import":
+                    stream = nullcontext(sys.stdin) if options.file == "-" else open(options.file, encoding="utf-8")
+                    with stream as source:
+                        result = import_touches(connection, read_records(source))
+                else:
+                    result = overview(connection)
+            elif options.command in ("import-events", "import-journal"):
                 coverage = NativeJournalCoverage() if options.command == "import-journal" and options.native else None
                 normalize = Event.parse if options.command == "import-events" else from_journal
                 if coverage is not None:

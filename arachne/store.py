@@ -7,6 +7,7 @@ import json
 import sqlite3
 from uuid import uuid4
 
+from .dead_souls import SCHEMA as DECOY_SCHEMA
 from .events import (
     ANCHOR_KINDS, POST_LOGIN_OBSERVATION, PRE_LOGIN_OBSERVATION, SESSION_ACTIVITY,
     Event, encode, episode_window, observation_profile, records,
@@ -105,7 +106,7 @@ def database(path):
     try:
         connection.execute("PRAGMA foreign_keys=ON")
         connection.execute("PRAGMA journal_mode=WAL")
-        connection.executescript(SCHEMA)
+        connection.executescript(SCHEMA + DECOY_SCHEMA)
         with connection:
             yield connection
     finally:

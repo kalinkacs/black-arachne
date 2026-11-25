@@ -16,6 +16,7 @@
   <nav class="workspace-nav" aria-label="Разделы">
     <button id="cases-tab" type="button" aria-pressed="true" aria-controls="cases-view">Расследования</button>
     <button id="integrity-tab" type="button" aria-pressed="false" aria-controls="integrity-view">Целостность файлов</button>
+    <button id="decoys-tab" type="button" aria-pressed="false" aria-controls="decoys-view">Мёртвые души</button>
   </nav>
   <main>
     <div id="cases-view" class="cases-grid">
@@ -33,6 +34,10 @@
     <section id="integrity-view" class="integrity-view" aria-label="Целостность файлов" hidden>
       <div class="section-head"><h2>Целостность файлов</h2><button id="integrity-reload" type="button">Обновить</button></div>
       <div id="integrity-content" aria-live="polite"></div>
+    </section>
+    <section id="decoys-view" class="integrity-view" aria-label="Мёртвые души" hidden>
+      <div class="section-head"><h2>Мёртвые души</h2><button id="decoys-reload" type="button">Обновить</button></div>
+      <div id="decoys-content" aria-live="polite"></div>
     </section>
   </main>
 </body>
