@@ -16,10 +16,15 @@ pilot_start=$(date --iso-8601=seconds)
 pilot_audit_key="arachne_pilot_$$"
 pilot_decoy="$pilot_dir/test-decoy.txt"
 pilot_watch_installed=false
+pilot_syscalls=(-F arch=b64 -S open,openat -F "path=$pilot_decoy" -F perm=r -k "$pilot_audit_key")
+pilot_task_filter=false
 [[ "$pilot_user" =~ ^[a-zA-Z0-9_-]+$ ]]
 cleanup() {
   if "$pilot_watch_installed"; then
-    sudo -n auditctl -W "$pilot_decoy" -p r -k "$pilot_audit_key" >/dev/null 2>&1 || true
+    sudo -n auditctl -d always,exit "${pilot_syscalls[@]}" >/dev/null 2>&1 || true
+  fi
+  if "$pilot_task_filter"; then
+    sudo -n auditctl -a never,task >/dev/null 2>&1 || true
   fi
   sudo -n systemctl stop "$pilot_unit.service" 2>/dev/null || true
   sudo -n rm -f /etc/sudoers.d/black-arachne-native-fixture
@@ -27,7 +32,13 @@ cleanup() {
 }
 trap cleanup EXIT
 printf '%s\n' 'Harmless decoy used by the Black Arachne pilot.' > "$pilot_decoy"
-sudo -n auditctl -w "$pilot_decoy" -p r -k "$pilot_audit_key"
+# An unconditional never,task rule prevents even the scoped exit rule
+# from seeing the fixture. Temporarily remove it only on this disposable VM.
+if sudo -n auditctl -l | grep -Fxq -- '-a never,task'; then
+  sudo -n auditctl -d never,task
+  pilot_task_filter=true
+fi
+sudo -n auditctl -A always,exit "${pilot_syscalls[@]}"
 pilot_watch_installed=true
 
 pilot_port=$(python3 - <<'PY'
@@ -125,7 +136,13 @@ for attempt in {1..20}; do
   fi
   sleep .25
 done
-test -s "$pilot_dir/files.audit"
+if ! test -s "$pilot_dir/files.audit"; then
+  printf '%s\n' 'No events reached the pilot audit export.' >&2
+  sudo -n auditctl -s
+  sudo -n auditctl -l
+  sudo -n grep -c -F "$pilot_audit_key" /var/log/audit/audit.log || true
+  exit 1
+fi
 python3 - "$pilot_dir" "$pilot_audit_key" <<'PY'
 from collections import Counter
 from datetime import datetime, timedelta, timezone
