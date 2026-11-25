@@ -2,6 +2,7 @@
 
 from datetime import datetime, timedelta
 
+from .dumas import review as dumas_review
 from .reasoning import finding, relevant
 from .events import DENIAL_REVIEW_THRESHOLD, denied_attempts, observation_profile, records
 from .learning import check_model, decision_model
@@ -130,10 +131,10 @@ def reconsider(initial, observed, anchor):
     return initial
 
 
-def operational_policy(anchor, observations, profile, initial, assisted):
+def operational_policy(anchor, observations, profile, initial, assisted, *, checks=None):
     """Apply local safeguards outside both one-check comparison branches."""
     independent = [
-        check_observations(check, anchor, observations, profile)
+        checks[check] if checks is not None else check_observations(check, anchor, observations, profile)
         for check in ("change_record", "identity_record")
     ]
     for result in independent:
@@ -147,10 +148,13 @@ def operational_policy(anchor, observations, profile, initial, assisted):
                        [anchor, *denied_attempts(anchor, observations)[:DENIAL_REVIEW_THRESHOLD]])
     if initial["decision"] == "escalate" and assisted["decision"] != "escalate":
         return finding("review", "Escalation was disputed. An operator must reconcile the evidence.", [anchor])
+    if checks is not None and assisted["decision"] == "close":
+        if any(not result["available"] for result in checks.values()):
+            return finding("review", "A Dumas specialist could not finish its verification.", [anchor])
     return assisted
 
 
-def update_objections(anchor, observations, profile, checkpoint):
+def update_objections(profile, checkpoint, checks):
     previous_run, previous_items = checkpoint
     reasons = {item["check"]: item["reason"] for item in previous_items}
     if profile["declared_change"]:
@@ -160,9 +164,11 @@ def update_objections(anchor, observations, profile, checkpoint):
 
     items = []
     for check, reason in sorted(reasons.items()):
-        observation = check_observations(check, anchor, observations, profile)
+        observation = checks[check]
         items.append({
-            **observation,
+            "check": check,
+            "state": observation["state"],
+            "evidence_ids": observation["evidence_ids"],
             "source": CHECKS[check]["source"],
             "reason": reason,
             "open": observation["state"] in ("unknown", "conflict"),
@@ -382,13 +388,14 @@ def mimic(anchor, events, history=(), model=None, *, verified=None, session_scop
     assisted = branches["assisted"]
     matches = {role: hypothesis["expectations"][observed["check"]] == observed["state"]
                for role, hypothesis in hypotheses.items()} if observed["state"] in {"supports", "disputes"} else {}
-    recommendation = operational_policy(anchor, scoped, profile, initial, assisted)
+    dumas = dumas_review(anchor, scoped, profile, check_observations) if objection_checkpoint is not None else None
+    recommendation = operational_policy(anchor, scoped, profile, initial, assisted, checks=dumas)
     if session_scope is not None and recommendation["decision"] == "close" and not profile["privileged_activity"]:
         recommendation = finding("review", "Closure requires privilege activity attributed to the same SSH session.", [anchor])
     journal = {}
     if objection_checkpoint is not None:
-        objections = update_objections(anchor, scoped, profile, objection_checkpoint)
-        journal = {"objection_journal": objections}
+        objections = update_objections(profile, objection_checkpoint, dumas)
+        journal = {"objection_journal": objections, "dumas": list(dumas.values())}
         unresolved = [item for item in objections["items"] if item["open"]]
         if unresolved and recommendation["decision"] == "close":
             evidence_ids = list(dict.fromkeys([

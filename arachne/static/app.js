@@ -98,6 +98,21 @@ function roleTimeline(runtime) {
   return panel;
 }
 
+function dumasPanel(findings, indices) {
+  const panel = node("section", undefined, "card");
+  const list = node("ul");
+  const names = { Athos: "Атос", Porthos: "Портос", Aramis: "Арамис" };
+  for (const finding of findings) {
+    const item = node("li", names[finding.specialist] + " · " + checks[finding.check] + " · " +
+      (finding.available ? states[finding.state] : "Проверка не завершена"));
+    const refs = evidence(finding.evidence_ids, indices);
+    if (refs) item.append(node("small", " · Улики " + refs));
+    list.append(item);
+  }
+  panel.append(node("h3", "Дюма · Три мушкетёра"), list);
+  return panel;
+}
+
 function objectionPanel(journal, indices) {
   const names = { change_record: "Подтверждение заявленных работ",
     identity_record: "Подтверждение использования учётной записи" };
@@ -232,6 +247,7 @@ function render(report) {
   if (report.recommendation) {
     caseElement.append(decisionCard("Защитная рекомендация", report.recommendation, indices));
   }
+  if (report.dumas) caseElement.append(dumasPanel(report.dumas, indices));
   if (report.objection_journal?.items.length) caseElement.append(objectionPanel(report.objection_journal, indices));
   if (report.full_evidence_reference) {
     caseElement.append(decisionCard("Правила со всеми проверками", report.full_evidence_reference, indices, report.label));
