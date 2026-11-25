@@ -67,19 +67,22 @@ def worker_process():
             reader.join(timeout=10)
 
 
-def investigate(paths, threshold, approval, groups, crash):
+def investigate(paths, threshold, approval, groups, crash, *, preload_all=False):
     request = {"paths": paths, "threshold": threshold}
     expected = checkpoint(paths, threshold)
+    checkpoint_reads = 0
     with ExitStack() as stack:
         active = {team: stack.enter_context(worker_process()) for team in groups}
 
         def commit(agent):
+            nonlocal checkpoint_reads
+            checkpoint_reads += 1
             if agent[1](request) != expected:
                 raise RuntimeError("A replacement changed the original Windows file scope")
 
-        for agent in active.values():
-            commit(agent)
         team = groups[0]
+        for agent in active.values() if preload_all else (active[team],):
+            commit(agent)
         if crash:
             process, _ = active[team]
             process.kill()
@@ -89,11 +92,14 @@ def investigate(paths, threshold, approval, groups, crash):
             replacement[0].kill()
             replacement[0].wait(timeout=10)
             if len(groups) == 1:
-                return {"decision": "pending", "approval_reads": 0, "handoff": None, "forced_stops": 2}
+                return {"decision": "pending", "approval_reads": 0, "handoff": None, "forced_stops": 2,
+                        "checkpoint_reads": checkpoint_reads}
             team = groups[1]
+            if not preload_all:
+                commit(active[team])
         result = active[team][1]({"approval": approval})
         return {**result, "approval_reads": 1, "handoff": [groups[0], team] if crash else None,
-                "forced_stops": 2 if crash else 0}
+                "forced_stops": 2 if crash else 0, "checkpoint_reads": checkpoint_reads}
 
 
 def compare(cases):
@@ -101,16 +107,18 @@ def compare(cases):
     reports = {}
     for scenario, crash, delay in scenarios:
         reports[scenario] = {}
-        for label, use_swarm in (("solo", False), ("three_teams", True)):
+        for label, capacity in (("solo", 1), ("reserve_queue", 3), ("three_teams", 3)):
             totals = dict(completed=0, correct=0, pending=0, manual_review=0, incorrect_clearances=0,
-                          false_escalations=0, handoffs=0, forced_stops=0, approval_reads=0)
+                          false_escalations=0, handoffs=0, forced_stops=0, approval_reads=0,
+                          checkpoint_reads=0, max_workers=capacity)
             for index, case in enumerate(cases):
                 paths = sorted({item["path"] for item in case["writes"]})
                 if set(paths) != set(case["written_paths"]):
                     raise ValueError("Native event coverage is incomplete")
-                groups = tuple("ABC"[(index + offset) % 3] for offset in range(3 if use_swarm else 1))
+                groups = tuple("ABC"[(index + offset) % 3] for offset in range(capacity))
                 approval = None if delay else case["approval"]
-                result = investigate(paths, case["threshold"], approval, groups, crash)
+                result = investigate(paths, case["threshold"], approval, groups, crash,
+                                     preload_all=label == "three_teams")
                 decision, expected = result["decision"], case["expected_escalation"]
                 totals["completed"] += decision != "pending"
                 totals["correct"] += decision == ("escalate" if expected else "clear")
@@ -121,6 +129,7 @@ def compare(cases):
                 totals["handoffs"] += result["handoff"] is not None
                 totals["forced_stops"] += result["forced_stops"]
                 totals["approval_reads"] += result["approval_reads"]
+                totals["checkpoint_reads"] += result["checkpoint_reads"]
             reports[scenario][label] = totals
     return reports
 
