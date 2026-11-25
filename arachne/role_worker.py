@@ -5,7 +5,7 @@ import json
 import sys
 
 from .learning import hypothesis_model
-from .measurement import ASSURANCES, PROFILE_FIELDS, checked_focus, local_focus
+from .measurement import ASSURANCES, MEASUREMENTS, PROFILE_FIELDS, checked_focus, local_focus, measurement
 from .mimicry import (
     CHECKS, CROSS_CHECKS, RESTRICTED_KINDS, blue_hypotheses, checked_commitment,
     observation_profile, reconsider, red_forecast, standard_choice,
@@ -24,7 +24,7 @@ class Observation:
 PHASES = {
     "red": {"forecast", "compare", "commit", "switch", "signal_initial", "signal_reframe"},
     "blue": {"assess", "reconsider", "commit", "switch", "signal_initial", "signal_reframe"},
-    "control": {"select"},
+    "control": {"select", "signal_judge"},
 }
 PROFILE_KEYS = {"declared_change", "prior_failures", "privileged_activity"}
 OPTIONAL_PROFILE_KEYS = {"repeated_privilege_denials"}
@@ -91,9 +91,26 @@ def cross_examine(role, phase, payload, state):
     return {"check": check, "expected_state": expected}
 
 
+def judge_signal(payload):
+    if set(payload) != {"proposals", "ranking", "previous"}:
+        raise ValueError("Invalid independent review request")
+    proposals, ranking, previous = payload["proposals"], payload["ranking"], payload["previous"]
+    catalogue = {item.identifier for item in MEASUREMENTS.values()}
+    if (not isinstance(proposals, dict) or set(proposals) != {"red", "blue"}
+            or not isinstance(ranking, list) or len(ranking) != len(catalogue)
+            or not all(isinstance(item, str) for item in ranking) or set(ranking) != catalogue
+            or previous not in (*catalogue, None)):
+        raise ValueError("Invalid independent review inputs")
+    offered = [measurement(checked_focus(proposal)).identifier for proposal in proposals.values()]
+    winner = min(offered, key=ranking.index)
+    return {"source": winner, "agreement": offered[0] == offered[1], "changed": previous not in (None, winner)}
+
+
 def handle(role, phase, payload, state):
     if phase not in PHASES[role] or not isinstance(payload, dict):
         raise ValueError("Unsupported role phase")
+    if phase == "signal_judge":
+        return judge_signal(payload)
     if phase in {"signal_initial", "signal_reframe"}:
         return plan_signal(role, phase, payload, state)
     if phase in {"commit", "switch"}:

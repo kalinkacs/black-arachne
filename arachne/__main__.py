@@ -26,6 +26,7 @@ from .operations import collect, operational_review, triage
 from .pilot import since_cutoff, summary as pilot_summary
 from .provenance import SOURCE_KINDS, create_key, load_key, sign_record
 from .quarantine import isolate, restore
+from .rotation_trial import run_rotation_trial
 from .signal_experiment import run_signal_experiment
 from .store import (
     confirm_outcome, database, episode, import_verifications, ingest, save_run, status_snapshot, verify_audit,
@@ -110,6 +111,9 @@ def parser():
     evolution.add_argument("discovery")
     evolution.add_argument("holdout")
     evolution.add_argument("--generations", type=int, choices=range(1, 6), default=3)
+    rotation = commands.add_parser("rotation-trial", help="Test three defensive teams rotating and handing off a role")
+    rotation.add_argument("discovery")
+    rotation.add_argument("holdout")
     failure_trial = commands.add_parser("failure-trial", help="Compare solo and role-switched review during outages")
     failure_trial.add_argument("discovery")
     failure_trial.add_argument("holdout")
@@ -222,6 +226,10 @@ def main(argv=None):
             with holdout as unseen, open(options.file, encoding="utf-8") as stream:
                 report = audit_observability(stream, options.max_checks, options.tolerate_missing, holdout=unseen)
             print(json.dumps(report, indent=2, ensure_ascii=False))
+            return 0
+        if options.command == "rotation-trial":
+            with open(options.discovery, encoding="utf-8") as discovery, open(options.holdout, encoding="utf-8") as holdout:
+                print(json.dumps(run_rotation_trial(discovery, holdout), indent=2))
             return 0
         if options.command == "failure-trial":
             with open(options.discovery, encoding="utf-8") as discovery, open(options.holdout, encoding="utf-8") as holdout:
