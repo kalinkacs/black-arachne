@@ -17,3 +17,16 @@ class RotationTrialTests(unittest.TestCase):
                 {"red", "blue", "control"},
             )
         self.assertEqual(trace[1]["handoffs"], [{"from": "B", "to": "A", "role": "red"}])
+
+    def test_any_registered_source_can_be_selected_and_empty_coverage_defers(self):
+        profile = {"declared_change": False, "prior_failures": False, "privileged_activity": False,
+                   "repeated_privilege_denials": False}
+        normal, _, _ = rotate(profile, list(SOURCES))
+        expanded, trace, _ = rotate(profile, list(SOURCES), eligible=["privilege_operation"])
+        self.assertEqual(normal, "identity_session")
+        self.assertEqual(expanded, "privilege_operation")
+        self.assertTrue(all(entry["outside_first_proposals"] for entry in trace))
+        for entry in trace:
+            self.assertTrue(all(set(menu) == set(SOURCES) for menu in entry["options"].values()))
+        deferred, _, _ = rotate(profile, list(SOURCES), eligible=[])
+        self.assertIsNone(deferred)

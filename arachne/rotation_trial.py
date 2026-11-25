@@ -17,7 +17,7 @@ ROTATION = (
 SOURCES = tuple(item.identifier for item in MEASUREMENTS.values())
 
 
-def rotate(profile, ranking, interrupted_role=None, interrupted_round=1):
+def rotate(profile, ranking, interrupted_role=None, interrupted_round=1, *, eligible=None):
     trace = []
     inherited = {}
     previous = None
@@ -43,11 +43,17 @@ def rotate(profile, ranking, interrupted_role=None, interrupted_round=1):
         with ExitStack() as stack:
             workers = {role: stack.enter_context(InterruptedRole(role)) for role in teams}
             frozen = {role: start(workers[role], inherited.get(role)) for role in ("red", "blue")}
-            proposals = {}
+            proposals, options = {}, {}
             handoffs = []
+
+            def propose(role, worker, peer):
+                proposals[role] = reframe(worker, peer)
+                if eligible is not None:
+                    options[role] = worker.call_with_recovery("signal_options", {})["sources"]
+
             for role, other in (("red", "blue"), ("blue", "red")):
                 try:
-                    proposals[role] = reframe(workers[role], frozen[other])
+                    propose(role, workers[role], frozen[other])
                 except RoleTransportFailure:
                     workers[role].__exit__()
                     # The reviewer takes the vacant slot and repeats only the
@@ -55,17 +61,24 @@ def rotate(profile, ranking, interrupted_role=None, interrupted_round=1):
                     with RoleProcess(role) as replacement:
                         if start(replacement, inherited.get(role)) != frozen[role]:
                             raise RoleFailure("Handoff changed the frozen proposal")
-                        proposals[role] = reframe(replacement, frozen[other])
+                        propose(role, replacement, frozen[other])
                     handoffs.append({"from": teams[role], "to": teams["control"], "role": role})
-            result = workers["control"].call_with_recovery("signal_judge", {
-                "proposals": proposals, "ranking": ranking, "previous": previous,
-            })
-            if result.get("source") not in {measurement(item).identifier for item in proposals.values()}:
-                raise RoleFailure("Reviewer selected an evidence source outside the proposals")
+            request = {"proposals": proposals, "ranking": ranking, "previous": previous}
+            offered = {measurement(item).identifier for item in proposals.values()}
+            allowed = offered
+            if eligible is not None:
+                request.update(eligible=eligible, options=options)
+                allowed = set(eligible) if eligible else {None}
+            result = workers["control"].call_with_recovery("signal_judge", request)
+            if "source" not in result or result["source"] not in allowed:
+                raise RoleFailure("Reviewer selected a source outside the allowed evidence catalogue")
             previous = result["source"]
             inherited = {role: proposal["primary"] for role, proposal in proposals.items()}
-            trace.append({"round": number, "teams": teams, "inherited": inherited,
-                          "chosen_source": previous, "handoffs": handoffs})
+            entry = {"round": number, "teams": teams, "inherited": inherited,
+                     "chosen_source": previous, "handoffs": handoffs}
+            if eligible is not None:
+                entry.update(options=options, outside_first_proposals=previous is not None and previous not in offered)
+            trace.append(entry)
     return previous, trace, stopped
 
 
@@ -75,12 +88,16 @@ def run_rotation_trial(discovery_stream, holdout_stream):
     if not calibration:
         raise ValueError("Discovery needs indistinguishable cases with opposite outcomes")
     views = {blind_profile(pair.close.visible) for pair in calibration}
-    ranked = sorted(SOURCES, key=lambda source: merit(scores(calibration, dict.fromkeys(views, source))),
-                    reverse=True)
+    calibration_scores = {source: scores(calibration, dict.fromkeys(views, source)) for source in SOURCES}
+    ranked = sorted(SOURCES, key=lambda source: merit(calibration_scores[source]), reverse=True)
+    eligible = [source for source in ranked
+                if calibration_scores[source]["distinguished"] and not calibration_scores[source]["reversed"]]
     holdout = read_holdout(holdout_stream, discovery)
     holdout_views = sorted({blind_profile(episode.visible) for episode in holdout})
-    plans = {"solo": {}, "pair": {}, "rotation": {}, "rotation_after_loss": {}}
-    representative = None
+    plans = {name: {} for name in ("solo", "pair", "rotation", "rotation_after_loss",
+                                   "open_catalogue", "open_catalogue_after_loss")}
+    representative = open_example = None
+    outside = abstained = open_recovered = 0
     fault_cases = cycle(product(range(1, len(ROTATION) + 1), ("red", "blue")))
     handoffs = stops = unchanged = 0
     for view in holdout_views:
@@ -91,8 +108,16 @@ def run_rotation_trial(discovery_stream, holdout_stream):
         clean, _, _ = rotate(profile, ranked)
         round_number, role = next(fault_cases)
         recovered, trace, killed = rotate(profile, ranked, interrupted_role=role, interrupted_round=round_number)
+        open_plan, _, _ = rotate(profile, ranked, eligible=eligible)
+        open_after, open_trace, _ = rotate(profile, ranked, interrupted_role=role,
+                                           interrupted_round=round_number, eligible=eligible)
         if representative is None:
-            representative = trace
+            representative, open_example = trace, open_trace
+        plans["open_catalogue"][view] = open_plan
+        plans["open_catalogue_after_loss"][view] = open_after
+        open_recovered += open_after == open_plan
+        outside += open_trace[-1]["outside_first_proposals"]
+        abstained += open_plan is None
         handoffs += sum(len(item["handoffs"]) for item in trace)
         stops += killed
         unchanged += recovered == clean
@@ -109,4 +134,7 @@ def run_rotation_trial(discovery_stream, holdout_stream):
         "unchanged_plans_after_handoff": unchanged,
         "holdout": {name: scores(witnesses, selected) for name, selected in plans.items()},
         "example_rotation": representative,
+        "open_catalogue": {"size": len(SOURCES), "eligible": eligible, "profiles_outside_first_proposals": outside,
+                           "profiles_with_no_selection": abstained, "unchanged_plans_after_handoff": open_recovered,
+                           "example_rotation": open_example},
     }

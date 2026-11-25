@@ -22,8 +22,8 @@ class Observation:
 
 
 PHASES = {
-    "red": {"forecast", "compare", "commit", "switch", "signal_initial", "signal_reframe"},
-    "blue": {"assess", "reconsider", "commit", "switch", "signal_initial", "signal_reframe"},
+    "red": {"forecast", "compare", "commit", "switch", "signal_initial", "signal_reframe", "signal_options"},
+    "blue": {"assess", "reconsider", "commit", "switch", "signal_initial", "signal_reframe", "signal_options"},
     "control": {"select", "signal_judge"},
 }
 PROFILE_KEYS = {"declared_change", "prior_failures", "privileged_activity"}
@@ -91,8 +91,20 @@ def cross_examine(role, phase, payload, state):
     return {"check": check, "expected_state": expected}
 
 
+def signal_options(state, payload):
+    if payload or "signal_reframe" not in state:
+        raise ValueError("Options require a frozen role-switch proposal")
+    focus = state["signal_reframe"]
+    priority = [focus["primary"], focus["secondary"]]
+    combinations = sorted(MEASUREMENTS, key=lambda entry: (
+        priority[0] not in entry, priority[1] not in entry, len(entry)
+    ))
+    return {"sources": [MEASUREMENTS[entry].identifier for entry in combinations]}
+
+
 def judge_signal(payload):
-    if set(payload) != {"proposals", "ranking", "previous"}:
+    required = {"proposals", "ranking", "previous"}
+    if set(payload) not in (required, required | {"eligible", "options"}):
         raise ValueError("Invalid independent review request")
     proposals, ranking, previous = payload["proposals"], payload["ranking"], payload["previous"]
     catalogue = {item.identifier for item in MEASUREMENTS.values()}
@@ -102,7 +114,22 @@ def judge_signal(payload):
             or previous not in (*catalogue, None)):
         raise ValueError("Invalid independent review inputs")
     offered = [measurement(checked_focus(proposal)).identifier for proposal in proposals.values()]
-    winner = min(offered, key=ranking.index)
+    if "eligible" in payload:
+        eligible, options = payload["eligible"], payload["options"]
+        if (not isinstance(eligible, list) or len(eligible) > len(catalogue)
+                or not all(isinstance(item, str) and item in catalogue for item in eligible)
+                or not isinstance(options, dict) or set(options) != {"red", "blue"}
+                or any(not isinstance(menu, list) or len(menu) != len(catalogue)
+                       or not all(isinstance(item, str) for item in menu) or set(menu) != catalogue
+                       for menu in options.values())):
+            raise ValueError("Invalid expanded review options")
+        def preference(source):
+            positions = [menu.index(source) for menu in options.values()]
+            return max(positions), ranking.index(source)
+
+        winner = min(eligible, key=preference, default=None)
+    else:
+        winner = min(offered, key=ranking.index)
     return {"source": winner, "agreement": offered[0] == offered[1], "changed": previous not in (None, winner)}
 
 
@@ -111,6 +138,8 @@ def handle(role, phase, payload, state):
         raise ValueError("Unsupported role phase")
     if phase == "signal_judge":
         return judge_signal(payload)
+    if phase == "signal_options":
+        return signal_options(state, payload)
     if phase in {"signal_initial", "signal_reframe"}:
         return plan_signal(role, phase, payload, state)
     if phase in {"commit", "switch"}:
