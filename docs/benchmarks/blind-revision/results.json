@@ -1,0 +1,846 @@
+{
+  "totals": {
+    "approval_only": {
+      "correct": 3,
+      "false_alerts": 0,
+      "incorrect_clearances": 9,
+      "reviews": 0
+    },
+    "pooled": {
+      "correct": 14,
+      "false_alerts": 0,
+      "incorrect_clearances": 0,
+      "reviews": 2
+    },
+    "staged": {
+      "correct": 14,
+      "false_alerts": 0,
+      "incorrect_clearances": 0,
+      "reviews": 2
+    }
+  },
+  "observations": {
+    "0-0": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-0-0"
+          }
+        ],
+        "C": [
+          {
+            "id": "C2",
+            "reference": "unrelated-0",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          },
+          {
+            "id": "C1",
+            "reference": "change-0-0",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          }
+        ]
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C1"
+            ],
+            "reference": "change-0-0",
+            "matches": [
+              "artifact",
+              "principal",
+              "scope"
+            ],
+            "differences": []
+          }
+        ],
+        "decision": "clear"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "clear",
+        "staged": "clear"
+      }
+    },
+    "0-1": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-0-1"
+          }
+        ],
+        "C": [
+          {
+            "id": "C2",
+            "reference": "unrelated-0",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          },
+          {
+            "id": "C1",
+            "reference": "change-0-1",
+            "scope": "archive",
+            "principal": "other-0-principal",
+            "artifact": "snapshot-8"
+          }
+        ]
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C1"
+            ],
+            "reference": "change-0-1",
+            "matches": [
+              "artifact",
+              "scope"
+            ],
+            "differences": [
+              "principal"
+            ]
+          }
+        ],
+        "decision": "escalate"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "escalate",
+        "staged": "escalate"
+      }
+    },
+    "0-2": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-0-2"
+          }
+        ],
+        "C": [
+          {
+            "id": "C2",
+            "reference": "unrelated-0",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          },
+          {
+            "id": "C1",
+            "reference": "change-0-2",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "other-0-artifact"
+          }
+        ]
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C1"
+            ],
+            "reference": "change-0-2",
+            "matches": [
+              "principal",
+              "scope"
+            ],
+            "differences": [
+              "artifact"
+            ]
+          }
+        ],
+        "decision": "escalate"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "escalate",
+        "staged": "escalate"
+      }
+    },
+    "0-3": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-0-3"
+          }
+        ],
+        "C": [
+          {
+            "id": "C2",
+            "reference": "unrelated-0",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          },
+          {
+            "id": "C1",
+            "reference": "change-0-3",
+            "scope": "archive",
+            "principal": "other-0-principal",
+            "artifact": "other-0-artifact"
+          }
+        ]
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C1"
+            ],
+            "reference": "change-0-3",
+            "matches": [
+              "scope"
+            ],
+            "differences": [
+              "artifact",
+              "principal"
+            ]
+          }
+        ],
+        "decision": "escalate"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "escalate",
+        "staged": "escalate"
+      }
+    },
+    "1-0": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-1-0"
+          }
+        ],
+        "C": [
+          {
+            "id": "C1",
+            "reference": "change-1-0",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          },
+          {
+            "id": "C2",
+            "reference": "unrelated-1",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          }
+        ]
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C1"
+            ],
+            "reference": "change-1-0",
+            "matches": [
+              "artifact",
+              "principal",
+              "scope"
+            ],
+            "differences": []
+          }
+        ],
+        "decision": "clear"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "clear",
+        "staged": "clear"
+      }
+    },
+    "1-1": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-1-1"
+          }
+        ],
+        "C": [
+          {
+            "id": "C1",
+            "reference": "change-1-1",
+            "scope": "archive",
+            "principal": "other-1-principal",
+            "artifact": "snapshot-8"
+          },
+          {
+            "id": "C2",
+            "reference": "unrelated-1",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          }
+        ]
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C1"
+            ],
+            "reference": "change-1-1",
+            "matches": [
+              "artifact",
+              "scope"
+            ],
+            "differences": [
+              "principal"
+            ]
+          }
+        ],
+        "decision": "escalate"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "escalate",
+        "staged": "escalate"
+      }
+    },
+    "1-2": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-1-2"
+          }
+        ],
+        "C": [
+          {
+            "id": "C1",
+            "reference": "change-1-2",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "other-1-artifact"
+          },
+          {
+            "id": "C2",
+            "reference": "unrelated-1",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          }
+        ]
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C1"
+            ],
+            "reference": "change-1-2",
+            "matches": [
+              "principal",
+              "scope"
+            ],
+            "differences": [
+              "artifact"
+            ]
+          }
+        ],
+        "decision": "escalate"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "escalate",
+        "staged": "escalate"
+      }
+    },
+    "1-3": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-1-3"
+          }
+        ],
+        "C": [
+          {
+            "id": "C1",
+            "reference": "change-1-3",
+            "scope": "archive",
+            "principal": "other-1-principal",
+            "artifact": "other-1-artifact"
+          },
+          {
+            "id": "C2",
+            "reference": "unrelated-1",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          }
+        ]
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C1"
+            ],
+            "reference": "change-1-3",
+            "matches": [
+              "scope"
+            ],
+            "differences": [
+              "artifact",
+              "principal"
+            ]
+          }
+        ],
+        "decision": "escalate"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "escalate",
+        "staged": "escalate"
+      }
+    },
+    "2-0": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-2-0"
+          }
+        ],
+        "C": [
+          {
+            "id": "C2",
+            "reference": "unrelated-2",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          },
+          {
+            "id": "C1",
+            "reference": "change-2-0",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          }
+        ]
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C1"
+            ],
+            "reference": "change-2-0",
+            "matches": [
+              "artifact",
+              "principal",
+              "scope"
+            ],
+            "differences": []
+          }
+        ],
+        "decision": "clear"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "clear",
+        "staged": "clear"
+      }
+    },
+    "2-1": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-2-1"
+          }
+        ],
+        "C": [
+          {
+            "id": "C2",
+            "reference": "unrelated-2",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          },
+          {
+            "id": "C1",
+            "reference": "change-2-1",
+            "scope": "archive",
+            "principal": "other-2-principal",
+            "artifact": "snapshot-8"
+          }
+        ]
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C1"
+            ],
+            "reference": "change-2-1",
+            "matches": [
+              "artifact",
+              "scope"
+            ],
+            "differences": [
+              "principal"
+            ]
+          }
+        ],
+        "decision": "escalate"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "escalate",
+        "staged": "escalate"
+      }
+    },
+    "2-2": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-2-2"
+          }
+        ],
+        "C": [
+          {
+            "id": "C2",
+            "reference": "unrelated-2",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          },
+          {
+            "id": "C1",
+            "reference": "change-2-2",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "other-2-artifact"
+          }
+        ]
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C1"
+            ],
+            "reference": "change-2-2",
+            "matches": [
+              "principal",
+              "scope"
+            ],
+            "differences": [
+              "artifact"
+            ]
+          }
+        ],
+        "decision": "escalate"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "escalate",
+        "staged": "escalate"
+      }
+    },
+    "2-3": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-2-3"
+          }
+        ],
+        "C": [
+          {
+            "id": "C2",
+            "reference": "unrelated-2",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          },
+          {
+            "id": "C1",
+            "reference": "change-2-3",
+            "scope": "archive",
+            "principal": "other-2-principal",
+            "artifact": "other-2-artifact"
+          }
+        ]
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C1"
+            ],
+            "reference": "change-2-3",
+            "matches": [
+              "scope"
+            ],
+            "differences": [
+              "artifact",
+              "principal"
+            ]
+          }
+        ],
+        "decision": "escalate"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "escalate",
+        "staged": "escalate"
+      }
+    },
+    "missing": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-extra"
+          }
+        ],
+        "C": []
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [],
+        "decision": "review"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "review",
+        "staged": "review"
+      }
+    },
+    "conflict": {
+      "input": {
+        "A": {
+          "id": "A1",
+          "scope": "archive",
+          "principal": "service-17",
+          "artifact": "snapshot-8"
+        },
+        "B": [
+          {
+            "id": "B1",
+            "scope": "archive",
+            "reference": "change-extra"
+          }
+        ],
+        "C": [
+          {
+            "id": "C1",
+            "reference": "change-extra",
+            "scope": "archive",
+            "principal": "service-17",
+            "artifact": "snapshot-8"
+          },
+          {
+            "id": "C2",
+            "reference": "change-extra",
+            "scope": "archive",
+            "principal": "other",
+            "artifact": "snapshot-8"
+          }
+        ]
+      },
+      "trace": {
+        "initial": "clear",
+        "hypotheses": [
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C1"
+            ],
+            "reference": "change-extra",
+            "matches": [
+              "artifact",
+              "principal",
+              "scope"
+            ],
+            "differences": []
+          },
+          {
+            "evidence": [
+              "A1",
+              "B1",
+              "C2"
+            ],
+            "reference": "change-extra",
+            "matches": [
+              "artifact",
+              "scope"
+            ],
+            "differences": [
+              "principal"
+            ]
+          }
+        ],
+        "decision": "review"
+      },
+      "decisions": {
+        "approval_only": "clear",
+        "pooled": "review",
+        "staged": "review"
+      }
+    }
+  },
+  "answer_key": {
+    "0-0": "clear",
+    "0-1": "escalate",
+    "0-2": "escalate",
+    "0-3": "escalate",
+    "1-0": "clear",
+    "1-1": "escalate",
+    "1-2": "escalate",
+    "1-3": "escalate",
+    "2-0": "clear",
+    "2-1": "escalate",
+    "2-2": "escalate",
+    "2-3": "escalate",
+    "missing": "review",
+    "conflict": "review"
+  }
+}
