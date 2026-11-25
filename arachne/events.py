@@ -6,8 +6,11 @@ import hashlib
 import json
 import re
 
+from .dead_souls import ACTIONS, identifier
+
 ANCHOR_KINDS = {"ssh_login", "ssh_session_open"}
-KINDS = ANCHOR_KINDS | {
+DECOY_EVIDENCE_KINDS = {"decoy_touch", "decoy_sensor_gap", "decoy_sensor_recovered"}
+KINDS = ANCHOR_KINDS | DECOY_EVIDENCE_KINDS | {
     "ssh_failure", "privileged_activity", "privilege_denied", "privilege_denial_unverified", "deployment", "change_verified",
     "change_disputed", "identity_verified", "identity_disputed",
 }
@@ -32,6 +35,8 @@ class Event:
     source: str
     machine_id: str | None = None
     session_key: str | None = None
+    decoy_id: str | None = None
+    decoy_action: str | None = None
 
     @classmethod
     def parse(cls, record):
@@ -51,6 +56,13 @@ class Event:
             raise ValueError("Invalid session key")
         if record["kind"] not in KINDS:
             raise ValueError("Unsupported event kind")
+        decoy, action = record.get("decoy_id"), record.get("decoy_action")
+        if record["kind"] == "decoy_touch":
+            identifier(decoy)
+            if action not in ACTIONS:
+                raise ValueError("Invalid bound decoy action")
+        elif decoy is not None or action is not None:
+            raise ValueError("Decoy fields require a decoy touch")
         timestamp = datetime.fromisoformat(record["timestamp"])
         if timestamp.tzinfo is None:
             raise ValueError("Timestamp must include a timezone")

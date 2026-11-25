@@ -1,5 +1,6 @@
 """Local, observation-only telemetry for operator-registered decoys."""
 
+from collections import deque
 from datetime import datetime, timezone
 import re
 
@@ -130,4 +131,44 @@ def overview(connection):
         "registered": connection.execute("SELECT count(*) FROM decoy_assets").fetchone()[0],
         "windows": [dict(zip(("minute", "touches", "important", "decoys"), row)) for row in windows],
         "important": [dict(zip(("timestamp", "decoy_id", "action", "sensor"), row)) for row in important],
+    }
+
+
+def check_touch_receipt(connection, event, sensor):
+    row = connection.execute(
+        "SELECT timestamp, decoy_id, action, sensor FROM decoy_touches WHERE id = ?", (event.id,)
+    ).fetchone()
+    if row != (event.timestamp, event.decoy_id, event.decoy_action, sensor):
+        raise ValueError("Signed decoy touch does not match the imported sensor record")
+
+
+def case_evidence(connection, anchor_id):
+    rows = connection.execute(
+        """SELECT e.id, e.timestamp, r.key_id, json_extract(e.payload, '$.kind'),
+                  json_extract(e.payload, '$.decoy_id'), json_extract(e.payload, '$.decoy_action')
+           FROM verified_evidence r JOIN events e ON e.id=r.event_id
+           WHERE r.anchor_id=? AND json_extract(e.payload, '$.source')='decoy-monitor'
+           ORDER BY e.timestamp, e.id""",
+        (anchor_id,),
+    )
+    important, ordinary = deque(maxlen=30), deque(maxlen=30)
+    gaps, recoveries = {}, {}
+    total = important_count = 0
+    for event_id, timestamp, sensor, kind, decoy_id, action in rows:
+        item = {"event_id": event_id, "timestamp": timestamp, "sensor": sensor}
+        if kind == "decoy_touch":
+            total += 1
+            is_important = action in ("credential_use", "write_attempt")
+            important_count += is_important
+            collection = important if is_important else ordinary
+            collection.append({**item, "decoy_id": decoy_id, "action": action})
+        elif kind == "decoy_sensor_gap":
+            gaps[sensor] = item
+        else:
+            recoveries[sensor] = timestamp
+    return {
+        "touches": [*reversed(important), *list(reversed(ordinary))[:30 - len(important)]],
+        "touch_count": total,
+        "important_count": important_count,
+        "open_gaps": [gap for sensor, gap in gaps.items() if recoveries.get(sensor, "") <= gap["timestamp"]],
     }

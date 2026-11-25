@@ -113,6 +113,25 @@ function dumasPanel(findings, indices) {
   return panel;
 }
 
+function linkedDecoyPanel(report) {
+  const panel = node("section", undefined, "card");
+  const signals = node("ul");
+  const actions = { probe: "Обращение", read: "Чтение", credential_use: "Использование учётных данных",
+    write_attempt: "Попытка записи" };
+  for (const item of report.touches) {
+    signals.append(node("li", actions[item.action] + " · " + item.decoy_id + " · " + item.sensor +
+      " · " + formatTime(item.timestamp) + " UTC"));
+  }
+  for (const gap of report.open_gaps) {
+    signals.append(node("li", "Открытый пробел датчика " + gap.sensor + " · " +
+      formatTime(gap.timestamp) + " UTC", "mismatch"));
+  }
+  panel.append(node("h3", "Арамис · Улики от «Мёртвых душ»"),
+    node("p", "Подтверждено для сеанса: " + report.touch_count + " · Особого внимания: " +
+      report.important_count), signals);
+  return panel;
+}
+
 function objectionPanel(journal, indices) {
   const names = { change_record: "Подтверждение заявленных работ",
     identity_record: "Подтверждение использования учётной записи" };
@@ -248,6 +267,7 @@ function render(report) {
     caseElement.append(decisionCard("Защитная рекомендация", report.recommendation, indices));
   }
   if (report.dumas) caseElement.append(dumasPanel(report.dumas, indices));
+  if (report.decoy_evidence) caseElement.append(linkedDecoyPanel(report.decoy_evidence));
   if (report.objection_journal?.items.length) caseElement.append(objectionPanel(report.objection_journal, indices));
   if (report.full_evidence_reference) {
     caseElement.append(decisionCard("Правила со всеми проверками", report.full_evidence_reference, indices, report.label));

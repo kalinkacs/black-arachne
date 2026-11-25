@@ -10,11 +10,12 @@ import re
 import secrets
 import stat
 
-from .events import ANCHOR_KINDS, Event, encode, episode_window, records
+from .events import ANCHOR_KINDS, DECOY_EVIDENCE_KINDS, Event, encode, episode_window, records
 
 SOURCE_KINDS = {
     "change-management": {"change_verified", "change_disputed"},
     "identity-management": {"identity_verified", "identity_disputed"},
+    "decoy-monitor": DECOY_EVIDENCE_KINDS,
 }
 VERIFICATION_KINDS = frozenset().union(*SOURCE_KINDS.values())
 KEY_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}")
@@ -110,5 +111,10 @@ def check_binding(anchor, event):
         raise ValueError("Verification does not match the login machine")
     if event.session_key is not None and event.session_key != anchor.session_key:
         raise ValueError("Verification does not match the login session")
+    if event.kind in DECOY_EVIDENCE_KINDS and (
+        anchor.source != "systemd-journal" or not event.machine_id or not event.session_key
+        or event.timestamp < anchor.timestamp
+    ):
+        raise ValueError("Decoy evidence requires a native login and exact machine and session identifiers")
     if not lower <= event.timestamp <= upper:
         raise ValueError("Verification is outside the login's evidence window")

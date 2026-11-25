@@ -7,7 +7,7 @@ import json
 import sqlite3
 from uuid import uuid4
 
-from .dead_souls import SCHEMA as DECOY_SCHEMA
+from .dead_souls import SCHEMA as DECOY_SCHEMA, check_touch_receipt
 from .events import (
     ANCHOR_KINDS, POST_LOGIN_OBSERVATION, PRE_LOGIN_OBSERVATION, SESSION_ACTIVITY,
     Event, encode, episode_window, observation_profile, records,
@@ -183,6 +183,8 @@ def import_verifications(connection, key, envelopes):
         if not row:
             raise ValueError("Verification refers to an unknown login")
         check_binding(Event.parse(json.loads(row[0])), event)
+        if event.kind == "decoy_touch":
+            check_touch_receipt(connection, event, key.key_id)
         ingest(connection, (event,))
         receipt = (anchor_id, key.key_id, envelope["mac"])
         existing = connection.execute(
@@ -215,6 +217,7 @@ def episode(connection, host, anchor_id):
     rows = connection.execute(
         """SELECT payload FROM events WHERE host = ? AND timestamp BETWEEN ? AND ?
            AND json_extract(payload, '$.actor')=?
+           AND json_extract(payload, '$.kind') NOT IN ('decoy_touch','decoy_sensor_gap','decoy_sensor_recovered')
            ORDER BY timestamp, id LIMIT 1001""",
         (host, lower, upper, anchor.actor),
     ).fetchall()

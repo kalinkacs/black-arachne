@@ -3,6 +3,7 @@
 from datetime import datetime, timedelta, timezone
 import subprocess
 
+from .dead_souls import case_evidence
 from .events import NativeJournalCoverage, POST_LOGIN_OBSERVATION, encode, read_records
 from .mimicry import mimic
 from .role_runtime import RoleFailure
@@ -72,8 +73,21 @@ def operational_review(connection, anchor, events, model):
     scope = attribution(anchor, events, verified)
     history = confirmed_history(connection, anchor, attributed_events(anchor, events, scope))
     previous_run, objections = latest_objection_journal(connection, anchor.id)
-    return mimic(anchor, events, history, model, verified=verified, session_scope=scope,
-                 objection_checkpoint=(previous_run, objections))
+    report = mimic(anchor, events, history, model, verified=verified, session_scope=scope,
+                   objection_checkpoint=(previous_run, objections))
+    signals = case_evidence(connection, anchor.id)
+    if not signals["touches"] and not signals["open_gaps"]:
+        return report
+    report["decoy_evidence"] = signals
+    aramis = next(item for item in report["dumas"] if item["check"] == "activity_record")
+    aramis["decoy_evidence_ids"] = [item["event_id"] for item in (*signals["touches"], *signals["open_gaps"])]
+    if (signals["important_count"] or signals["open_gaps"]) and report["recommendation"]["decision"] == "close":
+        report["recommendation"] = {
+            "decision": "review",
+            "reason": "A bound decoy signal or an open sensor gap requires operator review.",
+            "evidence_ids": report["recommendation"]["evidence_ids"],
+        }
+    return report
 
 
 def triage(path, model=None, limit=20, now=None):
