@@ -130,19 +130,15 @@ sudo -n journalctl --since "$pilot_start" --no-pager -o json \
   SYSLOG_IDENTIFIER=sshd SYSLOG_IDENTIFIER=sshd-session SYSLOG_IDENTIFIER=sudo > "$pilot_dir/native.jsonl"
 python3 -m arachne --db "$pilot_dir/rehearsal.sqlite3" import-journal --native "$pilot_dir/native.jsonl"
 python3 -m arachne --db "$pilot_dir/rehearsal.sqlite3" anchors > "$pilot_dir/anchors.json"
+# Read the raw log to keep the multipart SYSCALL and PATH records together.
+# The archive stays inside the temporary fixture directory.
 for attempt in {1..20}; do
-  if sudo -n ausearch -k "$pilot_audit_key" --raw > "$pilot_dir/files.audit"; then
+  sudo -n cat /var/log/audit/audit.log > "$pilot_dir/files.audit"
+  if grep '^type=SYSCALL ' "$pilot_dir/files.audit" | grep -F "$pilot_audit_key" >/dev/null; then
     break
   fi
   sleep .25
 done
-if ! test -s "$pilot_dir/files.audit"; then
-  printf '%s\n' 'No events reached the pilot audit export.' >&2
-  sudo -n auditctl -s
-  sudo -n auditctl -l
-  sudo -n grep -c -F "$pilot_audit_key" /var/log/audit/audit.log || true
-  exit 1
-fi
 python3 - "$pilot_dir" "$pilot_audit_key" <<'PY'
 from collections import Counter
 from datetime import datetime, timedelta, timezone
